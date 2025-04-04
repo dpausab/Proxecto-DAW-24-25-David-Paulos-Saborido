@@ -11,17 +11,19 @@
   - [Guía de contribución](#guía-de-contribución)
   - [Links](#links)
 
-> *EXPLICACIÓN*: Este documento será a "*páxina de aterrizaxe*" do teu proxecto. Será ou primeiro que vexan vos que se interesen por el. Cúida a sua redacción con todo ou mimo. Elimina posteriormente todas as lineas "EXPLICACIÓN*" cando creas finalizada a súa redacción.
-> Podes acompañar á redacción deste ficheiro con imaxes ou gifs, pero non abuses deles.
-
 ## Taboleiro do proyecto
 
-> *EXPLICACIÓN:* neste punto indica se o proyecto está en fase de desenrolo ou finalizado.
+> Proxecto en estado de desenvolvemento, actualmente rematando a primeira fase.
 
 ## Descrición
 
-> *EXPLICACIÓN*: Realiza unha breve descrición do proxecto. Non menos de 100 palabras e non máis de 300. Resalta o fundamental *coas túas propias palabras**. Utiliza unha linguaxe correcta, *pero natural**, que o entenda todo o mundo, mesmo e en especial, as persoas que non teñan un coñecemento técnico avanzado. Pode ser un estracto ou resumo de apartados que xa contemples noutros ficheiros.
-> Descrición básica das ferramentas/tecnoloxías/linguaxes de programación,... empregados.
+> O proxecto consiste no desenvolvemento dun sistema de xestión de entregas, principalmente enfocado en pequenos negocios, que necesiten unha orientación rápida e interactiva do tempo e distancia que lles levará realizar unha entrega. A aplicación permitirá visualizar as entregas pendentes de asignar, tendo cada entrega unha ubicación, que será o destino da ruta, así coma as realizadas, ca información correspondente.
+>
+> Para conseguir que sexa máis visual, a web contará cun mapa interactivo, no que mostrará a ruta de forma visual e coloreada.
+>
+> Empregará as tecnoloxías web recoñecidas, PHP, JavaScript (con Leaflet), HTML5 e CSS para acadar unha interfaz intuitiva e sinxela pero completa e agradable e será despregado nun servidor XAMPP.
+>
+> É importante destacar que é un proxecto que focaliza completamente a independencia e prosperidade dos pequenos negocios, aportando unha solución de cara á loxística personalizable e cotiá, nace da falta de proxectos non globais e de auto-xestión das entregas ou repartos de pequenas empresas.
 
 ## Instalación / Posta en marcha
 
@@ -45,7 +47,7 @@
 
 > *EXPLICACIÓN*: Simplemente indexa ordenadamente todo o tey proxecto.
 
-1. [Anteproyecto](doc/templates/1_Anteproxecto.md)
+1. [Anteproyecto](plantilla-proxecto/doc/templates/1_Anteproxecto.md)
 2. [Análise](doc/templates/2_Analise.md)
 3. [Deseño](doc/templates/3_Deseño.md)
 4. [Codificación e probas](doc/templates/4_Codificacion_e_probas.md)
