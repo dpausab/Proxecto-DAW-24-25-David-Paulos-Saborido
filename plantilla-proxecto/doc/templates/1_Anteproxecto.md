@@ -52,7 +52,7 @@
 >
 > Coma enlaces a datos de posible xustificación, atoparíamos tales coma un artículo de ![Logística Profesional](https://www.logisticaprofesional.com/texto-diario/mostrar/5102750/85-pymes-espana-senala-servicios-entrega-como-esenciales-competitividad?utm_source=chatgpt.com), reflexando un estudo de Geopost sobre a importancia en España de mellorar o ámbito de transporte e loxística das PYMES.
 >
-> Outro informe interesante sería o de ![Transporte profesional](https://transporteprofesional.es/noticias-actualidad-transporte-logistica/transporte-de-mercancias/por-que-las-pymes-son-reticentes-a-la-digitalizacion) no que resumen o informe de "Digitalización de las pymes españolas" do Banco Europeo de Inversiones, reflexando que o sector do transporte é retincente a cambios dixitais debido ó descoñecemento e o medo económico, cousa que o noso proxecto busca solventar, sendo transparente e sinxelo.
+> Outro informe interesante sería o de ![Transporte Profesional](https://transporteprofesional.es/noticias-actualidad-transporte-logistica/transporte-de-mercancias/por-que-las-pymes-son-reticentes-a-la-digitalizacion) no que resumen o informe de "Digitalización de las pymes españolas" do Banco Europeo de Inversiones, reflexando que o sector do transporte é retincente a cambios dixitais debido ó descoñecemento e o medo económico, cousa que o noso proxecto busca solventar, sendo transparente e sinxelo.
 >
 > Ademáis dos datos do propio sector, 
 >
@@ -114,7 +114,7 @@
 
 > - **Infraestructura:** empregarase un servidor web XAMPP, para ter un entorno de traballo eficaz, proporcionando o servidor Apache e MySQl
 > - **Backend:** para o backend empregarase o lenguaxe de PHP, xa que é un lenguaxe moi axeitado pola súa efectividade para traballar no entorno web.
-> - **Frontend:**para o frontend empregarase HTML5, CSS e JavaScript con Leaflet, que é a librería que nos permitirá ter o mapa interactivo.
+> - **Frontend:** para o frontend empregarase HTML5, CSS e JavaScript con Leaflet, que é a librería que nos permitirá ter o mapa interactivo.
 
 
 > Este apartado podería cambiar á hora do emprego de PHP base ou o framework Laravel.
