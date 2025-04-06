@@ -130,4 +130,4 @@
 | Desenvolvemento    | 21/04/2025     | 6 semanas | Desenrolo do código e da estructura do proxecto |
 | Probas         | 02/06/2025     | 1 semanas | Realizar as tarefas de testeo e optimización |
 
-[**<-Anterior**](../README.md)
+[**<-Anterior**](../../../README.md)
