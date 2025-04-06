@@ -50,9 +50,9 @@
 > - Existen ferramentas que tratan este tema, como se trata posteriormente, pero sempre cuns custos moi altos ou xestionando eles as entregas.
 > - A loxística é un dos problemas e sectores máis importantes, máis nunha época donde se premia a inmediatez e a transparencia.
 >
-> Coma enlaces a datos de posible xustificación, atoparíamos tales coma un artículo de [Logística_Profesional](https://www.logisticaprofesional.com/texto-diario/mostrar/5102750/85-pymes-espana-senala-servicios-entrega-como-esenciales-competitividad?utm_source=chatgpt.com), reflexando un estudo de Geopost sobre a importancia en España de mellorar o ámbito de transporte e loxística das PYMES.
+> Coma enlaces a datos de posible xustificación, atoparíamos tales coma un artículo de ![Logística Profesional](https://www.logisticaprofesional.com/texto-diario/mostrar/5102750/85-pymes-espana-senala-servicios-entrega-como-esenciales-competitividad?utm_source=chatgpt.com), reflexando un estudo de Geopost sobre a importancia en España de mellorar o ámbito de transporte e loxística das PYMES.
 >
-> Outro informe interesante sería o de [Transporte_profesional](https://transporteprofesional.es/noticias-actualidad-transporte-logistica/transporte-de-mercancias/por-que-las-pymes-son-reticentes-a-la-digitalizacion) no que resumen o informe de "Digitalización de las pymes españolas" do Banco Europeo de Inversiones, reflexando que o sector do transporte é retincente a cambios dixitais debido ó descoñecemento e o medo económico, cousa que o noso proxecto busca solventar, sendo transparente e sinxelo.
+> Outro informe interesante sería o de ![Transporte profesional](https://transporteprofesional.es/noticias-actualidad-transporte-logistica/transporte-de-mercancias/por-que-las-pymes-son-reticentes-a-la-digitalizacion) no que resumen o informe de "Digitalización de las pymes españolas" do Banco Europeo de Inversiones, reflexando que o sector do transporte é retincente a cambios dixitais debido ó descoñecemento e o medo económico, cousa que o noso proxecto busca solventar, sendo transparente e sinxelo.
 >
 > Ademáis dos datos do propio sector, 
 >
