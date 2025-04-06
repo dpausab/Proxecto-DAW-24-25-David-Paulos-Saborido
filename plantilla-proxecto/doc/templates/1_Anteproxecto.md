@@ -36,7 +36,9 @@
 
 ### 2.1- Idea de negocio
 
-> O producto central trátase dunha aplicación web que permite aos seus usuarios ter unha xestión directa, interactiva e sinxela das rutas das entregas que necesiten.
+> O producto central trátase dunha aplicación web que permite aos seus usuarios ter unha xestión directa, interactiva e sinxela das rutas das entregas que necesiten. Para conseguir facer viable dito proxecto, comercializarase cun formato de suscripción único, de 40€ / mensuais sen restriccións.
+>
+> No futuro sería posible implementar novas funcionalidades, de feito que, por exemplo, as rutas poidan ser programadas automáticamente, reducindo a labor manual.
 
 ### 2.2- Xustificación da idea
 
@@ -48,13 +50,22 @@
 > - Existen ferramentas que tratan este tema, como se trata posteriormente, pero sempre cuns custos moi altos ou xestionando eles as entregas.
 > - A loxística é un dos problemas e sectores máis importantes, máis nunha época donde se premia a inmediatez e a transparencia.
 >
-> Como xustificación, con datos da Asociación Española Profesional, o sector das PYMES representa o 99% do sector empresarial español e, coma maior problemática xorde o problema da loxística. Estímase segundo o Ministerio de Transporte e Comercio que en PYMES do sector, atópanse empregados unhas 8 millóns e medio de persoas, co cal é un sector do que depende moitísima xente e, canto máis eficiente e eficaz sexa, poderá prosperar e manter seguros os empregos. 
+> Coma enlaces a datos de posible xustificación, atoparíamos tales coma un artículo de [Logística_Profesional](https://www.logisticaprofesional.com/texto-diario/mostrar/5102750/85-pymes-espana-senala-servicios-entrega-como-esenciales-competitividad?utm_source=chatgpt.com), reflexando un estudo de Geopost sobre a importancia en España de mellorar o ámbito de transporte e loxística das PYMES.
+>
+> Outro informe interesante sería o de [Transporte_profesional](https://transporteprofesional.es/noticias-actualidad-transporte-logistica/transporte-de-mercancias/por-que-las-pymes-son-reticentes-a-la-digitalizacion) no que resumen o informe de "Digitalización de las pymes españolas" do Banco Europeo de Inversiones, reflexando que o sector do transporte é retincente a cambios dixitais debido ó descoñecemento e o medo económico, cousa que o noso proxecto busca solventar, sendo transparente e sinxelo.
+>
+> Ademáis dos datos do propio sector, 
+>
+> A continuación mostrase un gráfico DAFO, resumindo as debilidades e fortalezas da idea de negocio.
+>
+> ![Análise DAFO](/img/dafo.png)
 
 ### 2.3- Segmento de clientes
 
 > O público obxectivo son grupos concretos:
-> - Pequenos negocios que teñan negocios con servizo de entrega.
-> - Autónomos que necesiten realizar entregas de forma constante.
+>
+> - Pequenos negocios que teñan servizo de entrega ou se queiran expandir nese ámbito.
+> - Autónomos que necesiten facer entregas de forma constante ou recurrente.
 > - Empresas locais que precisan organizar rutas de reparto.
 
 ### 2.4- Competencia
@@ -105,15 +116,18 @@
 > - **Backend:** para o backend empregarase o lenguaxe de PHP, xa que é un lenguaxe moi axeitado pola súa efectividade para traballar no entorno web.
 > - **Frontend:**para o frontend empregarase HTML5, CSS e JavaScript con Leaflet, que é a librería que nos permitirá ter o mapa interactivo.
 
+
+> Este apartado podería cambiar á hora do emprego de PHP base ou o framework Laravel.
+
 ## 4- Planificación
 
-> O proxecto estará formado polas seguintes fases:
+> A planificación é, en principio, sinxela de seguir, tendo en conta unha estimación xeral, o proxecto estará formado polas seguintes fases, estando sempre aberto a pequenos cambios segundo sexa necesario:
 >
 | Fase                | Data de inicio | Duración | Descrición |
 |---------------------|---------------|----------|------------|
-| Estudo preliminar  | 01/04/2025     | 1 semana | Análise do mercado e necesidades. |
-| Deseño             | 07/04/2025     | 2 semanas | Creación de prototipos e wireframes en Figma. |
-| Desenvolvemento    | 21/04/2025     | 6 semanas | Implementación da aplicación. |
-| Probado            | 02/06/2025     | 1 semanas | Test de usabilidade e optimización. |
+| Estudo preliminar  | 01/04/2025     | 1 semana | Análise do mercado e necesidades que vai cubrir o proxecto. |
+| Deseño             | 07/04/2025     | 2 semanas | Creación do deseño da interfaz con Figma. |
+| Desenvolvemento    | 21/04/2025     | 6 semanas | Desenrolo do código e da estructura do proxecto |
+| Probas         | 02/06/2025     | 1 semanas | Realizar as tarefas de testeo e optimización |
 
 [**<-Anterior**](../../README.md)
