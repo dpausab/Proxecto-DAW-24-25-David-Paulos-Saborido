@@ -58,7 +58,7 @@
 >
 > A continuación mostrase un gráfico DAFO, resumindo as debilidades e fortalezas da idea de negocio.
 >
-> ![Análise DAFO](/img/dafo.png)
+> ![Análise DAFO](../img/dafo.png)
 
 ### 2.3- Segmento de clientes
 
