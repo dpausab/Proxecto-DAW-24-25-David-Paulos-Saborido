@@ -114,6 +114,8 @@ O proxecto consiste no desenvolvemento dun sistema de xestión de entregas, prin
 
 ## 3- Requirimentos técnicos
 
+**LA INFRAESTRUCTURA ES EN PUESTA EN PRODUCCIÓN, NO EN DESARROLLO**
+
 > - **Infraestructura:** empregarase un servidor web XAMPP, para ter un entorno de traballo eficaz, proporcionando o servidor Apache e MySQl
 > - **Backend:** para o backend empregarase o lenguaxe de PHP, xa que é un lenguaxe moi axeitado pola súa efectividade para traballar no entorno web.
 > - **Frontend:** para o frontend empregarase HTML5, CSS e JavaScript con Leaflet, que é a librería que nos permitirá ter o mapa interactivo.
