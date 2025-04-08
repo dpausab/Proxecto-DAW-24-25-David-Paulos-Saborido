@@ -22,7 +22,9 @@
 
 ## 1- Descrición do proxecto
 
-> O proxecto consiste no desenvolvemento dun sistema de xestión de entregas, principalmente enfocado en pequenos negocios, que necesiten unha orientación rápida e interactiva do tempo e distancia que lles levará realizar unha entrega. A aplicación permitirá visualizar as entregas pendentes de asignar, tendo cada entrega unha ubicación, que será o destino da ruta, así coma as realizadas, ca información correspondente.
+**ELIMINA LOS "<" DE DELATE DE CADA PÁRRAFO**
+
+O proxecto consiste no desenvolvemento dun sistema de xestión de entregas, principalmente enfocado en pequenos negocios, que necesiten unha orientación rápida e interactiva do tempo e distancia que lles levará realizar unha entrega. A aplicación permitirá visualizar as entregas pendentes de asignar, tendo cada entrega unha ubicación, que será o destino da ruta, así coma as realizadas, ca información correspondente.
 >
 > Para conseguir que sexa máis visual, a web contará cun mapa interactivo, no que mostrará a ruta.
 >
@@ -120,6 +122,8 @@
 > Este apartado podería cambiar á hora do emprego de PHP base ou o framework Laravel.
 
 ## 4- Planificación
+
+**SE PIDE DIAGRAMA GANTT. NO ES CALCAR LO QUE YO OS PONGO DE LAS FASES DE ENTREGA, ES LO QUE CREEIS TU Y LAS FASES QUE REALMENTE APLICARÍAS**
 
 > A planificación é, en principio, sinxela de seguir, tendo en conta unha estimación xeral, o proxecto estará formado polas seguintes fases, estando sempre aberto a pequenos cambios segundo sexa necesario:
 >
