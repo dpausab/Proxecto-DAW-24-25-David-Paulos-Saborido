@@ -8,57 +8,47 @@
   - [5- Normativa](#5--normativa)
   - [6- Melloras futuras](#6--melloras-futuras)
 
-> *EXPLICACION*: Este documento describe os requirimentos para "nome do proxecto" especificando que funcionalidade ofrecerá e de que xeito.
-
 ## 1- Descrición Xeral
 
->*EXPLICACION*: Descrición Xeral do proxecto
+Routigal é unha plataforma deseñada para mellorar a xestión e seguimento de servizos técnicos a domicilio, tales como fontaneiros, electricistas ou calquera outro servizo similar. O sistema permitirá aos profesionais locais xestionar as súas rutas, programar visitas, facer seguimento en tempo real e manter un rexistro dos servizos realizados. Ademais, ofrecerá aos clientes a posibilidade de seguir a súa solicitude en todo momento, mellorando a eficiencia e a comunicación.
 
 ## 2- Funcionalidades
 
->*EXPLICACION* Describir que servizos ou operacións se van poder realizar por medio do noso proxecto, indicando que actores interveñen en cada caso.
->
-> Enumeradas, de maneira que na fase de deseño poidamos definir o diagrama ou configuración correspondente a cada funcionalidade.
-> Cada función ten uns datos de entrada e uns datos de saída. Entre os datos de entrada e de saída, realízase un proceso, que debe ser explicado.
-
-Exemplo:
+Estas son, nun principio, as funcionalidades básicas da apliación:
 
 | Acción   |  Descrición        |
 |----------|--------------------|
-| Alta de productos   | Dar de alta os productos na base de datos|
-| Modificar productos | Modificación de productos na base de datos|
-| Presentación dos productos  | Mostra dos productos por medio da páxina web |
+| Acceso de técnico   | Acceder a su cuenta|
+| Engadir servizos | O técnico poderá engadir os servicios por realizar mediante un formulario, para posteriormente xestionalos |
+| Creación de rutas | Mediante un listado dos servizos por realizar, poderá interactuar cun mapa, que proporcionará a información estimada da ruta, permitindo gardala. |
+| Xestión de rutas | Mediante un listado das rutas o usuario poderá modificalas. |
+| Listaxe de servizos realizados | Mediante un listado dos servizos poderase ter unha idea clara dos mesmos, xunto a información importante dos mesmos. |
 
 ## 3- Tipos de usuarios
 
-> *EXPLICACION* Describir os tipos de usuario que poderán acceder ao noso sistema. Habitualmente os tipos de usuario veñen definidos polas funcionalidades ás cales teñen acceso. En termos xerais existen moitos grupos de usuarios: anónimos, novos, rexistrados, bloqueados, confirmados, verificados, administradores, etc.
->
-> Exemplo:
->
-> - Usuario xenérico, que terá acceso a ...
-> - Usuario técnico, que poderá...
+- **Administrador**: no caso de empresas, pode haber un perfil de administrador que poida xestionar diferentes técnicos, para asingarlles as rutas.
+- **Usuario profesional**: pode xestionar os seus propios servizos, rutas e avisos.
 
 ## 4- Contorno operacional
 
-> *EXPLICACION* Neste apartado deben describirse os recursos necesarios, dende o punto de vista do usuario, para poder operar coa aplicación web. Habitualmente consiste nun navegador web actualizado e unha conexión a internet.
-Se é necesario algún hardware ou software adicional, deberá indicarse.
+- Navegador web moderno (Chrome, Firefox...).
+- Conexión estable a Internet.
+- Dispositivo compatible (PC, tablet ou móbil).
 
 ## 5- Normativa
 
-> *EXPLICACION* Investigarase que normativa vixente afecta ao desenvolvemento do proxecto e de que maneira. O proxecto debe adaptarse ás esixencias legais dos territorios onde vai operar.
-> 
-> Pola natureza dos sistema de información, unha lei que se vai a ter que mencionar de forma obrigatoria é la [Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales (LOPDPGDD)](https://www.boe.es/buscar/act.php?id=BOE-A-2018-16673). O ámbito da LOPDPGDD é nacional. Se a aplicación está pensada para operar a nivel europeo, tamén se debe facer referencia á [General Data Protection Regulation (GDPR)](https://eur-lex.europa.eu/eli/reg/2016/679/oj). Na documentación debe afirmarse que o proxecto cumpre coa normativa vixente.
->
-> Para cumplir a LOPDPGDD e/ou GDPR debe ter un apartado na web onde se indique quen é a persoa responsable do tratamento dos datos e para que fins se van utilizar. Habitualmente esta información estructúrase nos seguintes apartados:
->
-> - Aviso legal.
-> - Política de privacidade.
-> - Política de cookies.
->
-> É acosenllable ver [exemplos de webs](https://www.spotify.com/es/legal/privacy-policy/) que conteñan textos legais referenciando a LOPDPGDD ou GDPR.
+Este proyecto cumpre coa Ley Orgánica 3/2018, do 5 de decembro, de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD) en lo referente al tratamiento y protección de los datos personales de los usuarios.
+
+- Responsable del tratamiento de los datos: David Paulos Saborido
+- Contacto: Davidpaulosdaw1999@gmail.com
+- A páxina contará cun apartado claro sobre a política de privacidade e cookies, onde explicará a finalidade do uso dos datos recopilados.
+
 
 ## 6- Melloras futuras
 
-> *EXPLICACION* É posible que o noso proxecto se centre en resolver un problema concreto que se poderá ampliar no futuro con novas funcionalidades, novas interfaces, etc.
+- Planificación automática de rutas optimizadas segundo tempo ou distancia.
+- Integración con SMS ou WhatsApp para avisos.
+- Sistema de valoración do cliente cos servizos.
+- App móbil nativa para maior comodidade.
 
 [**<-Anterior**](../../README.md)
