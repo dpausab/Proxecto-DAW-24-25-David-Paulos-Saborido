@@ -6,36 +6,28 @@
   - [3- Diagrama de Base de Datos](#3--diagrama-de-base-de-datos)
   - [4- Deseño de interface de usuarios](#4--deseño-de-interface-de-usuarios)
 
-> *EXPLICACIÓN:* Este documento inclúe os diferentes diagramas, esquemas e deseños que axuden a describir mellor o [nome do proxecto] detallando os seus compoñentes, funcionalidades, bases de datos e interface.
 
 ## 1- Diagrama da arquitectura
 
-> *EXPLICACIÓN:* Incluír os diagramas de arquitectura que representen de forma gráfica a aplicación, os seus compoñentes e a súa interrelación: front-end, back-end, bases de datos, nube, microservizos, etc.
+Diagrama básico de arquitectura para contextualizar el contexto técnico de la aplicación.
+![Diagrama de arquitectura](../img/arquitecura_web.PNG)
 
 ## 2- Casos de uso
 
-> *EXPLICACIÓN:* Facer os diagramas de casos de uso que representen como as persoas usuarias interaccionan co sistema.
->
->Deben incluírse o(s) tipo(s) de usuario implicados en cada caso de uso.
+Casos de uso generalizados, siendo el administrador un rol tomado por un autónomo en caso de ser único trabajador o el adminsitrador de una empresa que gestione los técnicos y servicios.
+![Casos de uso](../img/casos%20de%20uso.png)
 
 ## 3- Diagrama de Base de Datos
 
-> *EXPLICACIÓN:* Neste apartado incluiranse os diagramas relacionados coa Base de Datos:
->
-> - Modelo Entidade/relación
-> - Modelo relacional
->
-> Pódese entregar a captura do phpMyAdmin se se emprega MariaDB como Modelo relacional.
+Diagramas de la base de datos empleada en el proyecto.
+![Diagrama de Base de Datos](../img/diagramaBBDD.PNG)
+![Diagrama de Base de Datos - Relacional](../img/diagrama-relacional.PNG)
 
 ## 4- Deseño de interface de usuarios
 
-> *EXPLICACIÓN:* Neste apartado deben incluírse unha mostra representativan dos mockups da aplicación. Estes mockups deben incluír todas as vistas da aplicación, é dicir, todas as páxinas diferentes que unha persoa usuaria (de calquera tipo) vai poder ver. Tamén se debe incluír información de como navegar dunha ventá a outra.
->
-> Os mockups axudan no deseño da aplicación. Poden facerse á man, cunha aplicación ou a través dunha web do estilo: diagrams Un mockup permite ver como se verá unha páxina concreta dunha aplicación web. O deseño de mockups axuda a:
->
-> - Avanzar moi rápido na parte frontend: ao ter os mockups realizados, permite saber que elementos vai ter cada vista e onde colocalos.
-> - Visualizar a información que vai a ser necesaria mostrar. Sabendo con que información imos traballar e sabendo a información que necesitamos mostrar, podemos organizar os datos dunha forma axeitada para gardalos na base de datos.
->
-> Se temos as ideas máis claras do noso proxecto podemos sustituir os mockups por prototipos.
->
+Mockup en figma, donde se muestra una idea de diseño para la web.
+
+- Me gustaría aclarar que es un mockup inicial para mostrar la idea y el diseño básico, no es definitivo y quiero añadir más cosas.
+![Figma](https://www.figma.com/design/JY1LzkEXCofDl6hho2BuxK/Routigal?node-id=0-1&t=LNzM97Vaou4aekGo-1)
+
 [**<-Anterior**](../../README.md)
