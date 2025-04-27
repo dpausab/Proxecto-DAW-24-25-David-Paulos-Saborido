@@ -54,9 +54,9 @@ En resumo:
 - Alternativa máis económica e simple fronte a solucións orientadas a grandes empresas.
 - Potencial de mercado alto, xa que moitas empresas aínda traballan sen ferramentas específicas.
 
-Coma enlaces a datos de posible xustificación, atoparíamos tales coma un artículo de ![Logística Profesional](https://www.logisticaprofesional.com/texto-diario/mostrar/5102750/85-pymes-espana-senala-servicios-entrega-como-esenciales-competitividad?utm_source=chatgpt.com), reflexando un estudo de Geopost sobre a importancia en España de mellorar o ámbito de transporte e loxística das PYMES.
+Coma enlaces a datos de posible xustificación, atoparíamos tales coma un artículo de [Logística Profesional](https://www.logisticaprofesional.com/texto-diario/mostrar/5102750/85-pymes-espana-senala-servicios-entrega-como-esenciales-competitividad?utm_source=chatgpt.com), reflexando un estudo de Geopost sobre a importancia en España de mellorar o ámbito de transporte e loxística das PYMES.
 
-Outro informe interesante sería o de ![Transporte Profesional](https://transporteprofesional.es/noticias-actualidad-transporte-logistica/transporte-de-mercancias/por-que-las-pymes-son-reticentes-a-la-digitalizacion) no que resumen o informe de "Digitalización de las pymes españolas" do Banco Europeo de Inversiones, reflexando que o sector do transporte é retincente a cambios dixitais debido ó descoñecemento e o medo económico, cousa que o noso proxecto busca solventar, sendo transparente e sinxelo.
+Outro informe interesante sería o de [Transporte Profesional](https://transporteprofesional.es/noticias-actualidad-transporte-logistica/transporte-de-mercancias/por-que-las-pymes-son-reticentes-a-la-digitalizacion) no que resumen o informe de "Digitalización de las pymes españolas" do Banco Europeo de Inversiones, reflexando que o sector do transporte é retincente a cambios dixitais debido ó descoñecemento e o medo económico, cousa que o noso proxecto busca solventar, sendo transparente e sinxelo.
 
 Ademáis destes datos, que demostran unha falta de investimento na loxística, aínda que sexa no sector de transporte, representa unha necesidade de organización nos eventos que requiran desprazamentos asiduos, xa que para calqueira empresa, a organización é primordial, debido os custos engadidos por imprevistos ou a falta de optimización do tempo.
 
