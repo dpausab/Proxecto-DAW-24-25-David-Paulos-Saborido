@@ -29,4 +29,4 @@ De momento a forma máis sinxela de traballar con ela é mediante coordenadas, p
 
 De momento a fase é de desenvolvemento, soamente hay probas feitas sobre código feito, sen tests planeados.
 
-[**<-Anterior**](../../README.md)
+[**<-Anterior**](../../../README.md)
