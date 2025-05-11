@@ -30,4 +30,4 @@ Mockup en figma, donde se muestra una idea de diseño para la web.
 - Me gustaría aclarar que es un mockup inicial para mostrar la idea y el diseño básico, no es definitivo y quiero añadir más cosas.
 [Figma](https://www.figma.com/design/JY1LzkEXCofDl6hho2BuxK/Routigal?node-id=0-1&t=LNzM97Vaou4aekGo-1)
 
-[**<-Anterior**](../../README.md)
+[**<-Anterior**](../../../README.md)

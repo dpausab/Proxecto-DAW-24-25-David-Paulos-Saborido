@@ -51,4 +51,4 @@ Este proyecto cumpre coa Ley Orgánica 3/2018, do 5 de decembro, de Protección 
 - Sistema de valoración do cliente cos servizos.
 - App móbil nativa para maior comodidade.
 
-[**<-Anterior**](../../README.md)
+[**<-Anterior**](../../../README.md)
