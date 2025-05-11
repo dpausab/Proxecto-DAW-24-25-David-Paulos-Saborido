@@ -10,32 +10,23 @@
 
 ## 1- Codificación
 
-> Crea unha carpeta no teu repositorio e sube o código frecuentemente.
->
-> Mentres se vai codificando a aplicación, iranse atopando problemas e haberá que ir modificando aspectos do deseño. Estes cambios tamén se deben recoller na documentación.
+Destacar que aínda que o código subido é pouco, é porque tento buscar a forma máis óptima segundo o meu enfoque de realizar unha pequena API para simplificar a xestión e as consultas. Teño máis código feito pero son probas a parte que non teñen relación directa coa idea.
+[**Carpeta de código**](../../../routigal)
 
 ## 2- Prototipos
 
-> A medida que se vai codificando crearanse varios prototipos, preferentemente realizados con Figma. Para cada un indicar unha descrición das funcionalidades implementadas.
->
-> Debes ir incluindo unha mostra representativan dos prototipos da aplicación.
->
-> Os proptotipos axudan no deseño da aplicación. Podes empregar:
->
-> - [Sketch](https://www.sketch.com/)
-> - [Figma](https://www.figma.com/). Recomendada
-> - [Proto.io](https://proto.io/)
->
-> A mellor opción é empregar Figma xa que esta é unha ferramenta en línea colavorativa. 
-> **Comparte o prototipo cos profesores por medio de Figma ou descarga o arquivo local o cal subirás o teu repositorio de GitHub**.
-> **Este prototipos deberían estar listo e enviados o titor para revisalo na primeira semana desta fase.**
+[**Figma**](https://www.figma.com/design/JY1LzkEXCofDl6hho2BuxK/Routigal?node-id=0-1&t=LNzM97Vaou4aekGo-1)
 
 ## 3- Innovación
 
-No caso de utilizar tecnoloxías diferentes ás estudadas no ciclo formativo, fai unha descrición dos retos asumidos e como se resolveron.
+No meu caso eu vou empregar a Librería de JavaScript "Leaflet", que permite a integración de mapas interactivos e a capacidade, xunto con outra ferramenta, OSRM (Open Street Route Machine), a creación de rutas divididas en tramos para así poder ter a información precisa para a aplicación.
+
+Cabe destacar que a dificultade de implementala é a necesidade de acomodarse ás funcionalidades da librería xa que son extensas pero, ten unha boa documentación, deixo por aquí o link: [**LEAFLET**](https://leafletjs.com/)
+
+De momento a forma máis sinxela de traballar con ela é mediante coordenadas, pero a experiencia de usuario non sería de todo boa co que teño que encontrar a forma de poder convertir as rutas "a man" a coordenadas para poderlle facer as peticións á API.
 
 ## 4- Probas
 
-Deben describirse as probas realizadas e conclusión obtidas. Describir os problemas atopados e como foron solucionados.
+De momento a fase é de desenvolvemento, soamente hay probas feitas sobre código feito, sen tests planeados.
 
 [**<-Anterior**](../../README.md)

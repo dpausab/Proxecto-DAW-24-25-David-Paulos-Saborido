@@ -1,0 +1,28 @@
+*, *::before, *::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+form {
+    display: flex;
+    gap: 10px;
+}
+
+.selected-ubis {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.po {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #0d6efd;
+    color: white;
+}
+
+.leaflet-control {
+    display: none;
+}
