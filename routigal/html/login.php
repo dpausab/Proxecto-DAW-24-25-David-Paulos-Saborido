@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script type="module" src="../js/login.js" defer></script>
 </head>
 <body>
     <h1>Bienvenid@ a la app, inicie sesión</h1>
@@ -14,9 +15,9 @@
         </p>
         <p>
             <label for="pwd">Contraseña</label>
-            <input type="text" name="pwd" id="pwd">
+            <input type="password" name="pwd" id="pwd">
         </p>
-        <button id="login">Login</button>
+        <button type="submit" id="login">Login</button>
     </form>
 </body>
 </html>

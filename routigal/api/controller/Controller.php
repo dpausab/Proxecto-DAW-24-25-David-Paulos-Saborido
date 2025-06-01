@@ -5,7 +5,10 @@
  */
 define("CONTROLLER_SERVICE", "servicios");
 define("CONTROLLER_ROUTE", "rutas");
+define("CONTROLLER_UBICACIONES", "ubicaciones");
+define("CONTROLLER_USUARIOS", "usuarios");
 define("CONTROLLER_AUTH", "auth");
+define("CONTROLLER_ROL", "roles");
 
 class ControllerException extends Exception{
     function __construct()
@@ -38,6 +41,15 @@ abstract class Controller
             case CONTROLLER_AUTH:
                 $controller = new AuthController();
                 break;
+            case CONTROLLER_UBICACIONES:
+                $controller = new UbicacionController();
+                break;
+            case CONTROLLER_USUARIOS:
+                $controller = new UserController();
+                break;
+            case CONTROLLER_ROL:
+                $controller = new RolController();
+                break;
             default:
                 throw new ControllerException();
         }
@@ -45,7 +57,7 @@ abstract class Controller
     }
 
     public abstract function get($id);
-    public abstract function getAll();
+    public abstract function getAll($page);
     public abstract function delete($id);
     public abstract function update($id, $object);
     public abstract function insert($object);

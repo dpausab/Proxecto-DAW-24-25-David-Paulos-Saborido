@@ -1,0 +1,145 @@
+@import url('general.css');
+
+main {
+  padding: 20px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* CARDS DE INFO - INICIO */
+.ruta-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: space-around;
+}
+
+.ruta-cards .card {
+  background-color: #2a2a2a;
+  padding: 15px 20px;
+  border-radius: 10px;
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+/* CARDS DE INFO - FIN */
+/* PANEL DE SERVICIOS Y MAPA - INICIO */
+
+.ruta-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.ruta-servicios {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.ruta-servicios-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: auto;
+  max-height: 250px;
+  background-color: #2a2a2a;
+  border-radius: 10px;
+  padding: 10px 15px;
+}
+
+.ruta-servicios-column h3 {
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.servicios-disponibles, .servicios-seleccionados {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+/* PANEL DE SERVICIOS Y MAPA - FIN */
+/* SERVICIOS - INICIO */
+.servicio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.servicio label {
+  flex: 1;
+  color: #ddd;
+}
+
+.servicio select {
+  min-width: 90px;
+  cursor: pointer;
+}
+
+.servicio input[type="time"] {
+  padding: 5px 10px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.servicio input[type="checkbox"] {
+    transform: scale(1.5);
+    cursor: pointer;
+}
+.drag {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffc107;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  color: black;
+  text-align: center;
+}
+
+.info-tramo ul{
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: 5px;
+  justify-content: center;
+}
+
+.info-tramo ul li {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.my-label {
+  background-color: #ffc107;
+  border-radius: 10px;
+  font-weight: bold;
+}
+/* SERVICIOS - FIN */
+/* MAPA - INICIO */
+#map {
+  height: 600px;
+  border-radius: 10px;
+  background-color: #111;
+}
+/* MAPA - FIN */
+
+
+
+@media screen and (min-width: 726px){
+    #map {
+        height: 520px;
+    }
+  }
+

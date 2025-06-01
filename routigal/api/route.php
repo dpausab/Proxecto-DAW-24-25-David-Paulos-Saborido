@@ -5,6 +5,9 @@ include_once("./controller/Controller.php");
 include_once("./controller/RouteController.php");
 include_once("./controller/ServiceController.php");
 include_once("./controller/AuthController.php");
+include_once("./controller/UserController.php");
+include_once("./controller/UbicacionController.php");
+include_once("./controller/RolController.php");
 
 function getIds(array $uri):array{
     $ids = [];
@@ -23,18 +26,12 @@ function getIds(array $uri):array{
 $metodo = $_SERVER["REQUEST_METHOD"];
 $uri = $_SERVER["REQUEST_URI"];
 $uri = explode("/", $uri);
-$endpoint = $uri[3];
+$endpoint = $uri[2];
+$accion = $uri[3];
 $id = null;
 $controlador = null;
 
-try {
-    $controlador = Controller::getController($endpoint);
-} catch (ControllerException $th) {
-    Controller::sendNotFound("Error obteniendo el endpoint " . $endpoint);
-    die();
-}
-
-if (count($uri) >= 5) {
+if (count($uri) >= 4) {
     try {
         $id = getIds($uri);
     } catch (Throwable $th) {
@@ -44,34 +41,26 @@ if (count($uri) >= 5) {
     }
 }
 
-switch ($metodo) {
-    case 'POST':
-        $json = file_get_contents('php://input');
-        $controlador->insert($json);
-        break;
-    case 'GET':
-        if (isset($id)) {
-            $controlador->get($id);
-        } else {
-            $controlador->getAll();
-        }
-        break;
-    case 'DELETE':
-        if (isset($id) ) {
-            $controlador->delete($id);
-        } else {
-            Controller::sendNotFound("Es necesario indicar el id correcto de la banda a eliminar.");
-        }
-        break;
-    case 'PUT':
-        if (isset($id) ) {
-            $json = file_get_contents('php://input');
-            $controlador->update($id, $json);
-        } else {
-            Controller::sendNotFound("Es necesario indicar el id correcto de la banda a actualizar.");
-        }
+try {
+    $controlador = Controller::getController($endpoint);
+    $json = null;
+    if ($endpoint != "auth" && !isset($_SESSION['user'])) {
+        http_response_code(403);
+    }
 
-        break;
-    default:
-        Controller::sendNotFound("Método HTTP no disponible.");
+    if (method_exists($controlador, $accion)) {
+        if (in_array($metodo, ['POST', 'PUT', 'PATCH'])) {
+            $json = file_get_contents('php://input');
+            $controlador->$accion($json, $id ?? null);
+        } else {
+            $controlador->$accion($id);
+        }
+    } else {
+        http_response_code(404);
+        echo json_encode(['Error' => 'La acción especificada no es válida.']);
+    }
+} catch (ControllerException $th) {
+    Controller::sendNotFound("Error obteniendo el endpoint " . $endpoint);
+    die();
 }
+

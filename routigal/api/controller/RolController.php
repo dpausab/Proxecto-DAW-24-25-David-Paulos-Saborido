@@ -1,14 +1,14 @@
 <?php
 
 include_once("Controller.php");
-include_once("model/RouteModel.php");
+include_once("model/RolModel.php");
 
-class RouteController extends Controller{
+class RolController extends Controller{
     public function get($id) {
         $dato=null;
         try {
-            $dato = RouteModel::get($id[0]);
-            echo json_encode($dato);
+            $datos = RolModel::get($id);
+            echo json_encode($datos);
         } catch (\Throwable $th) {
             echo json_encode([
                 'error' => $th->getMessage(),
@@ -20,12 +20,12 @@ class RouteController extends Controller{
         $datos = [];
         try {
             if (isset($ids) && count($ids)>0) {
-                $pagina = $ids[0]-1 ?? 1;
+                $pagina = $ids[0] ?? 0;
                 $limit =  10;
                 $offset = $pagina * $limit;
-                $datos = RouteModel::getAll($offset, $limit);
+                $datos = RolModel::getAll($offset, $limit);
             } else {
-                $datos = RouteModel::getAll();
+                $datos = RolModel::getAll();
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {
@@ -39,7 +39,7 @@ class RouteController extends Controller{
         $dato = null;
         $mensaje = "Editado con éxito.";
         try {
-            $dato = RouteModel::delete($id[0]);
+            $dato = RolModel::delete($id[0]);
         } catch (\Throwable $th) {
             http_response_code(401);
             $mensaje = $th->getMessage();
@@ -52,7 +52,7 @@ class RouteController extends Controller{
         $mensaje = "Editado con éxito.";
         try {
             $datos = json_decode($json, true);
-            $dato = RouteModel::update($datos, $id[0]);
+            $dato = RolModel::update($datos, $id[0]);
         } catch (\Throwable $th) {
             http_response_code(401);
             $mensaje = $th->getMessage();
@@ -65,7 +65,7 @@ class RouteController extends Controller{
         $mensaje = "Insertado con éxito.";
         try {
             $datos = json_decode($json, true);
-            $dato = RouteModel::insert($datos);
+            $dato = RolModel::insert($datos);
         } catch (\Throwable $th) {
             http_response_code(401);
             $mensaje = $th->getMessage();

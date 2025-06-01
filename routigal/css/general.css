@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: black;
+}
+body {
+  min-height: 100vh;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #1c1c1c;
+  color: white;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  background-color: #101010;
+}
+
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.routigal-form textarea, .routigal-form select, .routigal-form input {
+  font-family: 'Montserrat', sans-serif;
+    width: 100%;
+    border-radius: 5px;
+    padding: 8px;
+    border: none;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  position: relative;
+}
+
+/* Aqui se crea el efecto para el hover con ::after para hacerlo dinámico */
+nav ul li:not(:last-of-type) a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background-color: white;
+  transition: width 0.5s ease;
+}
+
+nav ul li a:hover::after {
+  width: 100%;
+}
+
+/* FORMULARIO - INICIO */
+.routigal-form {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  align-items: end;
+  gap: 20px;
+}
+
+.routigal-form p {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button:not(.hamburger) {
+  padding: 10px 20px;
+  background-color: #ffc107;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:not(.hamburger):hover {
+  background-color: #ffa600;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.btn-yellow {
+  background-color: #ffc107;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn-yellow:hover {
+  background-color: #ffa600;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: space-between;
+  width: 35px;
+  height: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  color: white;
+  background-color: white !important;
+  border-radius: 2px;
+}
+
+nav ul {
+  list-style: none;
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+  position: fixed;
+  top: 70px;
+  right: 0;
+  width: 250px;
+  height: fit-content;
+  background-color: #1d1d1d;
+  padding: 20px 30px;
+  z-index: 999;
+  border-left: 2px solid #ffc107;
+  border-bottom: 2px solid #ffc107;
+}
+
+nav ul.show {
+  display: flex;
+}
+
+@media (min-width: 726px) {
+  .hamburger {
+    display: none;
+  }
+
+  nav ul {
+    display: flex !important;
+    flex-direction: row;
+    position: static;
+    background: none;
+    height: auto;
+    padding: 0;
+    border: none;
+    width: auto;
+    gap: 20px;
+  }
+}
+
+

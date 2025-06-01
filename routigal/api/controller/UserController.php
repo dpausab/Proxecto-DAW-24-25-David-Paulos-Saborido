@@ -1,13 +1,13 @@
 <?php
 
 include_once("Controller.php");
-include_once("model/ServiceModel.php");
+include_once("model/UserModel.php");
 
-class ServiceController extends Controller{
+class UserController extends Controller{
     public function get($id) {
         $dato=null;
         try {
-            $datos = ServiceModel::get($id);
+            $datos = UserModel::get($id);
             echo json_encode($datos);
         } catch (\Throwable $th) {
             echo json_encode([
@@ -16,16 +16,16 @@ class ServiceController extends Controller{
             ]);
         }
     }
-    public function getAll($params) {
+    public function getAll($ids) {
         $datos = [];
         try {
-            if (isset($params) && count($params)>0) {
-                $pagina = $params[0]-1 ?? 0;
+            if (isset($ids) && count($ids)>0) {
+                $pagina = $ids[0] ?? 0;
                 $limit =  10;
                 $offset = $pagina * $limit;
-                $datos = ServiceModel::getAll($offset, $limit);
+                $datos = UserModel::getAll($offset, $limit);
             } else {
-                $datos = ServiceModel::getAll();
+                $datos = UserModel::getAll();
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {
@@ -36,11 +36,17 @@ class ServiceController extends Controller{
         }
     }
 
-    public function getDisponibles($id=null) {
+    public function getTecnicos() {
         $datos = [];
         try {
-            $datos = ServiceModel::getDisponibles($id);
-            
+            if (isset($ids) && count($ids)>0) {
+                $pagina = $ids[0] ?? 0;
+                $limit =  10;
+                $offset = $pagina * $limit;
+                $datos = UserModel::getTecnicos($offset, $limit);
+            } else {
+                $datos = UserModel::getTecnicos();
+            }
             echo json_encode($datos);
         } catch (\Throwable $th) {
             echo json_encode([
@@ -50,24 +56,11 @@ class ServiceController extends Controller{
         }
     }
 
-    public function reset() {
-        $dato = null;
-        $mensaje = "Editado con éxito.";
-        try {
-            $dato = ServiceModel::reset();
-        } catch (\Throwable $th) {
-            http_response_code(401);
-            $mensaje = $th->getMessage();
-        }
-        
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
-    }
-
     public function delete($id) {
         $dato = null;
         $mensaje = "Editado con éxito.";
         try {
-            $dato = ServiceModel::delete($id[0]);
+            $dato = UserModel::delete($id[0]);
         } catch (\Throwable $th) {
             http_response_code(401);
             $mensaje = $th->getMessage();
@@ -80,7 +73,7 @@ class ServiceController extends Controller{
         $mensaje = "Editado con éxito.";
         try {
             $datos = json_decode($json, true);
-            $dato = ServiceModel::update($datos, $id[0]);
+            $dato = UserModel::update($datos, $id[0]);
         } catch (\Throwable $th) {
             http_response_code(401);
             $mensaje = $th->getMessage();
@@ -88,28 +81,12 @@ class ServiceController extends Controller{
         
         echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
     }
-
-    public static function updateRutaId($data, $ids) {
-        $dato = null;
-        $mensaje = "Editado con éxito.";
-        try {
-            $datos = json_decode($data, true);
-            $servicioId = $ids[0];
-            $dato = ServiceModel::updateRutaId($datos, $servicioId);
-        } catch (\Throwable $th) {
-            http_response_code(401);
-            $mensaje = $th->getMessage();
-        }
-        
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
-    }
-
     public function insert($json) {
         $dato = null;
         $mensaje = "Insertado con éxito.";
         try {
             $datos = json_decode($json, true);
-            $dato = ServiceModel::insert($datos);
+            $dato = UserModel::insert($datos);
         } catch (\Throwable $th) {
             http_response_code(401);
             $mensaje = $th->getMessage();

@@ -1,360 +1,434 @@
 <?php
 include_once("Model.php");
 
-class Service implements JsonSerializable{
+class Service implements JsonSerializable {
     protected $id;
-    protected $ruta;
-    protected $cliente;
+    protected $nombre;
+    protected $id_estado;
+    protected $nombre_cliente;
     protected $latitud;
     protected $longitud;
-    protected $estado;
+    protected $direccion;
+    protected $fecha_servicio;
+    protected $hora_servicio;
+    protected $id_ruta;
+    protected $orden;
+    protected $duracion_estimada;
     protected $descripcion;
-    protected $tiempoEstimado;
 
-    public function __construct($estado, $cliente, $latitud, $longitud, $descripcion, $tiempoEstimado, $ruta=null, $id=null) {
+    public function __construct($nombre, $id_estado, $nombre_cliente, $latitud, $longitud, $direccion, $fecha_servicio, $hora_servicio, $duracion_estimada, $descripcion, $orden = null, $id_ruta = null, $id = null) {
         $this->id = $id;
-        $this->ruta = $ruta;
-        $this->cliente = $cliente;
+        $this->nombre = $nombre;
+        $this->id_estado = $id_estado;
+        $this->nombre_cliente = $nombre_cliente;
         $this->latitud = $latitud;
         $this->longitud = $longitud;
-        $this->estado = $estado;
+        $this->direccion = $direccion;
+        $this->fecha_servicio = $fecha_servicio;
+        $this->hora_servicio = $hora_servicio;
+        $this->orden = $orden;
+        $this->id_ruta = $id_ruta;
+        $this->duracion_estimada = $duracion_estimada;
         $this->descripcion = $descripcion;
-        $this->tiempoEstimado = $tiempoEstimado;
     }
 
-    public function jsonSerialize() : mixed {
+    public function jsonSerialize(): mixed {
         return get_object_vars($this);
     }
-    
-    /**
-     * Get the value of id
-     */ 
-    public function getId()
-    {
-        return $this->id;
+
+    public function getId() { 
+        return $this->id; 
+    }
+    public function setId($id) { 
+        $this->id = $id; 
+        return $this; 
     }
 
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
+    public function getNombre() { 
+        return $this->nombre; 
+    }
+    public function setNombre($nombre) { 
+        $this->nombre = $nombre; 
+        return $this; 
     }
 
-    /**
-     * Get the value of id
-     */ 
-    public function getRuta()
-    {
-        return $this->ruta;
+    public function getIdEstado() { 
+        return $this->id_estado; 
+    }
+    public function setIdEstado($id_estado) { 
+        $this->id_estado = $id_estado; 
+        return $this; 
     }
 
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setRuta($ruta)
-    {
-        $this->ruta = $ruta;
-
-        return $this;
+    public function getNombreCliente() { 
+        return $this->nombre_cliente; 
+    }
+    public function setNombreCliente($nombre_cliente) { 
+        $this->nombre_cliente = $nombre_cliente; 
+        return $this; 
     }
 
-    /**
-     * Get the value of cliente
-     */ 
-    public function getCliente()
-    {
-        return $this->cliente;
-    }
-
-    /**
-     * Set the value of cliente
-     *
-     * @return  self
-     */ 
-    public function setCliente($cliente)
-    {
-        $this->cliente = $cliente;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of latitud
-     */ 
-    public function getLatitud()
-    {
-        return $this->latitud;
-    }
-
-    /**
-     * Set the value of latitud
-     *
-     * @return  self
-     */ 
-    public function setLatitud($latitud)
-    {
+    public function getLatitud() {
+         return $this->latitud; 
+        }
+    public function setLatitud($latitud) { 
         $this->latitud = $latitud;
-
-        return $this;
+         return $this; 
     }
 
-    /**
-     * Get the value of longitud
-     */ 
-    public function getLongitud()
-    {
-        return $this->longitud;
+    public function getLongitud() { 
+        return $this->longitud; 
     }
-
-    /**
-     * Set the value of longitud
-     *
-     * @return  self
-     */ 
-    public function setLongitud($longitud)
-    {
+    public function setLongitud($longitud) {
         $this->longitud = $longitud;
+         return $this; 
+    }
 
+    public function getDireccion() { 
+        return $this->direccion; 
+    }
+    public function setDireccion($direccion) { 
+        $this->direccion = $direccion; 
+        return $this; 
+    }
+
+    public function getFecha() { 
+        return $this->fecha_servicio; 
+    }
+    public function setFecha($fecha_servicio) { 
+        $this->fecha_servicio = $fecha_servicio; 
         return $this;
     }
 
-    /**
-     * Get the value of estado
-     */ 
-    public function getEstado()
-    {
-        return $this->estado;
+    public function getHora() { 
+        return $this->hora_servicio; 
+    }
+    public function setHora($hora_servicio) { 
+        $this->hora_servicio = $hora_servicio; 
+        return $this; 
     }
 
-    /**
-     * Set the value of estado
-     *
-     * @return  self
-     */ 
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
+    public function getIdRuta() { 
+        return $this->id_ruta; 
+    }
+    public function setIdRuta($id_ruta) { 
+        $this->id_ruta = $id_ruta;
+        return $this; 
     }
 
-    /**
-     * Get the value of descripcion
-     */ 
-    public function getDescripcion()
-    {
-        return $this->descripcion;
+    public function getOrden() { 
+        return $this->orden; 
+    }
+    public function setOrden($orden) { 
+        $this->orden = $orden;
+        return $this; 
     }
 
-    /**
-     * Set the value of descripcion
-     *
-     * @return  self
-     */ 
-    public function setDescripcion($descripcion)
-    {
-        $this->descripcion = $descripcion;
-
-        return $this;
+    public function getDuracionEstimada() { 
+        return $this->duracion_estimada; 
+    }
+    public function setDuracionEstimada($duracion_estimada) { 
+        $this->duracion_estimada = $duracion_estimada; 
+        return $this; 
     }
 
-    /**
-     * Get the value of tiempoEstimado
-     */ 
-    public function getTiempoEstimado()
-    {
-        return $this->tiempoEstimado;
+    public function getDescripcion() { 
+        return $this->descripcion; 
     }
-
-    /**
-     * Set the value of tiempoEstimado
-     *
-     * @return  self
-     */ 
-    public function setTiempoEstimado($tiempoEstimado)
-    {
-        $this->tiempoEstimado = $tiempoEstimado;
-
-        return $this;
+    public function setDescripcion($descripcion) { 
+        $this->descripcion = $descripcion; 
+        return $this; 
     }
 }
-class ServiceModel extends Model
-{
 
-    public function getAll()
-    {
-        $sql = "SELECT * FROM servicio";
+class ServiceModel extends Model {
+
+    public static function getAll($offset = null, $limit = null) {
+        if (isset($offset, $limit)) {
+            $sql = "SELECT * FROM servicios ORDER BY id DESC LIMIT $limit OFFSET $offset";
+        } else {
+            $sql = "SELECT * FROM servicios ORDER BY id DESC";
+        }
         $db = self::getConnection();
         $datos = [];
+        $next = false;
+        $respuesta = null;
         try {
             $stmt = $db->query($sql);
-            $datos = [];
-            foreach($stmt as $s){   
-                $servicio = new Service($s['id_estado'], $s['cliente'], $s['latitud'], $s['longitud'], $s['descripcion'],$s['tiempoEstimado'], $s['id_ruta'], $s['id']);
+            if ($stmt->rowCount()===10) $next = true;
+            foreach ($stmt as $s) {
+                $servicio = new Service(
+                    $s['nombre'],
+                    $s['id_estado'],
+                    $s['nombre_cliente'],
+                    $s['latitud'],
+                    $s['longitud'],
+                    $s['direccion'],
+                    $s['fecha_servicio'],
+                    $s['hora_servicio'],
+                    $s['duracion_estimada'],
+                    $s['descripcion'],
+                    $s['orden'],
+                    $s['id_ruta'],
+                    $s['id']
+                );
                 $datos[] = $servicio;
             }
+            $respuesta = [
+                'datos' => $datos,
+                'next' => $next
+            ];
         } catch (PDOException $th) {
-            error_log("Error ServiceModel->getAll()");
+            error_log("Error ServicioModel->getAll()");
             error_log($th->getMessage());
         } finally {
             $stmt = null;
             $db = null;
         }
-        return $datos;
+        return $respuesta;
     }
 
-    public function get($servicioId):Service|null
-    {
-        $sql = "SELECT * FROM servicio WHERE id=?";
+    public static function getDisponibles($id=null) {
+        if (isset($id)) {
+            $sql = "SELECT * FROM servicios where id_estado=1 OR id_ruta=:id";
+        } else {
+            $sql = "SELECT * FROM servicios where id_estado=1";
+        }
+        $db = self::getConnection();
+        $datos = [];
+        $next = false;
+        $respuesta = null;
+        try {
+            if (isset($id)) {
+                $stmt = $db->prepare($sql);
+                $stmt->bindParam(':id', $id[0], PDO::PARAM_INT);
+                $stmt->execute();
+            } else {
+                $stmt = $db->query($sql);
+            }
+            foreach ($stmt as $s) {
+                $servicio = new Service(
+                    $s['nombre'],
+                    $s['id_estado'],
+                    $s['nombre_cliente'],
+                    $s['latitud'],
+                    $s['longitud'],
+                    $s['direccion'],
+                    $s['fecha_servicio'],
+                    $s['hora_servicio'],
+                    $s['duracion_estimada'],
+                    $s['descripcion'],
+                    $s['orden'],
+                    $s['id_ruta'],
+                    $s['id']
+                );
+                $datos[] = $servicio;
+            }
+            $respuesta = $datos;
+        } catch (PDOException $th) {
+            error_log("Error ServicioModel->getAll()");
+            error_log($th->getMessage());
+        } finally {
+            $stmt = null;
+            $db = null;
+        }
+        return $respuesta;
+    }
+
+    public static function get($servicioId): ?Service {
+        $sql = "SELECT * FROM servicios WHERE id = ?";
         $db = self::getConnection();
         $datos = null;
         try {
             $stmt = $db->prepare($sql);
             $stmt->bindValue(1, $servicioId, PDO::PARAM_INT);
             $stmt->execute();
-            if($s = $stmt->fetch()){
-                $datos = new Service($s['id'], $s['ruta'], $s['cliente'], $s['longitud'],$s['latitud'],$s['estado'], $s['descricion'], $s['tiempoEstimado']);
+            if ($s = $stmt->fetch()) {
+                $datos = new Service(
+                    $s['nombre'],
+                    $s['id_estado'],
+                    $s['nombre_cliente'],
+                    $s['latitud'],
+                    $s['longitud'],
+                    $s['direccion'],
+                    $s['fecha_servicio'],
+                    $s['hora_servicio'],
+                    $s['duracion_estimada'],
+                    $s['descripcion'],
+                    $s['orden'],
+                    $s['id_ruta'],
+                    $s['id']
+                );
             }
         } catch (Throwable $th) {
-            error_log("Error ServiceModel->get($servicioId)");
+            error_log("Error ServicioModel->get($servicioId)");
             error_log($th->getMessage());
         } finally {
             $stmt = null;
             $db = null;
         }
-
         return $datos;
     }
 
-    public function insert($servicio)
-    {
-        $sql = "INSERT INTO servicio (cliente, longitud, latitud, estado, descripcion, tiempoEstimado) 
-                VALUES (:cliente, :longitud, :latitud, :estado, :descripcion, :te)";
+    public static function insert($servicio) {
+        $sql = "INSERT INTO servicios 
+            (nombre, id_estado, nombre_cliente, latitud, longitud, direccion, fecha_servicio, hora_servicio, duracion_estimada, descripcion, orden, id_ruta) 
+            VALUES 
+            (:nombre, 1, :nombre_cliente, :latitud, :longitud, :direccion, :fecha, :hora, :duracion_estimada, :descripcion, null, null)";
 
         $db = self::getConnection();
         $db->beginTransaction();
-        $datos = false;
+        $respuesta = false;
         try {
             $stmt = $db->prepare($sql);
-            $stmt->bindValue(":cliente", $servicio->cliente, PDO::PARAM_STR);
-            $stmt->bindValue(":longitud", $servicio->longitud, PDO::PARAM_INT);
-            $stmt->bindValue(":latitud", $servicio->latitud, PDO::PARAM_STR);
-            $stmt->bindValue(":estado", $servicio->estado, PDO::PARAM_STR);
-            $stmt->bindValue(":descripcion", $servicio->descripcion, PDO::PARAM_STR);
-            $stmt->bindValue(":te", $servicio->tiempoEstimado, PDO::PARAM_STR);
+            $stmt->bindValue(":nombre", $servicio['nombre'], PDO::PARAM_STR);
+            $stmt->bindValue(":id_estado", $servicio['id_estado'], PDO::PARAM_INT);
+            $stmt->bindValue(":nombre_cliente", $servicio['nombre_cliente'], PDO::PARAM_STR);
+            $stmt->bindValue(":latitud", $servicio['latitud'], PDO::PARAM_STR);
+            $stmt->bindValue(":longitud", $servicio['longitud'], PDO::PARAM_STR);
+            $stmt->bindValue(":direccion", $servicio['direccion'], PDO::PARAM_STR);
+            $stmt->bindValue(":fecha", $servicio['direccion'], PDO::PARAM_STR);
+            $stmt->bindValue(":hora", $servicio['direccion'], PDO::PARAM_STR);
+            $stmt->bindValue(":duracion_estimada", $servicio['duracion_estimada']);
+            $stmt->bindValue(":descripcion", $servicio['descripcion'], PDO::PARAM_STR);
 
-            $datos = $stmt->execute();
+            $stmt->execute();
+            $lastId = $db->lastInsertId();
+            $respuesta = isset($lastId) ? true : false;
             $db->commit();
         } catch (PDOException $th) {
             $db->rollBack();
-            error_log("Error ServiceModel->insert()");
+            error_log("Error ServicioModel->insert()");
             error_log($th->getMessage());
         } finally {
             $stmt = null;
             $db = null;
         }
 
-        return $datos;
+        return $respuesta;
     }
 
-    public function update($servicio, $servicioId)
-    {
- 
-        $sql = "UPDATE servicio SET
-            nombre=:nombre,
-            distancia_total=:dt,
-            tiempo_total=:tt,
-            estado=:estado,
-            tecnico=:tecnico,
-            fecha=:fecha
-            WHERE id=:id";
+    public static function update($servicio, $servicioId) {
+
+        $sql = "UPDATE servicios SET
+        nombre = :nombre,
+        id_estado = :id_estado,
+        nombre_cliente = :nombre_cliente,
+        latitud = :latitud,
+        longitud = :longitud,
+        direccion = :direccion,
+        fecha_servicio = :fecha,
+        hora_servicio = :hora,
+        duracion_estimada = :duracion_estimada,
+        descripcion = :descripcion,
+        id_ruta = :id_ruta
+        WHERE id = :id";
+        
 
         $db = self::getConnection();
         $db->beginTransaction();
-        $datos = false;
+        $resultado = false;
         try {
             $stmt = $db->prepare($sql);
-            $stmt->bindValue(":nombre", $servicio->nombre, PDO::PARAM_STR);
-            $stmt->bindValue(":dt", $servicio->distanciaTotal, PDO::PARAM_INT);
-            $stmt->bindValue(":tt", $servicio->tiempoTotal, PDO::PARAM_STR);
-            $stmt->bindValue(":estado", $servicio->estado, PDO::PARAM_STR);
-            $stmt->bindValue(":tecnico", $servicio->tecnico, PDO::PARAM_STR);
-            $stmt->bindValue(":fecha", $servicio->fecha, PDO::PARAM_STR);
+            $stmt->bindValue(":id", $servicioId, PDO::PARAM_INT);
+            $stmt->bindValue(":nombre", $servicio['nombre'], PDO::PARAM_STR);
+            $stmt->bindValue(":id_estado", $servicio['id_estado'], PDO::PARAM_INT);
+            $stmt->bindValue(":nombre_cliente", $servicio['nombre_cliente'], PDO::PARAM_STR);
+            $stmt->bindValue(":latitud", $servicio['latitud'], PDO::PARAM_STR);
+            $stmt->bindValue(":longitud", $servicio['longitud'], PDO::PARAM_STR);
+            $stmt->bindValue(":direccion", $servicio['direccion'], PDO::PARAM_STR);
+            $stmt->bindValue(":fecha", $servicio['direccion'], PDO::PARAM_STR);
+            $stmt->bindValue(":hora", $servicio['direccion'], PDO::PARAM_STR);
+            $stmt->bindValue(":duracion_estimada", $servicio['duracion_estimada']);
+            $stmt->bindValue(":descripcion", $servicio['descripcion'], PDO::PARAM_STR);
+            $stmt->bindValue(":id_ruta", $servicio['id_ruta'], PDO::PARAM_INT);
 
-            $datos = $stmt->execute();
-            $datos = $stmt->rowCount() == 1;
+            $stmt->execute();
+            $resultado = true;
             $db->commit();
         } catch (PDOException $th) {
             $db->rollBack();
-            error_log("Error ServiceModel->update(" . implode(",", $servicio) . ", $servicioId)");
+            error_log("Error ServicioModel->update(" . implode(",", $servicio) . ", $servicioId)");
             error_log($th->getMessage());
         } finally {
             $stmt = null;
             $db = null;
         }
-
-        return $datos;
+        return $resultado;
     }
 
-    public function updateRutaId($servicioId, $rutaId)
-    {
- 
-        $sql = "UPDATE servicio SET
-            id_ruta=:ruta
-            WHERE id=:id";
+    public static function updateRutaId($datos, $id) {
+        $sql = "UPDATE servicios SET id_ruta = :ruta, id_estado = :estado, duracion_estimada=:estimado, orden=:orden WHERE id = :id";
 
         $db = self::getConnection();
         $db->beginTransaction();
-        $datos = false;
+        $resultado = false;
         try {
             $stmt = $db->prepare($sql);
-            $stmt->bindValue(":ruta", $rutaId, PDO::PARAM_STR);
-            $stmt->bindValue(":id", $servicioId, PDO::PARAM_STR);
+            $stmt->bindValue(":ruta", $datos['id_ruta'], PDO::PARAM_INT);
+            $stmt->bindValue(":estado", $datos['id_estado'], PDO::PARAM_INT);
+            $stmt->bindValue(":estimado", $datos['estimado'], PDO::PARAM_INT);
+            $stmt->bindValue(":orden", $datos['orden'], PDO::PARAM_INT);
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 
-            $datos = $stmt->execute();
-            $datos = $stmt->rowCount() == 1;
+            $stmt->execute();
+            $resultado = $stmt->rowCount() === 1;
             $db->commit();
         } catch (PDOException $th) {
             $db->rollBack();
-            error_log("Error ServiceModel->updateRutaId()");
+            $resultado = $th->getMessage();
+            error_log("Error ServicioModel->updateRutaId()");
             error_log($th->getMessage());
         } finally {
             $stmt = null;
             $db = null;
         }
 
-        return $datos;
+        return $resultado;
     }
 
-    public function delete($servicioId)
-    {
-        $sql = "DELETE FROM servicio WHERE id=?";
+    public static function reset() {
+        $sql = "UPDATE servicios SET id_ruta = null, id_estado = 1, orden=null";
 
         $db = self::getConnection();
         $db->beginTransaction();
-        $datos = false;
+        try {
+            $stmt = $db->query($sql);
+            $resultado = $stmt->rowCount() >= 1;
+            $db->commit();
+        } catch (PDOException $th) {
+            $db->rollBack();
+            $resultado = $th->getMessage();
+            error_log("Error ServicioModel->updateRutaId()");
+            error_log($th->getMessage());
+        } finally {
+            $stmt = null;
+            $db = null;
+        }
+
+        return $resultado;
+    }
+
+    public static function delete($servicioId) {
+        $sql = "DELETE FROM servicios WHERE id = ?";
+
+        $db = self::getConnection();
+        $db->beginTransaction();
+        $resultado = false;
         try {
             $stmt = $db->prepare($sql);
             $stmt->bindValue(1, $servicioId, PDO::PARAM_INT);
-            $datos = $stmt->execute();
+            $stmt->execute();
+            $resultado = $stmt->rowCount() >= 1;
             $db->commit();
         } catch (PDOException $th) {
             $db->rollBack();
-            error_log("Error ServiceModel->delete($servicioId)");
+            error_log("Error ServicioModel->delete($servicioId)");
             error_log($th->getMessage());
         } finally {
             $stmt = null;
             $db = null;
         }
-
-        return $datos;
+        return $resultado;
     }
 }
