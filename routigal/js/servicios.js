@@ -6,7 +6,7 @@ const $d = document,
             $filtros = $d.querySelector("#filtros"),
             $submit = $form.querySelector("button")
 
-let {cliente, latitud, longitud, fecha, hora, descripcion} = $form
+let {id, nombre, cliente, latitud, longitud, direccion, fecha, hora, estimado} = $form
 const estados = {
     1: 'Nuevo',
     2: 'En curso',
@@ -61,11 +61,14 @@ $form.addEventListener("submit", async(ev) => {
             url: "/api/servicios/insert",
             method: 'POST',
             data: {
+                nombre: nombre.value,
                 cliente: cliente.value,
                 latitud: latitud.value,
                 longitud: longitud.value,
-                descripcion: descripcion.value,
-                tiempoEstimado: tiempoEstimado.value
+                direccion: direccion.value,
+                fecha: fecha.value,
+                hora: hora.value,
+                tiempoEstimado: estimado.value
             }
         })
 
@@ -74,29 +77,21 @@ $form.addEventListener("submit", async(ev) => {
                 url: `http://localhost/api/servicios/getAll/${page}`
             })
 
-            $servicios.innerHTML = datos.map(el => 
-                `<tr>
-                    <td>${el.id}</td>
-                    <td>${el.cliente}</td>
-                    <td>${el.descripcion}</td>
-                    <td>${el.tiempoEstimado / 60} minutos</td>
-                    <td id="btns">
-                        <button id="editar" data-id="${el.id}">Editar</button>
-                        <button id="borrar" data-id="${el.id}">Borrar</button>
-                    </td>
-                </tr>`
-            ).join('')
+            window.location.reload()
         }
     } else {
         let resp = await ajax({
            url: `/api/servicios/update/${id.value}`,
             method: 'PUT',
             data: {
+                nombre: nombre.value,
                 cliente: cliente.value,
                 latitud: latitud.value,
                 longitud: longitud.value,
-                descripcion: descripcion.value,
-                tiempoEstimado: tiempoEstimado.value
+                direccion: direccion.value,
+                fecha: fecha.value,
+                hora: hora.value,
+                tiempoEstimado: estimado.value
             } 
         })
 
@@ -115,11 +110,14 @@ $servicios.addEventListener("click", async(ev) => {
         if (ev.target.id === "editar") {
             let servicio = servicios.find(el => el.id == ev.target.dataset.id)
             id.value = servicio.id
-            cliente.value = servicio.cliente
+            nombre.value = servicio.nombre
+            cliente.value = servicio.nombre_cliente
             latitud.value = servicio.latitud
             longitud.value = servicio.longitud
-            descripcion.value = servicio.descripcion
-            tiempoEstimado.value = servicio.tiempoEstimado
+            direccion.value = servicio.direccion
+            fecha.value = servicio.fecha_servicio,
+            hora.value = servicio.hora_servicio,
+            estimado.value = servicio.duracion_estimada
 
             $submit.textContent = 'Editar'
         } else {

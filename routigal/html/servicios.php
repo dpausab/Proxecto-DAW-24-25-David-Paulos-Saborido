@@ -19,6 +19,13 @@
     <h1>Gestión de servicios</h1>
     <section id="form">
       <form class="routigal-form" id="form-servicios">
+        <p class="id">
+          <input type="text" name="id" id="id" hidden>
+        </p>
+        <p>
+          <label for="nombre">Nombre</label>
+          <input type="text" name="nombre" id="nombre" placeholder="Nombre" />
+        </p>
         <p>
           <label for="cliente">Cliente</label>
           <input type="text" name="cliente" id="cliente" placeholder="Nombre del cliente" />
@@ -32,6 +39,10 @@
           <input type="text" name="longitud" id="longitud"/>
         </p>
         <p>
+          <label for="direccion">Direccion</label>
+          <input type="text" name="direccion" id="direccion"/>
+        </p>
+        <p>
           <label for="fecha">Fecha</label>
           <input type="date" name="fecha" id="fecha" />
         </p>
@@ -40,8 +51,8 @@
           <input type="time" name="hora" id="hora" />
         </p>
         <p>
-          <label for="observaciones">Observaciones</label>
-          <textarea name="observaciones" id="observaciones" rows="3" placeholder="Detalles adicionales..."></textarea>
+          <label for="estimado">T. Estimado</label>
+          <input type="time" name="estimado" id="estimado">
         </p>
         <button type="submit">Guardar servicio</button>
       </form>
