@@ -18,14 +18,16 @@ class RouteController extends Controller{
     }
     public function getAll($ids) {
         $datos = [];
+        $id = null;
+        $id = $_SESSION['user']['rol'] === 2 ? $_SESSION['user']['id'] : null;
         try {
             if (isset($ids) && count($ids)>0) {
                 $pagina = $ids[0]-1 ?? 1;
                 $limit =  10;
                 $offset = $pagina * $limit;
-                $datos = RouteModel::getAll($offset, $limit);
+                $datos = RouteModel::getAll($offset, $limit, $id);
             } else {
-                $datos = RouteModel::getAll();
+                $datos = RouteModel::getAll(null, null, $id);
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {

@@ -4,6 +4,7 @@ include_once("Controller.php");
 include_once("model/UserModel.php");
 
 class UserController extends Controller{
+
     public function get($id) {
         $dato=null;
         try {
@@ -20,7 +21,7 @@ class UserController extends Controller{
         $datos = [];
         try {
             if (isset($ids) && count($ids)>0) {
-                $pagina = $ids[0] ?? 0;
+                $pagina = $ids[0]-1 ?? 1;
                 $limit =  10;
                 $offset = $pagina * $limit;
                 $datos = UserModel::getAll($offset, $limit);

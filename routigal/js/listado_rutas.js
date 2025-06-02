@@ -2,42 +2,21 @@ import { ajax } from "./ajaxF.js"
 
 const $d = document,
             $rutas = $d.querySelector("tbody"),
-            $filtros = $d.querySelector("#filtros")
+            $filtros = $d.querySelector("#filtros"),
+            $nombreF = $filtros.querySelector("#nombre_filtro"),
+            $fechaF = $filtros.querySelector("#fecha_filtro")
 
-const estados = {
-    1: 'Asignada',
-    2: 'Finalizada'
-}
+
 let rutas = []
 let next = null;
 
 const page = new URLSearchParams(window.location.search).get("page") ?? 1;
+let user = null
 
 $d.addEventListener("DOMContentLoaded", async () => {
-    let datos  = await ajax({
-        url: `http://localhost/api/rutas/getAll/${parseInt(page)}`
-    })
-
-    rutas = datos.datos
-    console.log(rutas)
-    next = datos.next
-    $rutas.innerHTML = rutas.map(el => 
-        `<tr>
-            <td>${el.nombre}</td>
-            <td>${el.tecnico}</td>
-            <td>${el.origen}</td>
-            <td>${el.fecha}</td>
-            <td>${el.estado}</td>
-            <td>${el.distanciaTotal}</td>
-            <td>${el.tiempoTotal}</td>
-            <td>
-                <button>
-                    <a href="../html/rutas.php?ruta=${el.id}">Editar</a>
-                </button>
-                <button id="borrar" data-id="${el.id}">Borrar</button>
-            </td>
-        </tr>`
-    ).join('')
+    user = await ajax({url:"http://localhost/api/auth/getLoggedUser"})
+    await getRutas()
+    renderRutas(rutas)
     
     if (page>1) {
         $filtros.innerHTML += 
@@ -52,17 +31,84 @@ $d.addEventListener("DOMContentLoaded", async () => {
         </p>`
     }
 })
+async function getRutas() {
+let datos  = await ajax({
+        url: `http://localhost/api/rutas/getAll/${parseInt(page)}`
+    })
+
+    rutas = datos.datos
+    next = datos.next
+}
+function renderRutas(rutas) {
+    if (rutas.length) {
+        $rutas.innerHTML = rutas.map(el => {
+            let botones = ""
+            if (user.rol === 1) {
+                botones = `<td>
+                        <button id="editar" data-id="${el.id}">
+                            <a href="rutas.php?ruta=${el.id}">Editar</a>
+                        </button>
+                        <button id="borrar" data-id="${el.id}">Borrar</button>
+                    </td>`
+            } else {
+                botones = `<td>
+                        <button id="editar" data-id="${el.id}">
+                            <a href="rutas.php?ruta=${el.id}">Ver</a>
+                        </button>
+                    </td>`
+            }
+            return `<tr>
+                <td>${el.nombre}</td>
+                <td>${el.tecnico}</td>
+                <td>${el.origen}</td>
+                <td>${el.fecha}</td>
+                <td>${el.estado}</td>
+                <td>${el.distanciaTotal}</td>
+                <td>${el.tiempoTotal}</td>
+                ${botones}
+                </tr>`
+            }).join('')
+    } else {
+        $rutas.innerHTML = '<tr>No hay coincidencias</tr>'
+    }
+}
+
+async function deleteRuta(id) {
+    try {
+        let datos  = await ajax({
+                    url: `http://localhost/api/rutas/delete/${id}`,
+                    method: 'DELETE'
+                })
+
+        if(datos.respuesta) {
+            await getRutas()
+            renderRutas(rutas)
+        }
+    } catch (error) {
+        throw new Error()
+    }
+}
+
+$rutas.addEventListener("click", async(ev) => {
+    ev.preventDefault()
+
+    ev.preventDefault()
+
+    if (ev.target.id === "borrar" && ev.target.dataset.id) {
+        await deleteRuta(ev.target.dataset.id)
+    }
+})
 
 
-// Función simple que formatea los segundos a horas y minutos.
-export function formatearTiempo(segundos) {
-    let horas = parseFloat(Math.floor(segundos/3600)).toString().padStart(2, "0")
-    let minutos = parseFloat(Math.floor(((segundos) - (horas*3600)) / 60)).toString().padStart(2, "0")
+$nombreF.addEventListener("keyup", ev => {
+    ev.preventDefault()
+    let filtrados = rutas.filter(el => el.nombre.toLowerCase().includes(ev.target.value.toLowerCase()))
+    renderRutas(filtrados)
     
-    return `${horas}:${minutos}`.trim();
-}
-// Función simple de formateo de horas, para recoger las horas de la BBDD y la hora de inicio.
-export function formatearHoras(hora) {
-    let [horas, minutos] = hora.split(':').map(Number)
-    return horas*3600+minutos*60
-}
+})
+
+$fechaF.addEventListener("change", ev => {
+    ev.preventDefault()
+    let filtrados = servicios.filter(el => el.fecha === $fechaF.value)
+    renderRutas(filtrados)
+})

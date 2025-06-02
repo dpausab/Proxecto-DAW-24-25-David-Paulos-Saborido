@@ -79,9 +79,5 @@
       <div id="map"></div>
     </div>
   </main>
-  <footer>
-    ESTE ES EL FOOTER
-  </footer>
-
-  
+  <?php include_once ('footer.php'); ?>
 </html>

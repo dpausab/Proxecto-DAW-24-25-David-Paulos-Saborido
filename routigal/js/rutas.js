@@ -36,6 +36,7 @@ let distanciaRuta
 
 let ruta = null
 const rutaId = new URLSearchParams(window.location.search).get("ruta") ?? null
+let user = null;
 
 
 function loadMap() {
@@ -59,7 +60,7 @@ function loadMap() {
             permanent: true,
             direction: 'top',
             offset: [-15, -10],
-            className: 'my-label'
+            className: 'map-label'
         })
         .openTooltip();
         return marker;
@@ -221,7 +222,7 @@ function formulario(ruta) {
 }
 
 async function start() {
-
+    user = await ajax({url:"http://localhost/api/auth/getLoggedUser"})
     loadMap()
     await getTecnicos()
     await getUbicaciones()
@@ -391,7 +392,8 @@ async function crearRuta() {
                     orden: i,
                     id_ruta: parseInt(id),
                     estimado: horasMap.get(el.servicio.id).value,
-                    id_estado: 2
+                    id_estado: 2,
+                    tecnico: $tecnicos.value
                 }
             })
         ));
@@ -426,7 +428,8 @@ async function modificarRuta(id) {
                     orden: i,
                     id_ruta: parseInt(id),
                     estimado: horasMap.get(el.servicio.id).value+':00',
-                    id_estado: 2
+                    id_estado: 2,
+                    tecnico: $tecnicos.value
                 }
             })
         ));

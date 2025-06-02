@@ -24,8 +24,11 @@ section h2 {
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: #2b2b2b;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 0 10px #00000055;
@@ -33,7 +36,6 @@ section h2 {
 
 .card h2 {
   font-size: 1.3rem;
-  margin-bottom: 10px;
   color: #ffc107;
 }
 
@@ -41,33 +43,13 @@ section h2 {
   font-size: 1.2rem;
 }
 
-#table-container {
-  overflow-x: auto;
-}
-.table, .list {
+.list {
   background-color: #2b2b2b;
   border-radius: 10px;
   padding: 20px;
   width: 100%;
 }
 
-.table table {
-  width: 100%;
-  min-width: 650px;
-  border-collapse: collapse;
-  white-space: none;
-  color: white;
-}
-
-.table th, .table td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #444;
-}
-
-.table th {
-  background-color: #383838;
-}
 
 .list ul {
   list-style: none;
@@ -79,8 +61,3 @@ section h2 {
   border-bottom: 1px solid #333;
 }
 
-@media screen and (min-width: 920px){
-  #table-container {
-    max-width: 100%;
-  }
-}

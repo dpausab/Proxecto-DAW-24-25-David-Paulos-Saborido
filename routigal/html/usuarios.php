@@ -1,5 +1,8 @@
 <?php
     include_once("auth.php");
+    if ($_SESSION['user']['rol'] != 1) {
+        header("Location: 403.php");
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -8,29 +11,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Servicios - Routigal</title>
   <script src="/js/menu-hamburguesa.js" defer></script>
-  <script type="module" src="/js/listado_rutas.js" defer></script>
+  <script type="module" src="/js/usuarios.js" defer></script>
   <link rel="stylesheet" href="../css/servicios.css">
 </head>
 <body>
-  <?php include_once("header.php"); ?>
+  <?php include_once('header.php'); ?>
 
   <main>
-    <h1>Gestión de rutas</h1>
+    <h1>Gestión de usuarios</h1>
     <section class="table-container">
-      <h2>Listado de rutas</h2>
+      <h2>Listado de usuarios</h2>
       <form class="routigal-form" id="filtros">
         <p>
           <label for="cliente">Nombre</label>
-          <input type="text" name="nombre_filtro" id="nombre_filtro" placeholder="Nombre del cliente" />
+          <input type="text" name="nombre_filtro" id="nombre_filtro" placeholder="Nombre del usuario" />
         </p>
         <p>
-          <label for="fecha">Fecha</label>
-          <input type="date" name="fecha_filtro" id="fecha_filtro" />
+          <label for="rol">Rol</label>
+          <select name="rol_filtro" id="rol_filtro"></select>
         </p>
         <?php if ($_SESSION['user']['rol'] === 1) {
                   echo '<p>
-                      <button>
-                        <a href="/html/rutas.php">Crear</a>
+                      <button id="crear">
+                        Crear
                       </button>
                     </p>';
               }
@@ -40,12 +43,7 @@
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Tecnico</th>
-            <th>Origen</th>
-            <th>Fecha</th>
-            <th>Estado</th>
-            <th>KM estimados</th>
-            <th>Tiempo estimado</th>
+            <th>Rol</th>
             <th>Acciones</th>
           </tr>
         </thead>

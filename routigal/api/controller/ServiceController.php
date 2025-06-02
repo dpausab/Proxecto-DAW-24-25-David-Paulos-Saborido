@@ -18,14 +18,17 @@ class ServiceController extends Controller{
     }
     public function getAll($params) {
         $datos = [];
+        $id = null;
+        $id = $_SESSION['user']['rol'] === 2 ? $_SESSION['user']['id'] : null;
         try {
+            
             if (isset($params) && count($params)>0) {
                 $pagina = $params[0]-1 ?? 0;
                 $limit =  10;
                 $offset = $pagina * $limit;
-                $datos = ServiceModel::getAll($offset, $limit);
+                $datos = ServiceModel::getAll($offset, $limit, $id);
             } else {
-                $datos = ServiceModel::getAll();
+                $datos = ServiceModel::getAll(null, null, $id);
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {

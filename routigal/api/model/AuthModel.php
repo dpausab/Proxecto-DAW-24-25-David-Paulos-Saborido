@@ -5,7 +5,7 @@ class AuthModel extends Model
 {
     public static function login($user, $pwd)
     {
-        $sql = "SELECT *
+        $sql = "SELECT id, nombre, usuario, id_rol
         FROM usuarios WHERE usuario=:user AND pwd=:pwd";
         $db = self::getConnection();
         $stmt = $db->prepare($sql);
@@ -15,10 +15,10 @@ class AuthModel extends Model
             $stmt->bindValue(':pwd',$pwd, PDO::PARAM_STR);
             $stmt->execute();
             
-            $access = $stmt->rowCount()>=1;
+            $access = $stmt->fetch(PDO::FETCH_ASSOC);
             
         } catch (PDOException $th) {
-            error_log("Error en la consulta de autenticacion".$th->getMessage());
+            echo json_encode(['mensaje' => 'Error iniciando sesión']);
             $access = false;
         }finally{
             $stmt = null;
@@ -26,6 +26,31 @@ class AuthModel extends Model
         }
 
         return $access;
+    }
+
+    public static function hasPermission($userId, $endpoint, $method) {
+        $sql = "SELECT * FROM permisos p JOIN usuarios u ON u.id_rol = p.rol_id JOIN endpoints e ON e.id = p.endpoint_id
+        WHERE u.id = :id AND e.nombre = :ep AND p.metodo = :metodo";
+
+        $db = self::getConnection();
+        $stmt = $db->prepare($sql);
+        $result = false;
+        try {
+            $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+            $stmt->bindParam(':ep', $endpoint, PDO::PARAM_STR);
+            $stmt->bindParam(':metodo', $method, PDO::PARAM_STR);
+
+            $stmt->execute();
+            $result = $stmt->rowCount()>=1;
+        } catch (PDOException $ex) {
+            $result = false;
+            echo json_encode(['mensaje' => 'Error consultando los permisos']);
+        } finally {
+            $db = null;
+            $stmt = null;
+        }
+
+        return $result;
     }
 
     public static function register($json) {
@@ -42,7 +67,7 @@ class AuthModel extends Model
             
             $result = $stmt->rowCount() >= 1;
         } catch (PDOException $th) {
-            error_log("Error registrando al usuario".$th->getMessage());
+            echo json_encode(['mensaje' => 'Error registrando al usuario']);
             $result = false;
         } finally {
             $db = null;

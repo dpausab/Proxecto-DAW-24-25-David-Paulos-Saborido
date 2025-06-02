@@ -15,8 +15,9 @@ class Service implements JsonSerializable {
     protected $orden;
     protected $duracion_estimada;
     protected $descripcion;
+    protected $id_tecnico;
 
-    public function __construct($nombre, $id_estado, $nombre_cliente, $latitud, $longitud, $direccion, $fecha_servicio, $hora_servicio, $duracion_estimada, $descripcion, $orden = null, $id_ruta = null, $id = null) {
+    public function __construct($nombre, $id_estado, $nombre_cliente, $latitud, $longitud, $direccion, $fecha_servicio, $hora_servicio, $duracion_estimada, $id_tecnico=null, $descripcion=null, $orden = null, $id_ruta = null, $id = null) {
         $this->id = $id;
         $this->nombre = $nombre;
         $this->id_estado = $id_estado;
@@ -29,6 +30,7 @@ class Service implements JsonSerializable {
         $this->orden = $orden;
         $this->id_ruta = $id_ruta;
         $this->duracion_estimada = $duracion_estimada;
+        $this->id_tecnico = $id_tecnico;
         $this->descripcion = $descripcion;
     }
 
@@ -132,6 +134,14 @@ class Service implements JsonSerializable {
         return $this; 
     }
 
+    public function getTecnico() { 
+        return $this->id_tecnico; 
+    }
+    public function setTecnico($id_tecnico) { 
+        $this->id_tecnico = $id_tecnico; 
+        return $this; 
+    }
+
     public function getDescripcion() { 
         return $this->descripcion; 
     }
@@ -143,19 +153,30 @@ class Service implements JsonSerializable {
 
 class ServiceModel extends Model {
 
-    public static function getAll($offset = null, $limit = null) {
-        if (isset($offset, $limit)) {
-            $sql = "SELECT * FROM servicios ORDER BY id DESC LIMIT $limit OFFSET $offset";
-        } else {
-            $sql = "SELECT * FROM servicios ORDER BY id DESC";
+    public static function getAll($offset = null, $limit = null, $id) {
+        $sql = "SELECT * FROM servicios";
+
+        if (isset($id)) {
+            $sql.=" WHERE id_tecnico=:id";
         }
+        $sql.= ' ORDER BY id DESC';
+        if (isset($offset, $limit)) {
+            $limit = $limit+1;
+            $sql .= " LIMIT $limit OFFSET $offset";
+        } 
         $db = self::getConnection();
         $datos = [];
         $next = false;
         $respuesta = null;
         try {
-            $stmt = $db->query($sql);
-            if ($stmt->rowCount()===10) $next = true;
+            if (isset($id)) {
+                $stmt=$db->prepare($sql);
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+            } else {
+                $stmt = $db->query($sql);
+            }
+            if ($stmt->rowCount()===11) $next = true;
             foreach ($stmt as $s) {
                 $servicio = new Service(
                     $s['nombre'],
@@ -167,6 +188,7 @@ class ServiceModel extends Model {
                     $s['fecha_servicio'],
                     $s['hora_servicio'],
                     $s['duracion_estimada'],
+                    $s['id_tecnico'],
                     $s['descripcion'],
                     $s['orden'],
                     $s['id_ruta'],
@@ -174,6 +196,7 @@ class ServiceModel extends Model {
                 );
                 $datos[] = $servicio;
             }
+            if ($next) array_pop($datos);
             $respuesta = [
                 'datos' => $datos,
                 'next' => $next
@@ -217,6 +240,7 @@ class ServiceModel extends Model {
                     $s['fecha_servicio'],
                     $s['hora_servicio'],
                     $s['duracion_estimada'],
+                    $s['id_tecnico'],
                     $s['descripcion'],
                     $s['orden'],
                     $s['id_ruta'],
@@ -255,6 +279,7 @@ class ServiceModel extends Model {
                     $s['hora_servicio'],
                     $s['duracion_estimada'],
                     $s['descripcion'],
+                    $s['id_tecnico'],
                     $s['orden'],
                     $s['id_ruta'],
                     $s['id']
@@ -272,9 +297,9 @@ class ServiceModel extends Model {
 
     public static function insert($servicio) {
         $sql = "INSERT INTO servicios 
-            (nombre, id_estado, nombre_cliente, latitud, longitud, direccion, fecha_servicio, hora_servicio, duracion_estimada, descripcion, orden, id_ruta) 
+            (nombre, id_estado, nombre_cliente, latitud, longitud, direccion, fecha_servicio, hora_servicio, duracion_estimada, id_tecnico, descripcion, orden, id_ruta) 
             VALUES 
-            (:nombre, 1, :nombre_cliente, :latitud, :longitud, :direccion, :fecha, :hora, :duracion_estimada, :descripcion, null, null)";
+            (:nombre, 1, :nombre_cliente, :latitud, :longitud, :direccion, :fecha, :hora, :duracion_estimada, null, null, null, null)";
 
         $db = self::getConnection();
         $db->beginTransaction();
@@ -282,15 +307,13 @@ class ServiceModel extends Model {
         try {
             $stmt = $db->prepare($sql);
             $stmt->bindValue(":nombre", $servicio['nombre'], PDO::PARAM_STR);
-            $stmt->bindValue(":id_estado", $servicio['id_estado'], PDO::PARAM_INT);
-            $stmt->bindValue(":nombre_cliente", $servicio['nombre_cliente'], PDO::PARAM_STR);
+            $stmt->bindValue(":nombre_cliente", $servicio['cliente'], PDO::PARAM_STR);
             $stmt->bindValue(":latitud", $servicio['latitud'], PDO::PARAM_STR);
             $stmt->bindValue(":longitud", $servicio['longitud'], PDO::PARAM_STR);
             $stmt->bindValue(":direccion", $servicio['direccion'], PDO::PARAM_STR);
-            $stmt->bindValue(":fecha", $servicio['direccion'], PDO::PARAM_STR);
-            $stmt->bindValue(":hora", $servicio['direccion'], PDO::PARAM_STR);
-            $stmt->bindValue(":duracion_estimada", $servicio['duracion_estimada']);
-            $stmt->bindValue(":descripcion", $servicio['descripcion'], PDO::PARAM_STR);
+            $stmt->bindValue(":fecha", $servicio['fecha'], PDO::PARAM_STR);
+            $stmt->bindValue(":hora", $servicio['hora'], PDO::PARAM_STR);
+            $stmt->bindValue(":duracion_estimada", $servicio['tiempoEstimado'], PDO::PARAM_STR);
 
             $stmt->execute();
             $lastId = $db->lastInsertId();
@@ -312,16 +335,13 @@ class ServiceModel extends Model {
 
         $sql = "UPDATE servicios SET
         nombre = :nombre,
-        id_estado = :id_estado,
         nombre_cliente = :nombre_cliente,
         latitud = :latitud,
         longitud = :longitud,
         direccion = :direccion,
         fecha_servicio = :fecha,
         hora_servicio = :hora,
-        duracion_estimada = :duracion_estimada,
-        descripcion = :descripcion,
-        id_ruta = :id_ruta
+        duracion_estimada = :duracion_estimada
         WHERE id = :id";
         
 
@@ -332,16 +352,13 @@ class ServiceModel extends Model {
             $stmt = $db->prepare($sql);
             $stmt->bindValue(":id", $servicioId, PDO::PARAM_INT);
             $stmt->bindValue(":nombre", $servicio['nombre'], PDO::PARAM_STR);
-            $stmt->bindValue(":id_estado", $servicio['id_estado'], PDO::PARAM_INT);
-            $stmt->bindValue(":nombre_cliente", $servicio['nombre_cliente'], PDO::PARAM_STR);
+            $stmt->bindValue(":nombre_cliente", $servicio['cliente'], PDO::PARAM_STR);
             $stmt->bindValue(":latitud", $servicio['latitud'], PDO::PARAM_STR);
             $stmt->bindValue(":longitud", $servicio['longitud'], PDO::PARAM_STR);
             $stmt->bindValue(":direccion", $servicio['direccion'], PDO::PARAM_STR);
-            $stmt->bindValue(":fecha", $servicio['direccion'], PDO::PARAM_STR);
-            $stmt->bindValue(":hora", $servicio['direccion'], PDO::PARAM_STR);
-            $stmt->bindValue(":duracion_estimada", $servicio['duracion_estimada']);
-            $stmt->bindValue(":descripcion", $servicio['descripcion'], PDO::PARAM_STR);
-            $stmt->bindValue(":id_ruta", $servicio['id_ruta'], PDO::PARAM_INT);
+            $stmt->bindValue(":fecha", $servicio['fecha'], PDO::PARAM_STR);
+            $stmt->bindValue(":hora", $servicio['hora'], PDO::PARAM_STR);
+            $stmt->bindValue(":duracion_estimada", $servicio['tiempoEstimado'], PDO::PARAM_STR);
 
             $stmt->execute();
             $resultado = true;
@@ -358,7 +375,7 @@ class ServiceModel extends Model {
     }
 
     public static function updateRutaId($datos, $id) {
-        $sql = "UPDATE servicios SET id_ruta = :ruta, id_estado = :estado, duracion_estimada=:estimado, orden=:orden WHERE id = :id";
+        $sql = "UPDATE servicios SET id_ruta = :ruta, id_estado = :estado, duracion_estimada=:estimado, orden=:orden, id_tecnico=:tecnico WHERE id = :id";
 
         $db = self::getConnection();
         $db->beginTransaction();
@@ -369,6 +386,7 @@ class ServiceModel extends Model {
             $stmt->bindValue(":estado", $datos['id_estado'], PDO::PARAM_INT);
             $stmt->bindValue(":estimado", $datos['estimado'], PDO::PARAM_INT);
             $stmt->bindValue(":orden", $datos['orden'], PDO::PARAM_INT);
+            $stmt->bindValue(":tecnico", $datos['tecnico'], PDO::PARAM_INT);
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 
             $stmt->execute();
@@ -388,7 +406,7 @@ class ServiceModel extends Model {
     }
 
     public static function reset() {
-        $sql = "UPDATE servicios SET id_ruta = null, id_estado = 1, orden=null";
+        $sql = "UPDATE servicios SET id_ruta = null, id_estado = 1, orden=null, id_tecnico=null";
 
         $db = self::getConnection();
         $db->beginTransaction();

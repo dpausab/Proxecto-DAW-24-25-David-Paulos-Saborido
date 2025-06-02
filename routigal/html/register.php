@@ -1,3 +1,9 @@
+<?php
+    include('auth.php');
+    if ($_SESSION['user']['rol'] != 1) {
+        header("Location: 403.php");
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,28 +12,30 @@
     <title>Document</title>
 
     <script type="module" src="../js/register.js" defer></script>
-    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
-    <h1>Regístrate en Routigal</h1>
-    <form action="">
-        <p>
-            <label for="nombre">Nombre</label>
-            <input type="text" name="nombre" id="nombre">
-        </p>
-        <p>
-            <label for="user">Usuario</label>
-            <input type="text" name="user" id="user">
-        </p>
-        <p>
-            <label for="pwd">Contraseña</label>
-            <input type="text" name="pwd" id="pwd">
-        </p>
-        <p>
-            <label for="rol">Rol</label>
-            <select name="rol" id="rol"></select>
-        </p>
-        <button type="submit" id="register">Enviar</button>
-    </form>
+    <section>
+        <h1>Regístrate en Routigal</h1>
+        <form class="routiga-form" action="">
+            <p>
+                <label for="nombre">Nombre</label>
+                <input type="text" name="nombre" id="nombre">
+            </p>
+            <p>
+                <label for="user">Usuario</label>
+                <input type="text" name="user" id="user">
+            </p>
+            <p>
+                <label for="pwd">Contraseña</label>
+                <input type="text" name="pwd" id="pwd">
+            </p>
+            <p>
+                <label for="rol">Rol</label>
+                <select name="rol" id="rol"></select>
+            </p>
+            <button type="submit" id="register">Enviar</button>
+        </form>
+    </section>
 </body>
 </html>

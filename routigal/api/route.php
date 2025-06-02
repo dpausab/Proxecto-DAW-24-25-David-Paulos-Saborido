@@ -46,19 +46,40 @@ try {
     $json = null;
     if ($endpoint != "auth" && !isset($_SESSION['user'])) {
         http_response_code(403);
+        echo json_encode(['mensaje' => 'Debes iniciar sesión para esa petición.']);
+        return;
     }
 
     if (method_exists($controlador, $accion)) {
+        if ($endpoint != "auth") {
+            $user = AuthController::getSessionUser();
+            if (!isset($user)) {
+                http_response_code(403);
+                include_once('../html/403.php');
+                return;
+            }
+            if (!AuthController::hasPermission($user->getId(), $endpoint, $metodo)) {
+                http_response_code(403);
+                include_once('../html/403.php');
+                return;
+            }
+        }
         if (in_array($metodo, ['POST', 'PUT', 'PATCH'])) {
             $json = file_get_contents('php://input');
             $controlador->$accion($json, $id ?? null);
         } else {
+            if ($accion === 'delete' && $metodo!='DELETE') {
+                http_response_code(403);
+                include_once('../html/403.php');
+                return;
+            }
             $controlador->$accion($id);
         }
     } else {
         http_response_code(404);
         echo json_encode(['Error' => 'La acción especificada no es válida.']);
     }
+
 } catch (ControllerException $th) {
     Controller::sendNotFound("Error obteniendo el endpoint " . $endpoint);
     die();

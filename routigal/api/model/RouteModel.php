@@ -211,32 +211,35 @@ class Route implements JsonSerializable {
 class RouteModel extends Model
 {
 
-    public static function getAll($offset=null, $limit=null)
+    public static function getAll($offset=null, $limit=null, $id)
     {
-        if (isset($offset, $limit)) {
-            $sql = "SELECT r.id as id, r.nombre as nombre, tiempo_total as tiempo, km_totales as km, u.nombre as origen, er.nombre as estado, us.nombre as tecnico, r.fecha as fecha, r.hora_salida as hora FROM rutas r
+        $sql = "SELECT r.id as id, r.nombre as nombre, tiempo_total as tiempo, km_totales as km, u.nombre as origen, er.nombre as estado, us.nombre as tecnico, r.fecha as fecha, r.hora_salida as hora FROM rutas r
             INNER JOIN ubicaciones u ON r.id_origen = u.id
             INNER JOIN estados_ruta er ON er.id = r.id_estado
-            INNER JOIN usuarios us ON r.id_tecnico = us.id
-            ORDER BY id DESC LIMIT $limit OFFSET $offset";
-        } else {
-            $sql = "SELECT r.id as id, r.nombre as nombre, tiempo_total as tiempo, km_totales as km, u.nombre as origen, er.nombre as estado, us.nombre as tecnico, r.fecha as fecha, r.hora_salida as hora FROM rutas r
-            INNER JOIN ubicaciones u ON r.id_origen = u.id
-            INNER JOIN estados_ruta er ON er.id = r.id_estado
-            INNER JOIN usuarios us ON r.id_tecnico = us.id
-            ORDER BY id DESC";
+            INNER JOIN usuarios us ON r.id_tecnico = us.id";
+        if (isset($id)) {
+            $sql .= ' WHERE r.id_tecnico=:id';
         }
+        if (isset($offset, $limit)) {
+            $sql .= " LIMIT $limit OFFSET $offset";
+        } 
         $db = self::getConnection();
         $datos = [];
         $next = false;
         try {
-            $stmt = $db->query($sql);
-            if ($stmt->rowCount()===10) $next=true;
+            if (isset($id)) {
+                $stmt = $db->prepare($sql);
+                $stmt -> bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt -> execute();
+            } else {
+                $stmt = $db->query($sql);
+            }
+            if ($stmt->rowCount()===11) $next=true;
             foreach($stmt as $r){  
                 $ruta = new Route($r['nombre'], $r['tiempo'],$r['km'], $r['origen'], $r['estado'], $r['tecnico'], $r['fecha'], $r['hora'], $r['id']);
                 $datos[] = $ruta;
             }
-
+            if ($next) array_pop($datos);
             $respuesta = [
                 'datos' => $datos,
                 'next' => $next

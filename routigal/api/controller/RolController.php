@@ -16,17 +16,10 @@ class RolController extends Controller{
             ]);
         }
     }
-    public function getAll($ids) {
+    public function getAll($params) {
         $datos = [];
         try {
-            if (isset($ids) && count($ids)>0) {
-                $pagina = $ids[0] ?? 0;
-                $limit =  10;
-                $offset = $pagina * $limit;
-                $datos = RolModel::getAll($offset, $limit);
-            } else {
-                $datos = RolModel::getAll();
-            }
+            $datos = RolModel::getAll();
             echo json_encode($datos);
         } catch (\Throwable $th) {
             echo json_encode([
