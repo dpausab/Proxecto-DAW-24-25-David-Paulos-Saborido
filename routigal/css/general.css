@@ -20,6 +20,7 @@ body {
   grid-template-rows: auto 1fr auto;
 }
 
+/* Posiconamiento sticky del header */
 header {
   position: sticky;
   top: 0;
@@ -36,6 +37,7 @@ header {
   font-weight: bold;
 }
 
+/* Formateo de los inputs del formulario de inserción/edición */
 .routigal-form textarea, .routigal-form select, .routigal-form input {
   font-family: 'Montserrat', sans-serif;
     width: 100%;
@@ -114,6 +116,7 @@ a {
   background-color: #ffa600;
 }
 
+/* Menú hamburguesa, se muestra en móvil se esconde después, alineado a la derecha */
 .hamburger {
   display: flex;
   flex-direction: column;
@@ -136,6 +139,7 @@ a {
   border-radius: 2px;
 }
 
+/* Menú por defecto oculto, se muestra de forma interactiva al clickar en el botón */
 nav ul {
   list-style: none;
   display: none;
@@ -157,7 +161,8 @@ nav ul.show {
   display: flex;
 }
 
-@media (min-width: 720px) {
+/* Responsive para móviles */
+@media (min-width: 726px) {
   .hamburger {
     display: none;
   }
