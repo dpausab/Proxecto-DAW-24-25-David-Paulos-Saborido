@@ -30,7 +30,7 @@
             </p>
             <p>
                 <label for="pwd">Contraseña</label>
-                <input type="text" name="pwd" id="pwd">
+                <input type="pwd" name="pwd" id="pwd">
             </p>
             <p>
                 <label for="rol">Rol</label>
