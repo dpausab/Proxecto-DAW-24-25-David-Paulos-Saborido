@@ -11,7 +11,7 @@
 
 ### 1.1- Instalación
 
-> Para poder ter acceso ó código e traballar no desenvolvemento da aplicación, os pasos a seguir son sinxelos. Para desenvolver a nivel local, a aplicación funcionará perfectamente nun entorno XAMPP/LAMPP, no que únicamente se terá que instalar o programa correspondente (XAMPP en Windows, LAMPP en Linux) coas opcións de Apache e MySQL.
+Para poder ter acceso ó código e traballar no desenvolvemento da aplicación, os pasos a seguir son sinxelos. Para desenvolver a nivel local, a aplicación funcionará perfectamente nun entorno XAMPP/LAMPP, no que únicamente se terá que instalar o programa correspondente (XAMPP en Windows, LAMPP en Linux) coas opcións de Apache e MySQL.
 
 Posteriormente deberase abrir o programa, iniciar Apache e MySql, entrar ó navegador web preferido e buscar no navegador a ruta: "http://localhost/phpmyadmin/index.php", unha vez dentro terase acceso ó SGBD, haberá que importar o arquivo da base de datos que aparece no código na carpeta SQL.
 
@@ -23,7 +23,7 @@ As credenciais serán:
 
 Para realizar calqueira cambio, o único necesario é ter un entorno de desevolvemento, recoméndase VSC (Visual Studio Code), e abrir a carpeta "routigal".
 
-> A nivel de despregamento e posta en producción, haberá que ter acceso a unha plataforma de Hosting con soporte de PHP e MySql/MariaDB. Entrar no SGBD do hosting dende o panel de control. Normalmente todos os hostings teñen un panel de control explicativo no que existe a opción de ver as bases de datos ou acceder ó SGBD, moitas veces PhpMyAdmin.
+A nivel de despregamento e posta en producción, haberá que ter acceso a unha plataforma de Hosting con soporte de PHP e MySql/MariaDB. Entrar no SGBD do hosting dende o panel de control. Normalmente todos os hostings teñen un panel de control explicativo no que existe a opción de ver as bases de datos ou acceder ó SGBD, moitas veces PhpMyAdmin.
 
 Unha vez dentro, importar a BBDD (da mesma forma que en local) e subir os archivos, normalmente via FTP, ó servicio. Non debería resultar complicado xa que, similar ó punto anterior, no panel de control normalmente a opción de subir arquivos está visible e clara.
 
