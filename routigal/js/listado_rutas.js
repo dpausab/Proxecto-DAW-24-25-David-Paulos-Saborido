@@ -46,14 +46,14 @@ function renderRutas(rutas) {
             if (user.rol === 1) {
                 botones = `<td>
                         <button id="editar" data-id="${el.id}">
-                            <a href="rutas.php?ruta=${el.id}">Editar</a>
+                            Editar
                         </button>
                         <button id="borrar" data-id="${el.id}">Borrar</button>
                     </td>`
             } else {
                 botones = `<td>
                         <button id="editar" data-id="${el.id}">
-                            <a href="rutas.php?ruta=${el.id}">Ver</a>
+                            Ver
                         </button>
                     </td>`
             }
@@ -75,6 +75,23 @@ function renderRutas(rutas) {
 
 async function deleteRuta(id) {
     try {
+        let borrados  = await ajax({
+                            url: `http://localhost/api/servicios/getPorRuta/${id}`
+                        })
+                let serviciosBorrados = borrados
+                serviciosBorrados = Promise.all(serviciosBorrados.map(async el => {
+                    return await ajax({
+                        url: `http://localhost/api/servicios/updateRutaId/${el.id}`,
+                        method: 'PUT',
+                        data: {
+                            id_ruta: null,
+                            id_estado: 1,
+                            estimado: el.duracion_estimada,
+                            orden: null,
+                            tecnico: null
+                        }
+                    })
+                }))
         let datos  = await ajax({
                     url: `http://localhost/api/rutas/delete/${id}`,
                     method: 'DELETE'
@@ -85,7 +102,11 @@ async function deleteRuta(id) {
             renderRutas(rutas)
         }
     } catch (error) {
-        throw new Error()
+        swal.fire({
+            title: "Error",
+            icon: "error",
+            text: error.message
+        })
     }
 }
 

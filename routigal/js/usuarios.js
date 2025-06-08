@@ -41,7 +41,6 @@ async function getRoles() {
     })
 
     roles = datos
-    console.log(roles)
 }
 
 function renderUsuarios(usuarios) {

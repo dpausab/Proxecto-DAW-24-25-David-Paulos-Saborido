@@ -46,7 +46,7 @@ try {
     $json = null;
     if ($endpoint != "auth" && !isset($_SESSION['user'])) {
         http_response_code(403);
-        echo json_encode(['mensaje' => 'Debes iniciar sesión para esa petición.']);
+        include_once('../html/403.php');
         return;
     }
 

@@ -39,7 +39,7 @@ class RouteController extends Controller{
     }
     public function delete($id) {
         $dato = null;
-        $mensaje = "Editado con éxito.";
+        $mensaje = "Borrada con éxito.";
         try {
             $dato = RouteModel::delete($id[0]);
         } catch (\Throwable $th) {

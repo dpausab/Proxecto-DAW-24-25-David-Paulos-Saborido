@@ -259,6 +259,51 @@ class ServiceModel extends Model {
         return $respuesta;
     }
 
+    public static function getPorRuta($id=null) {
+       
+        $sql = "SELECT * FROM servicios where id_ruta=:id";
+        
+        $db = self::getConnection();
+        $datos = [];
+        $respuesta = null;
+        try {
+            if (isset($id)) {
+                $stmt = $db->prepare($sql);
+                $stmt->bindParam(':id', $id[0], PDO::PARAM_INT);
+                $stmt->execute();
+            } else {
+                $stmt = $db->query($sql);
+            }
+            foreach ($stmt as $s) {
+                $servicio = new Service(
+                    $s['nombre'],
+                    $s['id_estado'],
+                    $s['nombre_cliente'],
+                    $s['latitud'],
+                    $s['longitud'],
+                    $s['direccion'],
+                    $s['fecha_servicio'],
+                    $s['hora_servicio'],
+                    $s['duracion_estimada'],
+                    $s['id_tecnico'],
+                    $s['descripcion'],
+                    $s['orden'],
+                    $s['id_ruta'],
+                    $s['id']
+                );
+                $datos[] = $servicio;
+            }
+            $respuesta = $datos;
+        } catch (PDOException $th) {
+            error_log("Error ServicioModel->getAll()");
+            error_log($th->getMessage());
+        } finally {
+            $stmt = null;
+            $db = null;
+        }
+        return $respuesta;
+    }
+
     public static function get($servicioId): ?Service {
         $sql = "SELECT * FROM servicios WHERE id = ?";
         $db = self::getConnection();

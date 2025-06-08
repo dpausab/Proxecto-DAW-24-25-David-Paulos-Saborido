@@ -208,13 +208,23 @@ class UserModel extends Model
 
     public static function insert($user)
     {
-        $sql = "INSERT INTO usuarios (nombre, usuario, pwd, id_rol) 
-                VALUES (:nombre, :user, :pwd, :rol)";
-
-        $db = self::getConnection();
-        $db->beginTransaction();
         $respuesta = false;
         try {
+            
+            $sql = "SELECT * FROM usuarios WHERE usuario=:user";
+            $db = self::getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(":user", $user['usuario'], PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                throw new Exception("El usuario ya existe.");
+            }
+
+            $sql = "INSERT INTO usuarios (nombre, usuario, pwd, id_rol) 
+                    VALUES (:nombre, :user, :pwd, :rol)";
+
+            $db->beginTransaction();
+        
             $stmt = $db->prepare($sql);
             $stmt->bindValue(":nombre", $user['nombre'], PDO::PARAM_STR);
             $stmt->bindValue(":user", $user['usuario'], PDO::PARAM_STR);
@@ -228,12 +238,13 @@ class UserModel extends Model
             $db->rollBack();
             error_log("Error userModel->insert()");
             error_log($th->getMessage());
+            throw $th;
         } finally {
             $stmt = null;
             $db = null;
         }
-
         return $respuesta;
+
     }
 
     public static function update($user, $userId)

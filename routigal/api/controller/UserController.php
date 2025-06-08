@@ -89,7 +89,6 @@ class UserController extends Controller{
             $datos = json_decode($json, true);
             $dato = UserModel::insert($datos);
         } catch (\Throwable $th) {
-            http_response_code(401);
             $mensaje = $th->getMessage();
         }
         

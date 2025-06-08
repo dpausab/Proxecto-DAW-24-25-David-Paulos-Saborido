@@ -133,7 +133,7 @@ INSERT INTO servicios (nombre, id_estado, nombre_cliente, latitud, longitud, dir
 ('Instalación LED exteriores', 1, 'Sergio Barreiro', 42.4950, -8.8300, 'Camino do Río, Meaño', '2025-03-07', '14:00', '01:00:00', 'Montaxe de 3 puntos de luz con sensor.'),
 ('Arranxo cadro xeral', 3, 'Beatriz Gómez', 42.5090, -8.7955, 'Rua Nova, A Illa de Arousa', '2025-03-07', '15:30', '01:10:00', 'Problema con conexións no cadro eléctrico.');
 
-INSERT INTO endpoints (nombre) VALUES ('rutas'), ('servicios'), ('ubicaciones'), ('usuarios'), ('roles');
+INSERT INTO endpoints (endpoint) VALUES ('rutas'), ('servicios'), ('ubicaciones'), ('usuarios'), ('roles');
 
 INSERT INTO permisos (rol_id, endpoint_id, metodo, permitido) VALUES
 (1, 1, 'GET', TRUE),
@@ -160,4 +160,4 @@ INSERT INTO permisos (rol_id, endpoint_id, metodo, permitido) VALUES
 (1, 5, 'POST', TRUE),
 (1, 5, 'GET', TRUE),
 (1, 5, 'PUT', TRUE),
-(1, 5, 'DELETE', TRUE);
+(1, 5, 'DELETE', TRUE),

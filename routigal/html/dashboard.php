@@ -16,8 +16,8 @@
   <?php include_once("header.php"); ?>
 
   <main>
-    <h1>¡Bienvenido de nuevo!</h1>
-    
+    <h1>¡Bienvenido de nuevo, <?php echo $_SESSION['user']['nombre']; ?>!</h1>
+    <h2>Esta sección está en pruebas, quería poner gráficas con chart.js</h2>
     <section class="cards">
       <div class="card">
         <h2>Servicios esta semana</h2>

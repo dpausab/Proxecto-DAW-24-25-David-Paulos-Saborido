@@ -355,7 +355,8 @@ class RouteModel extends Model
     }
 
     public static function delete($rutaId)
-    {
+    {   
+        
         $sql = "DELETE FROM rutas WHERE id=?";
 
         $db = self::getConnection();

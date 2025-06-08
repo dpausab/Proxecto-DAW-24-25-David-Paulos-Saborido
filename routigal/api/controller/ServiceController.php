@@ -53,6 +53,20 @@ class ServiceController extends Controller{
         }
     }
 
+    public function getPorRuta($id=null) {
+        $datos = [];
+        try {
+            $datos = ServiceModel::getPorRuta($id);
+            
+            echo json_encode($datos);
+        } catch (\Throwable $th) {
+            echo json_encode([
+                'error' => $th->getMessage(),
+                'datos' => $datos
+            ]);
+        }
+    }
+
     public function reset() {
         $dato = null;
         $mensaje = "Editado con éxito.";

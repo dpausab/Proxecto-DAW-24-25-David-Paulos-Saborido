@@ -22,7 +22,11 @@ $d.addEventListener("DOMContentLoaded", async(ev) => {
 $form.addEventListener("submit", async(ev) => {
     ev.preventDefault()
 
-    try {
+    await insertUser()
+})
+
+async function insertUser() {
+  try {
       let nombre = $nombre.value
       let usuario = $user.value
       let pwd = $pwd.value
@@ -38,16 +42,23 @@ $form.addEventListener("submit", async(ev) => {
             rol
         }
       });
-
       if (resp.respuesta) {
+        await swal.fire({
+          title: 'Registro exitoso',
+          icon: 'success',
+          text: 'Usuario registrado correctamente.'
+        })
         window.location.href = "login.php"
       } else {
-        alert("Ha ocurrido un error.")
+        throw new Error(resp.mensaje)
       }
       
     } catch (error) {
-      alert('Error al intentar registrarse' + error);
-      console.log(resp)
-      window.location.reload()
+      await swal.fire({
+          title: 'Ha ocurrido un error',
+          icon: 'warning',
+          text: error.message
+        })
+      $form.reset()
     }
-})
+}

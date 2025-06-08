@@ -165,7 +165,7 @@ form button:hover {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 720px) {
   .card-container,
   .simulation-columns {
     flex-direction: column;

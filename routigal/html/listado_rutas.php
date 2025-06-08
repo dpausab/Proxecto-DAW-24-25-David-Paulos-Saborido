@@ -7,9 +7,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Servicios - Routigal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="../css/servicios.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="/js/menu-hamburguesa.js" defer></script>
   <script type="module" src="/js/listado_rutas.js" defer></script>
-  <link rel="stylesheet" href="../css/servicios.css">
 </head>
 <body>
   <?php include_once("header.php"); ?>
