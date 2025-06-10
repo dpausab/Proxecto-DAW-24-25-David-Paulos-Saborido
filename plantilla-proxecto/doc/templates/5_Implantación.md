@@ -52,4 +52,4 @@ No apartado de melloras futuras, o proxecto tería a capacidade de vincularse co
 
 Además, ter en conta que un dos grandes puntos do proxecto sería ter comunicación directa e automática cos clientes, mandando mensaxes cando o seu servizo sea asignado a unha ruta nunha fecha, ou horario estimado de chegada.
 
-[**<-Anterior**](../../README.md)
+[**<-Anterior**](../../../README.md)
