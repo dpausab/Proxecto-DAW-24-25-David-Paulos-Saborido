@@ -92,7 +92,10 @@ async function getTecnicos() {
         tecnicos = datos
         tecnicosMap = new Map(tecnicos.map(el => [el.id, el]))
     } catch (error) {
-        console.log(error)
+        swal.fire({
+            title: 'No se han podido cargar los técnicos.',
+            icon: 'error'
+        })
     }
 }
 async function getUbicaciones() {
@@ -104,7 +107,10 @@ async function getUbicaciones() {
         ubicaciones = datos
         ubicacionesMap = new Map(ubicaciones.map(el => [el.id, el]))
     } catch (error) {
-        console.log(error)
+        swal.fire({
+            title: 'No se han podido cargar las ubicaciones.',
+            icon: 'error'
+        })
     }
 }
 
@@ -138,15 +144,23 @@ function renderServicios(servicios) {
 }
 
 function renderTecnicos(tecnicos) {
-    $tecnicos.innerHTML = tecnicos.map(el => 
-        `<option value="${el.id}">${el.nombre}</option>`
-    ).join('')
+    if (tecnicos.length) {
+        $tecnicos.innerHTML = tecnicos.map(el => 
+            `<option value="${el.id}">${el.nombre}</option>`
+        ).join('')
+    } else {
+        $tecnicos.innerHTML = '<option value="">Sin técnicos</option>'
+    }
 }
 
 function renderUbicaciones(ubicaciones) {
-    $puntoPartida.innerHTML = ubicaciones.map(el => 
-        `<option value="${el.id}">${el.nombre}</option>`
-    ).join('')
+    if (ubicaciones.length) {
+        $puntoPartida.innerHTML = ubicaciones.map(el => 
+            `<option value="${el.id}">${el.nombre}</option>`
+        ).join('')
+    } else {
+        $puntoPartida.innerHTML = '<option value="">Sin ubicaciones</option>'
+    }
 }
 
 function renderSeleccionados(seleccionados) {
@@ -157,6 +171,7 @@ function renderSeleccionados(seleccionados) {
         </div>`
     ).join('')
 
+    // En esta parte se les añaden las funciones de drag a los servicios seleccionados.
     let info = document.querySelectorAll(".drag")
         info.forEach(function(el) {
             el.addEventListener('dragstart', handleDragStart);
@@ -194,18 +209,11 @@ export function renderInfo(tramos) {
     })
     let tiempoF = formatearTiempo(tiempoRuta).split(":")
     let horas = parseFloat(tiempoF[0])>0 ? true : false
-    let minutos = parseFloat(tiempoF[1])
     
     $distanciaTotal.textContent = `${distanciaRuta.toFixed(2)} km`.replace('.', ',')
     $tiempoTotal.textContent = `${horas ? tiempoF[0] + " h " : ""}${tiempoF[1] + " minutos"}`
 }
 
-function generarTiempos() {
-    let html = ""
-    let tiempos = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
-    html = tiempos.map(el => `<option value="${el}">${el} min</option>`).join('')
-    return html
-}
 
 function formulario(ruta) {
     if (ruta) {
@@ -391,7 +399,7 @@ async function crearRuta() {
                 data: {
                     orden: i,
                     id_ruta: parseInt(id),
-                    estimado: horasMap.get(el.servicio.id).value,
+                    estimado: horasMap.get(el.servicio.id).value+':00',
                     id_estado: 2,
                     tecnico: $tecnicos.value
                 }
@@ -406,18 +414,18 @@ async function crearRuta() {
 async function modificarRuta(id) {
     try {
         let ruta = await ajax({
-        url: `http://localhost/api/rutas/update/${id}`,
-        method: "PUT",
-        data: {
-            nombre:$nombre.value.trim(),
-            distanciaTotal: distanciaRuta,
-            tiempoTotal: formatearTiempo(tiempoRuta),
-            origen: $puntoPartida.value,
-            estado: 1,
-            tecnico: $tecnicos.value,
-            fecha: $fecha.value,
-            horaSalida: $horaSalida.value
-        }
+            url: `http://localhost/api/rutas/update/${id}`,
+            method: "PUT",
+            data: {
+                nombre:$nombre.value.trim(),
+                distanciaTotal: distanciaRuta,
+                tiempoTotal: formatearTiempo(tiempoRuta),
+                origen: $puntoPartida.value,
+                estado: 1,
+                tecnico: $tecnicos.value,
+                fecha: $fecha.value,
+                horaSalida: $horaSalida.value
+            }
         })
         await ajax({url: "http://localhost/api/servicios/reset"})
         await Promise.all(seleccionados.map((el, i) =>
@@ -442,8 +450,17 @@ async function modificarRuta(id) {
 guardar.addEventListener("click", async (ev) => {
     ev.preventDefault()
     if (!$inputs.every(el => el.value.length) || !seleccionados.length) {
-        alert("Rellena todos los campos y asigna algun servicio.")
-    } else {
+        swal.fire({
+            title: 'Todos los campos son obligatorios y debes tener seleccionado mínimo un servicio.',
+            icon: 'warning'
+        })
+    } else if (new Date($fecha.value).toDateString() < new Date().toDateString()) {
+        swal.fire({
+            title: 'La fecha no puede ser anterior a la actual.',
+            icon: 'warning'
+        })
+        
+    } else{
         try {
             if (!rutaId) {
                 await crearRuta()

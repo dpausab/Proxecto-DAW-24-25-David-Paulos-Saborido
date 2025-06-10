@@ -30,7 +30,8 @@
         </p>
         <p>
           <label for="rol">Rol</label>
-          <select name="rol_filtro" id="rol_filtro"></select>
+          <select name="rol_filtro" id="rol_filtro">
+          </select>
         </p>
         <?php if ($_SESSION['user']['rol'] === 1) {
                   echo '<p>

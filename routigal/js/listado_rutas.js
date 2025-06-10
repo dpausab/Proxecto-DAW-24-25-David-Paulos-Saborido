@@ -46,14 +46,14 @@ function renderRutas(rutas) {
             if (user.rol === 1) {
                 botones = `<td>
                         <button id="editar" data-id="${el.id}">
-                            Editar
+                            <a href="rutas.php?ruta=${el.id}">Editar</a>
                         </button>
                         <button id="borrar" data-id="${el.id}">Borrar</button>
                     </td>`
             } else {
                 botones = `<td>
                         <button id="editar" data-id="${el.id}">
-                            Ver
+                            <a href="rutas.php?ruta=${el.id}">Editar</a>
                         </button>
                     </td>`
             }
@@ -111,10 +111,6 @@ async function deleteRuta(id) {
 }
 
 $rutas.addEventListener("click", async(ev) => {
-    ev.preventDefault()
-
-    ev.preventDefault()
-
     if (ev.target.id === "borrar" && ev.target.dataset.id) {
         await deleteRuta(ev.target.dataset.id)
     }

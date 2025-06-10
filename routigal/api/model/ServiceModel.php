@@ -429,7 +429,7 @@ class ServiceModel extends Model {
             $stmt = $db->prepare($sql);
             $stmt->bindValue(":ruta", $datos['id_ruta'], PDO::PARAM_INT);
             $stmt->bindValue(":estado", $datos['id_estado'], PDO::PARAM_INT);
-            $stmt->bindValue(":estimado", $datos['estimado'], PDO::PARAM_INT);
+            $stmt->bindValue(":estimado", $datos['estimado'], PDO::PARAM_STR);
             $stmt->bindValue(":orden", $datos['orden'], PDO::PARAM_INT);
             $stmt->bindValue(":tecnico", $datos['tecnico'], PDO::PARAM_INT);
             $stmt->bindValue(":id", $id, PDO::PARAM_INT);

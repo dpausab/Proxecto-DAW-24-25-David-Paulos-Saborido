@@ -11,9 +11,9 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <link rel="stylesheet" href="/css/rutas.css">
+  <link rel="stylesheet" href="../css/rutas.css">
 
-  <script src="/js/menu-hamburguesa.js" defer></script>
+  <script src="../js/menu-hamburguesa.js" defer></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
