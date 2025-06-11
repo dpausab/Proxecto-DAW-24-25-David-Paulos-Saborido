@@ -6,24 +6,55 @@ const $d = document,
             $pwd = $d.querySelector("#pwd"),
             $form = $d.querySelector("form"),
             $rol = $d.querySelector("#rol"),
-            $register = $d.querySelector("#register")
+            $register = $d.querySelector("#register"),
+            $old = $d.querySelector("#old_pwd")
+
 
 let roles = []
+const usuario = new URLSearchParams(window.location.search).get("usuario") ?? null;
 
 $d.addEventListener("DOMContentLoaded", async(ev) => {
-  let resp = await ajax({
-        url: 'http://localhost/api/roles/getAll'
-      });
-  roles = resp
+  
+  await getRoles()
+  renderRoles(roles)
 
-  $rol.innerHTML = roles.map(el => `<option value="${el.id}">${el.nombre}</option>`)
+  if (!usuario) {
+    $old.style.display = "none"
+  } else {
+    fillUser(usuario)
+  }
 })
 
 $form.addEventListener("submit", async(ev) => {
     ev.preventDefault()
-
-    await insertUser()
+    if (usuario) {
+      await updateUser(usuario)
+    } else {
+      await insertUser()
+    }
 })
+
+async function getRoles() {
+  try {
+    let resp = await ajax({
+        url: '/api/roles/getAll'
+      });
+      roles = resp
+  } catch (error) {
+    swal.fire({
+      title: error.message,
+      icon: 'error'
+    });
+  }
+}
+
+function renderRoles(roles) {
+  $rol.innerHTML = `<option value="">Rol</option>`
+  if (roles.length) {
+    $rol.innerHTML += roles.map(el => 
+      `<option value="${el.id}">${el.nombre}</option>`).join('')
+  } 
+}
 
 async function insertUser() {
   try {
@@ -33,7 +64,7 @@ async function insertUser() {
       let rol = $rol.value
 
       let resp = await ajax({
-        url: 'http://localhost/api/usuarios/insert',
+        url: '/api/usuarios/insert',
         method: 'POST',
         data: {
             nombre,
@@ -48,7 +79,7 @@ async function insertUser() {
           icon: 'success',
           text: 'Usuario registrado correctamente.'
         })
-        window.location.href = "login.php"
+        window.location.href = "usuarios.php"
       } else {
         throw new Error(resp.mensaje)
       }
@@ -61,4 +92,43 @@ async function insertUser() {
         })
       $form.reset()
     }
+}
+
+async function updateUser(id) {
+  try {
+    let resp = await ajax({
+      url: `/api/usuarios/update/${parseInt(id)}`,
+      method: 'PUT',
+      data: {
+        nombre: $nombre.value,
+        usuario: $user.value,
+        old_pwd: $old.value,
+        new_pwd: $pwd.value,
+        rol: $rol.value
+      }
+    })
+    swal.fire({
+      title: 'Usuario editado correctamente',
+      icon: 'success'
+    })
+  } catch (error) {
+    swal.fire({
+      title: error.message,
+      icon: "error",
+    })
+  }
+}
+
+async function fillUser(id) {
+  let datos = await ajax({
+    url: `/api/usuarios/get/${parseInt(id)}`
+  })
+
+  let user = datos ?? null
+  if (user) {
+    $nombre.value = user.nombre
+    $user.value = user.usuario
+    $rol.value = user.rol
+    $register.textContent = "Actualizar Usuario"
+  }
 }

@@ -37,7 +37,7 @@ header {
 }
 
 .routigal-form textarea, .routigal-form select, .routigal-form input {
-  font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     width: 100%;
     border-radius: 5px;
     padding: 8px;

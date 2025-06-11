@@ -6,15 +6,12 @@ include_once("model/UserModel.php");
 class UserController extends Controller{
 
     public function get($id) {
-        $dato=null;
+        $datos=null;
         try {
-            $datos = UserModel::get($id);
+            $datos = UserModel::get($id[0]);
             echo json_encode($datos);
         } catch (\Throwable $th) {
-            echo json_encode([
-                'error' => $th->getMessage(),
-                'dato' => $dato
-            ]);
+            throw $th;
         }
     }
     public function getAll($ids) {
@@ -30,10 +27,7 @@ class UserController extends Controller{
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {
-            echo json_encode([
-                'error' => $th->getMessage(),
-                'datos' => $datos
-            ]);
+            throw $th;
         }
     }
 
@@ -50,24 +44,19 @@ class UserController extends Controller{
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {
-            echo json_encode([
-                'error' => $th->getMessage(),
-                'datos' => $datos
-            ]);
+            throw $th;
         }
     }
 
     public function delete($id) {
         $dato = null;
-        $mensaje = "Editado con éxito.";
         try {
             $dato = UserModel::delete($id[0]);
         } catch (\Throwable $th) {
-            http_response_code(401);
-            $mensaje = $th->getMessage();
+            throw $th;
         }
         
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
+        echo json_encode(['respuesta' => $dato]);
     }
     public function update($json, $id) {
         $dato = null;
@@ -76,8 +65,8 @@ class UserController extends Controller{
             $datos = json_decode($json, true);
             $dato = UserModel::update($datos, $id[0]);
         } catch (\Throwable $th) {
-            http_response_code(401);
-            $mensaje = $th->getMessage();
+            $mensaje = "Error al editar el usuario.";
+            throw $th;
         }
         
         echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
@@ -89,7 +78,8 @@ class UserController extends Controller{
             $datos = json_decode($json, true);
             $dato = UserModel::insert($datos);
         } catch (\Throwable $th) {
-            $mensaje = $th->getMessage();
+            $mensaje = "Error al insertar el usuario.";
+            throw $th;
         }
         
         echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);

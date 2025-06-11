@@ -23,7 +23,7 @@ const page = new URLSearchParams(window.location.search).get("page") ?? 1;
 let user = null
 
 $d.addEventListener("DOMContentLoaded", async () => {
-    user = await ajax({url:"http://localhost/api/auth/getLoggedUser"})
+    user = await ajax({url:"/api/auth/getLoggedUser"})
     console.log(user)
 
     if (user.rol === 1 && $form) {
@@ -52,7 +52,7 @@ $d.addEventListener("DOMContentLoaded", async () => {
 })
 async function getServicios() {
 let datos  = await ajax({
-        url: `http://localhost/api/servicios/getAll/${parseInt(page)}`
+        url: `/api/servicios/getAll/${parseInt(page)}`
     })
 
     servicios = datos.datos
@@ -116,18 +116,9 @@ function formulario(servicio) {
 
 async function addServicio($form) {
     let {id, nombre, cliente, latitud, longitud, direccion, fecha, hora, estimado} = $form
-    let errores = validarForm()
-            if (errores.length){
-                    swal.fire({
-                    title: 'Error',
-                    icon: 'warning',
-                    html: `<ul>
-                        ${errores.map(el => `<p>${el}</p>`).join('')}
-                    </ul>`
-                })
-                return
-            }
+    
     try {
+        if (!validarForm()) return
         let resp = await ajax({
                     url: "/api/servicios/insert",
                     method: 'POST',
@@ -144,6 +135,10 @@ async function addServicio($form) {
                 })
         
         if(resp.respuesta) {
+            swal.fire({
+                title: "Servicio agregado",
+                icon: "success"
+            })
             await getServicios()
             renderServicios(servicios)
         }
@@ -153,18 +148,9 @@ async function addServicio($form) {
     
 }
 
-async function updateServicio($form) {
+async function updateServicio(servicio) {
     try {
-        let errores = validarForm()
-        if (errores.length){
-            swal.fire({
-                title: 'Error',
-                icon: 'warning',
-                html: errores.map(el => `<p>${el}</p>`).join('')
-            })
-            return
-        }
-
+        if(!validarForm(servicio)) return
         
         let {id, nombre, cliente, latitud, longitud, direccion, fecha, hora, estimado} = $form
 
@@ -183,11 +169,18 @@ async function updateServicio($form) {
                         } 
                     })
         if (resp.respuesta) {
+            swal.fire({
+                title: "Servicio editado",
+                icon: "success"
+            })
             await getServicios()
             renderServicios(servicios)
         }
     } catch (error) {
-        throw new Error()
+        swal.fire({
+            title: error.message,
+            icon: 'warning'
+        })
     }
     
 }
@@ -196,19 +189,22 @@ async function deleteServicio(id) {
     try {
 
         let datos  = await ajax({
-                    url: `http://localhost/api/servicios/delete/${id}`,
+                    url: `/api/servicios/delete/${id}`,
                     method: 'DELETE'
                 })
 
         if(datos.respuesta) {
+            swal.fire({
+                title: "Servicio eliminado",
+                icon: "success"
+            })
             await getServicios()
             renderServicios(servicios)
         }
     } catch (error) {
         swal.fire({
-            title: 'Error',
-            icon: 'warning',
-            text: 'Fallo al eliminar el servicio: ' + error.message
+            title: error.message,
+            icon: 'warning'
         })
     }
 }
@@ -218,9 +214,10 @@ async function handleStatus() {
 
     try{
         if (id.length) {
-            await updateServicio($form)
+            let servicio = servicios.find(el => el.id == id)
+            await updateServicio(servicio)
         } else {
-            await addServicio($form)
+            await addServicio()
         }
         
         $form.reset()
@@ -254,10 +251,11 @@ function adminPanel() {
         })
 }
 
-function validarForm() {
+function validarForm(servicio = null) {
     let errores = []
-    let { nombre, cliente, latitud, longitud, direccion, fecha, hora, estimado } = $form
+    let { id, nombre, cliente, latitud, longitud, direccion, fecha, hora, estimado } = $form
     let campos = Array.from($form.querySelectorAll("input, select, textarea"))
+    // Se hace el slice para no comprobar el id ni el botónN
     campos = campos.slice(1, campos.length - 1)
 
     const regexLatitud = /^-?([1-8]?\d(\.\d+)?|90(\.0+)?)$/;
@@ -279,12 +277,28 @@ function validarForm() {
         errores.push("Longitud inválida.");
     }
 
-    if (new Date(fecha.value) < new Date()) {
-        errores.push("La fecha del servicio no puede ser anterior a la actual")
+    if (servicio) {
+        console.log(servicio)
+        if (new Date(fecha.value).toDateString() < new Date(servicio.fecha_servicio).toDateString()) {
+            errores.push("La fecha del servicio no puede ser anterior a la original")
+        }
+    } else {
+        if (new Date(fecha.value).toDateString() < new Date().toDateString()) {
+            errores.push("La fecha del servicio no puede ser anterior a la actual")
+        }
     }
 
 
-    return errores
+    if (errores.length){
+        swal.fire({
+            title: 'Error',
+            icon: 'warning',
+            html: errores.map(el => `<p>${el}</p>`).join('')
+        })
+        return false
+    }
+
+    return true
     
 }
 

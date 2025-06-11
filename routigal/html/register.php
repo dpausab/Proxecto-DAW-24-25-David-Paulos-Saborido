@@ -11,10 +11,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="/assets/css/login.css">
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="../js/register.js" defer></script>
+    <script type="module" src="/js/register.js" defer></script>
 </head>
 <body>
     <section>
@@ -28,6 +28,10 @@
                 <label for="user">Usuario</label>
                 <input type="text" name="user" id="user">
             </p>
+            <p id="old">
+                <label for="old_pwd">Contraseña actual</label>
+                <input type="password" name="old_pwd" id="old_pwd">
+            </p>
             <p>
                 <label for="pwd">Contraseña</label>
                 <input type="password" name="pwd" id="pwd">
@@ -36,7 +40,12 @@
                 <label for="rol">Rol</label>
                 <select name="rol" id="rol"></select>
             </p>
-            <button type="submit" id="register">Enviar</button>
+            <p id="buttons">
+                <button>
+                    <a href="usuarios.php">Volver</a>
+                </button>
+                <button type="submit" id="register">Enviar</button>
+            </p>
         </form>
     </section>
 </body>

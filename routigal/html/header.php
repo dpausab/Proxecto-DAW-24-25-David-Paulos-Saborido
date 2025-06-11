@@ -17,7 +17,7 @@
           echo '<li><a href="/html/usuarios.php">Usuarios</a></li>';
         }
       ?>
-      <li><a href="../api/auth/logout" class="btn-yellow">Cerrar sesión</a></li>
+      <li><a href="/api/auth/logout" class="btn-yellow">Cerrar sesión</a></li>
     </ul>
   </nav>
 </header>

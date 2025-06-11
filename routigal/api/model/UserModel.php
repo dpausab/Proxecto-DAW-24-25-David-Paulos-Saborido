@@ -4,13 +4,15 @@ include_once("Model.php");
 class User implements JsonSerializable{
     protected $id;
     protected $nombre;
+    protected $usuario;
     protected $pwd;
     protected $rol;
 
-    public function __construct($nombre, $rol, $id=null, $pwd=null) {
+    public function __construct($nombre, $usuario, $rol, $id=null, $pwd=null) {
         $this->id = $id;
         $this->pwd = $pwd;
         $this->nombre = $nombre;
+        $this->usuario = $usuario;
         $this->rol = $rol;
     }
 
@@ -19,7 +21,7 @@ class User implements JsonSerializable{
     }
     
     /**
-     * Get the value of id
+     * Get the value of $id
      */ 
     public function getId()
     {
@@ -27,7 +29,7 @@ class User implements JsonSerializable{
     }
 
     /**
-     * Set the value of id
+     * Set the value of $id
      *
      * @return  self
      */ 
@@ -39,7 +41,7 @@ class User implements JsonSerializable{
     }
 
     /**
-     * Get the value of id
+     * Get the value of $nombre
      */ 
     public function getNombre()
     {
@@ -47,7 +49,7 @@ class User implements JsonSerializable{
     }
 
     /**
-     * Set the value of id
+     * Set the value of $nombre
      *
      * @return  self
      */ 
@@ -59,7 +61,27 @@ class User implements JsonSerializable{
     }
 
     /**
-     * Get the value of id
+     * Get the value of $usuario
+     */ 
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
+     * Set the value of $usuairo
+     *
+     * @return  self
+     */ 
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of $pwd
      */ 
     public function getPwd()
     {
@@ -67,7 +89,7 @@ class User implements JsonSerializable{
     }
 
     /**
-     * Set the value of id
+     * Set the value of $pwd
      *
      * @return  self
      */ 
@@ -79,7 +101,7 @@ class User implements JsonSerializable{
     }
 
     /**
-     * Get the value of id
+     * Get the value of $rol
      */ 
     public function getRol()
     {
@@ -87,7 +109,7 @@ class User implements JsonSerializable{
     }
 
     /**
-     * Set the value of id
+     * Set the value of $rol
      *
      * @return  self
      */ 
@@ -103,7 +125,7 @@ class UserModel extends Model
 
     public static function getAll($offset=null, $limit=null)
     {
-        $sql = "SELECT id, nombre, id_rol FROM usuarios ORDER BY id DESC";
+        $sql = "SELECT id, nombre, usuario, id_rol FROM usuarios ORDER BY id DESC";
         if (isset($offset, $limit)) {
             $sql .= " LIMIT $limit OFFSET $offset";
         } 
@@ -115,7 +137,7 @@ class UserModel extends Model
             if ($stmt->rowCount()===11) $next=true;
             $datos = [];
             foreach($stmt as $s){   
-                $user = new user($s['nombre'], $s['id_rol'], $s['id']);
+                $user = new user($s['nombre'], $s['usuario'], $s['id_rol'], $s['id']);
                 $datos[] = $user;
             }
             if ($next) array_pop($datos);
@@ -146,7 +168,7 @@ class UserModel extends Model
             $stmt = $db->query($sql);
             $datos = [];
             foreach($stmt as $s){   
-                $user = new user($s['nombre'], $s['id_rol'], $s['id']);
+                $user = new user($s['nombre'], $s['usuario'], $s['id_rol'], $s['id']);
                 $datos[] = $user;
             }
         } catch (PDOException $th) {
@@ -169,7 +191,7 @@ class UserModel extends Model
             $stmt->bindValue(1, $userId, PDO::PARAM_INT);
             $stmt->execute();
             if($s = $stmt->fetch()){
-                $datos = new user($s['nombre'], $s['id_rol'], $s['id']);
+                $datos = new user($s['nombre'], $s['usuario'], $s['id_rol'], $s['id']);
             }
         } catch (Throwable $th) {
             error_log("Error UserModel->get($userId)");
@@ -178,7 +200,6 @@ class UserModel extends Model
             $stmt = null;
             $db = null;
         }
-
         return $datos;
     }
 
@@ -193,7 +214,7 @@ class UserModel extends Model
             $stmt->bindValue(1, $userId, PDO::PARAM_INT);
             $stmt->execute();
             if($s = $stmt->fetch()){
-                $datos = new user($s['nombre'], $s['id_rol'], $s['id']);
+                $datos = new user($s['nombre'], $s['usuario'], $s['id_rol'], $s['id']);
             }
         } catch (Throwable $th) {
             error_log("Error UserModel->get($userId)");
@@ -247,9 +268,24 @@ class UserModel extends Model
 
     }
 
-    public static function update($user, $userId)
+    public static function update($data, $userId)
     {
- 
+        $user = self::get($userId);
+        $db = null;
+        if (!$user) {
+            throw new Exception("El usuario no existe.");
+        } else {
+            $sql = "SELECT pwd FROM usuarios WHERE id=:id";
+            $db = self::getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(":id", $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            $pwd = $stmt->fetchColumn();
+
+            if ($pwd !== sha1($data['old_pwd'])) {
+                throw new Exception("La contraseña actual no coincide.");
+            }
+        }
         $sql = "UPDATE usuarios SET
             nombre=:user,
             pwd=:pwd,
@@ -262,18 +298,17 @@ class UserModel extends Model
         try {
             $stmt = $db->prepare($sql);
             $stmt->bindValue(":id", $userId, PDO::PARAM_INT);
-            $stmt->bindValue(":user", $user['nombre'], PDO::PARAM_STR);
-            $stmt->bindValue(":pwd", $user['pwd'], PDO::PARAM_STR);
-            $stmt->bindValue(":rol", $user['id_rol'], PDO::PARAM_INT);
+            $stmt->bindValue(":user", $data['nombre'], PDO::PARAM_STR);
+            $stmt->bindValue(":pwd", sha1($data['new_pwd']), PDO::PARAM_STR);
+            $stmt->bindValue(":rol", $data['rol'], PDO::PARAM_INT);
 
             $stmt->execute();
             $datos = true;
             $db->commit();
         } catch (PDOException $th) {
             $db->rollBack();
-            error_log("Error UserModel->update(" . implode(",", $user) . ", $userId)");
+            error_log("Error UserModel->update(" . implode(",", $data) . ", $userId)");
             error_log($th->getMessage());
-            echo "ERROR".$th->getMessage();
         } finally {
             $stmt = null;
             $db = null;

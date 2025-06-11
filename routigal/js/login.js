@@ -13,7 +13,7 @@ $form.addEventListener("submit", async(ev) => {
       let pwd = $pwd.value
 
       let resp = await ajax({
-        url: 'http://localhost/api/auth/login',
+        url: '/api/auth/login',
         method: 'POST',
         data: {
             user,
@@ -21,15 +21,18 @@ $form.addEventListener("submit", async(ev) => {
         }
       });
 
-      if (resp.respuesta===false) {
-        alert("Datos no correctos")
+      if (!resp.respuesta) {
+        console.log("NO")
+        throw new Error('Error al iniciar sesión');
       } else {
         window.location.href="dashboard.php"
       }
       
     } catch (error) {
-      alert('Error al intentar logear' + error);
-      console.log(error)
-      window.location.reload()
+      await swal.fire({
+        title: error.message,
+        icon: 'error'
+      })
+      $form.reset()
     }
 })

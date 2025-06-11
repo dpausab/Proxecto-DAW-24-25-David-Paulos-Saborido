@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/js/menu-hamburguesa.js" defer></script>
-  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="/assets/css/dashboard.css">
   
 </head>
 <body>

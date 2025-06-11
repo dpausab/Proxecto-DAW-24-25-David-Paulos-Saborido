@@ -1,8 +1,11 @@
 <?php
 
-define("DB_DSN","mysql:host=localhost;dbname=routigal");
-define("DB_USER","root");
-define("DB_PASS","");
+$config = file_get_contents(__DIR__ . '/../../config/config.json');
+$datos_config = json_decode($config, true)['conexion'];
+
+define("DB_DSN","mysql:host=".$datos_config['host'].";dbname=".$datos_config['database'].";charset=utf8mb4");
+define("DB_USER", $datos_config['user']);
+define("DB_PASS", $datos_config['password']);
 
 class Model{
 

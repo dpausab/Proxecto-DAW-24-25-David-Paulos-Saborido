@@ -16,7 +16,7 @@ const page = new URLSearchParams(window.location.search).get("page") ?? 1;
 let user = null
 
 $d.addEventListener("DOMContentLoaded", async () => {
-    user = await ajax({url:"http://localhost/api/auth/getLoggedUser"})
+    user = await ajax({url:"/api/auth/getLoggedUser"})
    
     await getUsuarios()
     await getRoles()
@@ -27,17 +27,16 @@ $d.addEventListener("DOMContentLoaded", async () => {
 })
 async function getUsuarios() {
     let datos  = await ajax({
-        url: `http://localhost/api/usuarios/getAll/${parseInt(page)}`
+        url: `/api/usuarios/getAll/${parseInt(page)}`
     })
 
     usuarios = datos.datos
-    console.log(usuarios)
     next = datos.next
 }
 
 async function getRoles() {
     let datos  = await ajax({
-        url: `http://localhost/api/roles/getAll`
+        url: `/api/roles/getAll`
     })
 
     roles = datos
@@ -52,6 +51,9 @@ function renderUsuarios(usuarios) {
                 <td>${el.nombre}</td>
                 <td>${rol}</td>
                 <td>
+                    <button id="editar" data-id="${el.id}">
+                        <a href="register.php?usuario=${el.id}">Editar</a>
+                    </button>
                     <button id="borrar" data-id="${el.id}">Borrar</button>
                 </tr>`
             }).join('')
@@ -62,7 +64,8 @@ function renderUsuarios(usuarios) {
 
 function renderRoles(roles) {
     if (roles.length) {
-        $rolF.innerHTML = roles.map(el => 
+        $rolF.innerHTML = `<option value="">Rol</option>`
+        $rolF.innerHTML += roles.map(el => 
             `<option value="${el.id}">${el.nombre}</option>`
         ).join('')
     } else {
@@ -89,7 +92,7 @@ if (page>1) {
 async function deleteUsuario(id) {
     try {
         let datos  = await ajax({
-                    url: `http://localhost/api/usuarios/delete/${id}`,
+                    url: `/api/usuarios/delete/${id}`,
                     method: 'DELETE'
                 })
 
@@ -103,7 +106,6 @@ async function deleteUsuario(id) {
 }
 
 $usuarios.addEventListener("click", async(ev) => {
-    ev.preventDefault()
 
     if (ev.target.id === "borrar" && ev.target.dataset.id) {
         await deleteUsuario(ev.target.dataset.id)
@@ -127,6 +129,6 @@ $nombreF.addEventListener("input", ev => {
 
 $rolF.addEventListener("change", ev => {
     ev.preventDefault()
-    let filtrados = usuarios.filter(el => el.rol == $rolF.value)
+    let filtrados = $rolF.value.length ? usuarios.filter(el => el.rol == $rolF.value) : usuarios
     renderUsuarios(filtrados)
 })

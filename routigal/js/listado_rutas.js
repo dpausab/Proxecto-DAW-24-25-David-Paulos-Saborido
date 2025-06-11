@@ -14,7 +14,7 @@ const page = new URLSearchParams(window.location.search).get("page") ?? 1;
 let user = null
 
 $d.addEventListener("DOMContentLoaded", async () => {
-    user = await ajax({url:"http://localhost/api/auth/getLoggedUser"})
+    user = await ajax({url:"/api/auth/getLoggedUser"})
     await getRutas()
     renderRutas(rutas)
     
@@ -33,7 +33,7 @@ $d.addEventListener("DOMContentLoaded", async () => {
 })
 async function getRutas() {
 let datos  = await ajax({
-        url: `http://localhost/api/rutas/getAll/${parseInt(page)}`
+        url: `/api/rutas/getAll/${parseInt(page)}`
     })
 
     rutas = datos.datos
@@ -76,12 +76,12 @@ function renderRutas(rutas) {
 async function deleteRuta(id) {
     try {
         let borrados  = await ajax({
-                            url: `http://localhost/api/servicios/getPorRuta/${id}`
+                            url: `/api/servicios/getPorRuta/${id}`
                         })
                 let serviciosBorrados = borrados
                 serviciosBorrados = Promise.all(serviciosBorrados.map(async el => {
                     return await ajax({
-                        url: `http://localhost/api/servicios/updateRutaId/${el.id}`,
+                        url: `/api/servicios/updateRutaId/${el.id}`,
                         method: 'PUT',
                         data: {
                             id_ruta: null,
@@ -93,11 +93,16 @@ async function deleteRuta(id) {
                     })
                 }))
         let datos  = await ajax({
-                    url: `http://localhost/api/rutas/delete/${id}`,
+                    url: `/api/rutas/delete/${id}`,
                     method: 'DELETE'
                 })
 
         if(datos.respuesta) {
+            swal.fire({
+                title: "Ruta eliminada",
+                icon: "success",
+                text: "La ruta ha sido eliminada correctamente."
+            })
             await getRutas()
             renderRutas(rutas)
         }

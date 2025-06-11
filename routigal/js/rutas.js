@@ -394,7 +394,7 @@ async function crearRuta() {
         
         await Promise.all(seleccionados.map((el, i) =>
             ajax({
-                url: `http://localhost/api/servicios/updateRutaId/${el.servicio.id}`,
+                url: `/api/servicios/updateRutaId/${el.servicio.id}`,
                 method: "PUT",
                 data: {
                     orden: i,
@@ -406,7 +406,10 @@ async function crearRuta() {
             })
         ));
     } catch (error) {
-        throw new Error(error.message)
+        swal.fire({
+            title: error.message,
+            icon: 'error'
+        })
     }
     
 }
@@ -414,7 +417,7 @@ async function crearRuta() {
 async function modificarRuta(id) {
     try {
         let ruta = await ajax({
-            url: `http://localhost/api/rutas/update/${id}`,
+            url: `/api/rutas/update/${id}`,
             method: "PUT",
             data: {
                 nombre:$nombre.value.trim(),
@@ -427,10 +430,10 @@ async function modificarRuta(id) {
                 horaSalida: $horaSalida.value
             }
         })
-        await ajax({url: "http://localhost/api/servicios/reset"})
+        await ajax({url: "/api/servicios/reset"})
         await Promise.all(seleccionados.map((el, i) =>
             ajax({
-                url: `http://localhost/api/servicios/updateRutaId/${el.servicio.id}`,
+                url: `/api/servicios/updateRutaId/${el.servicio.id}`,
                 method: "PUT",
                 data: {
                     orden: i,
@@ -442,7 +445,10 @@ async function modificarRuta(id) {
             })
         ));
     } catch (error) {
-        throw new Error(error.message)
+        swal.fire({
+            title: error.message,
+            icon: 'error'
+        })
     }
     
 }

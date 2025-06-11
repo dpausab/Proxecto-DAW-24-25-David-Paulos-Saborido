@@ -19,9 +19,18 @@ section {
 }
 
 form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     background-color: white;
     padding: 20px;
     border-radius: 10px;
+}
+
+form #buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 h1 {
@@ -33,7 +42,7 @@ label {
     color: #444;
 }
 
-input {
+input, select {
     width: 100%;
     padding: 1rem;
     border-radius: 0.5rem;
