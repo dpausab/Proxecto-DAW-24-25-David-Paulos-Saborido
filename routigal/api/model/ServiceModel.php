@@ -14,10 +14,10 @@ class Service implements JsonSerializable {
     protected $id_ruta;
     protected $orden;
     protected $duracion_estimada;
-    protected $descripcion;
+    protected $nombre_estado;
     protected $id_tecnico;
 
-    public function __construct($nombre, $id_estado, $nombre_cliente, $latitud, $longitud, $direccion, $fecha_servicio, $hora_servicio, $duracion_estimada, $id_tecnico=null, $descripcion=null, $orden = null, $id_ruta = null, $id = null) {
+    public function __construct($nombre, $id_estado, $nombre_cliente, $latitud, $longitud, $direccion, $fecha_servicio, $hora_servicio, $duracion_estimada, $nombre_estado= null, $id_tecnico=null, $orden = null, $id_ruta = null, $id = null) {
         $this->id = $id;
         $this->nombre = $nombre;
         $this->id_estado = $id_estado;
@@ -30,11 +30,11 @@ class Service implements JsonSerializable {
         $this->orden = $orden;
         $this->id_ruta = $id_ruta;
         $this->duracion_estimada = $duracion_estimada;
+        $this->nombre_estado = $nombre_estado;
         $this->id_tecnico = $id_tecnico;
-        $this->descripcion = $descripcion;
     }
 
-    public function jsonSerialize(): mixed {
+    public function jsonSerialize():mixed {
         return get_object_vars($this);
     }
 
@@ -59,6 +59,14 @@ class Service implements JsonSerializable {
     }
     public function setIdEstado($id_estado) { 
         $this->id_estado = $id_estado; 
+        return $this; 
+    }
+
+    public function getNombreEstado() { 
+        return $this->nombre_estado; 
+    }
+    public function setNombreEstado($nombre_estado) { 
+        $this->nombre_estado = $nombre_estado; 
         return $this; 
     }
 
@@ -142,41 +150,64 @@ class Service implements JsonSerializable {
         return $this; 
     }
 
-    public function getDescripcion() { 
-        return $this->descripcion; 
-    }
-    public function setDescripcion($descripcion) { 
-        $this->descripcion = $descripcion; 
-        return $this; 
-    }
 }
 
 class ServiceModel extends Model {
 
-    public static function getAll($offset = null, $limit = null, $id) {
-        $sql = "SELECT * FROM servicios";
+    public static function getAll($offset = null, $limit = null, $nombre=null, $fecha=null, $estado=null, $id=null) {
+
+        $filtrosQuery = [];
+        $filtrosBind = [];
+
+        if (isset($nombre) && !empty($nombre)) {
+            $filtrosQuery[] = 's.nombre_cliente LIKE :nombre';
+            $filtrosBind[':nombre'] = '%'.$nombre.'%';
+        }
+
+        if (isset($fecha)) {
+            $filtrosQuery[] = 's.fecha_servicio <= :fecha';
+            $filtrosBind[':fecha'] = $fecha;
+        }
+
+        if (isset($estado)) {
+            $filtrosQuery[] = 's.id_estado = :estado';
+            $filtrosBind[':estado'] = $estado;
+        }
 
         if (isset($id)) {
-            $sql.=" WHERE id_tecnico=:id";
+            $filtrosQuery[] = 's.id_tecnico = :id';
+            $filtrosBind[':id'] = $id;
         }
-        $sql.= ' ORDER BY id DESC';
-        if (isset($offset, $limit)) {
+
+        $sql = "SELECT s.nombre as nombre, id_estado, nombre_cliente, latitud, longitud, direccion, fecha_servicio, hora_servicio,
+        duracion_estimada, id_tecnico, orden, id_ruta, s.id as id, es.nombre as nombre_estado
+        FROM servicios s INNER JOIN estados_servicio es ON s.id_estado = es.id";
+        
+        if (count($filtrosQuery) && !empty($filtrosQuery)) {
+            $sql.= " WHERE ". implode(" AND ", $filtrosQuery);
+        }
+
+        $sql.= ' ORDER BY s.id DESC';
+        if (isset($offset, $limit) && is_numeric($offset) && is_numeric($limit)) {
             $limit = $limit+1;
             $sql .= " LIMIT $limit OFFSET $offset";
         } 
+        
         $db = self::getConnection();
         $datos = [];
         $next = false;
         $respuesta = null;
         try {
-            if (isset($id)) {
-                $stmt=$db->prepare($sql);
-                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-                $stmt->execute();
-            } else {
-                $stmt = $db->query($sql);
+            $stmt = $db->prepare($sql);
+            if (count($filtrosBind) && !empty($filtrosBind)) {
+                foreach($filtrosBind as $key => $value) {
+                    $pdo_param = is_numeric($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+                    $stmt->bindValue($key, $value, $pdo_param);
+                }
             }
-            if ($stmt->rowCount()===11) $next = true;
+
+            $stmt->execute();
+            if ($stmt->rowCount()>=11) $next = true;
             foreach ($stmt as $s) {
                 $servicio = new Service(
                     $s['nombre'],
@@ -188,8 +219,8 @@ class ServiceModel extends Model {
                     $s['fecha_servicio'],
                     $s['hora_servicio'],
                     $s['duracion_estimada'],
+                    $s['nombre_estado'],
                     $s['id_tecnico'],
-                    $s['descripcion'],
                     $s['orden'],
                     $s['id_ruta'],
                     $s['id']
@@ -219,7 +250,6 @@ class ServiceModel extends Model {
         }
         $db = self::getConnection();
         $datos = [];
-        $next = false;
         $respuesta = null;
         try {
             if (isset($id)) {
@@ -240,8 +270,8 @@ class ServiceModel extends Model {
                     $s['fecha_servicio'],
                     $s['hora_servicio'],
                     $s['duracion_estimada'],
+                    null,
                     $s['id_tecnico'],
-                    $s['descripcion'],
                     $s['orden'],
                     $s['id_ruta'],
                     $s['id']
@@ -285,8 +315,8 @@ class ServiceModel extends Model {
                     $s['fecha_servicio'],
                     $s['hora_servicio'],
                     $s['duracion_estimada'],
+                    null,
                     $s['id_tecnico'],
-                    $s['descripcion'],
                     $s['orden'],
                     $s['id_ruta'],
                     $s['id']
@@ -323,7 +353,7 @@ class ServiceModel extends Model {
                     $s['fecha_servicio'],
                     $s['hora_servicio'],
                     $s['duracion_estimada'],
-                    $s['descripcion'],
+                    null,
                     $s['id_tecnico'],
                     $s['orden'],
                     $s['id_ruta'],
@@ -342,7 +372,7 @@ class ServiceModel extends Model {
 
     public static function insert($servicio) {
         $sql = "INSERT INTO servicios 
-            (nombre, id_estado, nombre_cliente, latitud, longitud, direccion, fecha_servicio, hora_servicio, duracion_estimada, id_tecnico, descripcion, orden, id_ruta) 
+            (nombre, id_estado, nombre_cliente, latitud, longitud, direccion, fecha_servicio, hora_servicio, duracion_estimada, nombre_estado, id_tecnico, orden, id_ruta) 
             VALUES 
             (:nombre, 1, :nombre_cliente, :latitud, :longitud, :direccion, :fecha, :hora, :duracion_estimada, null, null, null, null)";
 

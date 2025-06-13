@@ -211,29 +211,58 @@ class Route implements JsonSerializable {
 class RouteModel extends Model
 {
 
-    public static function getAll($offset=null, $limit=null, $id)
+    public static function getAll($offset=null, $limit=null, $estado=null, $nombre=null, $fecha=null, $id=null)
     {
+        $filtrosQuery = [];
+        $filtrosBind = [];
+
+        if (isset($nombre) && !empty($nombre)) {
+            $filtrosQuery[] = 'r.nombre LIKE :nombre';
+            $filtrosBind[':nombre'] = '%'.$nombre.'%';
+        }
+
+        if (isset($fecha)) {
+            $filtrosQuery[] = 'r.fecha <= :fecha';
+            $filtrosBind[':fecha'] = $fecha;
+        }
+
+        if (isset($estado)) {
+            $filtrosQuery[] = 'r.id_estado = :estado';
+            $filtrosBind[':estado'] = $estado;
+        }
+
+        if (isset($id)) {
+            $filtrosQuery[] = 'r.id_tecnico = :id';
+            $filtrosBind[':id'] = $id;
+        }
+
         $sql = "SELECT r.id as id, r.nombre as nombre, tiempo_total as tiempo, km_totales as km, u.nombre as origen, er.nombre as estado, us.nombre as tecnico, r.fecha as fecha, r.hora_salida as hora FROM rutas r
             INNER JOIN ubicaciones u ON r.id_origen = u.id
             INNER JOIN estados_ruta er ON er.id = r.id_estado
             INNER JOIN usuarios us ON r.id_tecnico = us.id";
-        if (isset($id)) {
-            $sql .= ' WHERE r.id_tecnico=:id';
+
+        if (count($filtrosQuery) && !empty($filtrosQuery)) {
+            $sql.= " WHERE ". implode(" AND ", $filtrosQuery);
         }
-        if (isset($offset, $limit)) {
+    
+        $sql.= ' ORDER BY r.id DESC';
+        if (isset($offset, $limit) && is_numeric($offset) && is_numeric($limit)) {
+            $limit = $limit+1;
             $sql .= " LIMIT $limit OFFSET $offset";
-        } 
+        }
+
         $db = self::getConnection();
         $datos = [];
         $next = false;
         try {
-            if (isset($id)) {
-                $stmt = $db->prepare($sql);
-                $stmt -> bindParam(':id', $id, PDO::PARAM_INT);
-                $stmt -> execute();
-            } else {
-                $stmt = $db->query($sql);
+            $stmt = $db->prepare($sql);
+            if (count($filtrosBind) && !empty($filtrosBind)) {
+                foreach($filtrosBind as $key => $value) {
+                    $pdo_param = is_numeric($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+                    $stmt->bindValue($key, $value, $pdo_param);
+                }
             }
+            $stmt->execute();
             if ($stmt->rowCount()===11) $next=true;
             foreach($stmt as $r){  
                 $ruta = new Route($r['nombre'], $r['tiempo'],$r['km'], $r['origen'], $r['estado'], $r['tecnico'], $r['fecha'], $r['hora'], $r['id']);
@@ -247,6 +276,7 @@ class RouteModel extends Model
         } catch (PDOException $th) {
             error_log("Error ServiceModel->getAll()");
             error_log($th->getMessage());
+            throw new Error("Error recuperando las rutas.");
         } finally {
             $stmt = null;
             $db = null;
@@ -270,6 +300,7 @@ class RouteModel extends Model
         } catch (Throwable $th) {
             error_log("Error RouteModel->get($rutaId)");
             error_log($th->getMessage());
+            throw new Error("Error recuperando la ruta.");
         } finally {
             $stmt = null;
             $db = null;
@@ -305,6 +336,7 @@ class RouteModel extends Model
             error_log("Error RouteModel->insert()");
             error_log($th->getMessage());
             $db->rollBack();
+            throw new Error("Error creando la ruta.");
         } finally {
             $stmt = null;
             $db = null;
@@ -346,6 +378,7 @@ class RouteModel extends Model
         } catch (PDOException $th) {
             error_log("Error RouteModel->update(" . implode(",", $ruta) . ", $rutaId)");
             error_log($th->getMessage());
+            throw new Error("Error editando la ruta.");
         } finally {
             $stmt = null;
             $db = null;

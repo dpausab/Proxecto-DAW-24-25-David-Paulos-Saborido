@@ -7,9 +7,10 @@
   <meta charset="UTF-8">
   <title>Inicio - Routigal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/css/dashboard.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/js/menu-hamburguesa.js" defer></script>
-  <link rel="stylesheet" href="/assets/css/dashboard.css">
+  <script type="module" src="/js/dashboard.js" defer></script>
   
 </head>
 <body>
@@ -17,35 +18,32 @@
 
   <main>
     <h1>¡Bienvenido de nuevo, <?php echo $_SESSION['user']['nombre']; ?>!</h1>
-    <h2>Esta sección está en pruebas, quería poner gráficas con chart.js</h2>
-    <section class="cards">
-      <div class="card">
-        <h2>Servicios esta semana</h2>
-        <p>24</p>
-      </div>
-      <div class="card">
+    <section class="cards-servicios">
+      <article class="card-servicio">
+        <h2>Servicios</h2>
+        <p id="totales"></p>
+      </article>
+      <article class="card-servicio">
         <h2>Completados</h2>
-        <p>18</p>
-      </div>
-      <div class="card">
-        <h2>Horas en ruta</h2>
-        <p>14h 20min</p>
-      </div>
-      <div class="card">
-        <h2>Pendientes</h2>
-        <p>6</p>
-      </div>
+        <p id="completados"></p>
+      </article>
+      <article class="card-servicio">
+        <h2>Horas planificadas</h2>
+        <p id="tiempo-total"></p>
+      </article>
+      <article class="card-servicio">
+        <h2>Distancia planificada</h2>
+        <p id="km_totales"></p>
+      </article >
     </section>
 
-    <section>
+    <section id="servicios-container">
       <h2>Agenda próxima</h2>
-      <div class="list">
-        <ul>
-          <li>23/05 - Visita a Jorge Gómez (Fontanería general)</li>
-          <li>24/05 - Mantenimiento en Casa Lola</li>
-          <li>25/05 - Instalación eléctrica en Bazar Marta</li>
+      <section class="list">
+        <ul id="list-servicios">
+          <li>No hay servicios.</li>
         </ul>
-      </div>
+      </section>
     </section>
   </main>
   <?php include_once ('footer.php'); ?>

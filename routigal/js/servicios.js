@@ -7,69 +7,68 @@ const $d = document,
             $paginacion = $d.querySelector("#paginacion"),
             $clienteF = $d.querySelector("#cliente_filtro"),
             $fechaF = $d.querySelector("#fecha_filtro"),
+            $estadoF = $d.querySelector("#estado_filtro"),
             $submit = $form?.querySelector("button") ?? null,
             $tabla = $d.querySelector("table")
 
-const estados = {
-    1: 'Nuevo',
-    2: 'En curso',
-    3: 'Acabado'
-}
+
 let servicios = []
 
 let next = null;
-
-const page = new URLSearchParams(window.location.search).get("page") ?? 1;
+let actualPage = 1;
 let user = null
+const today = getToday()
+
 
 $d.addEventListener("DOMContentLoaded", async () => {
     user = await ajax({url:"/api/auth/getLoggedUser"})
-    console.log(user)
+
+    $fechaF.value = today
 
     if (user.rol === 1 && $form) {
         adminPanel()
-        
-        $clienteF.addEventListener("input", ev => {
-            ev.preventDefault()
-            let filtrados = servicios.filter(el => el.nombre_cliente.toLowerCase().includes(ev.target.value.toLowerCase()))
-            renderServicios(filtrados)
-        })
-
-        $form.querySelector("#fecha").value = new Date().toISOString().split("T")[0]
+        $form.querySelector("#fecha").value = today
         $form.querySelector("#hora").value = "08:00"
-        $fechaF.value = new Date().toISOString().split("T")[0]
-        $fechaF.addEventListener("change", ev => {
-            ev.preventDefault()
-            let filtrados = servicios.filter(el => el.fecha_servicio === $fechaF.value)
-            renderServicios(filtrados)
-        })
-    
+        startListeners()
+        await getServicios()
+    } else {
+        await getServicios(user.id)
     }   
-    await getServicios()
     renderServicios(servicios)
-    renderPaginacion()
     
 })
-async function getServicios() {
-let datos  = await ajax({
-        url: `/api/servicios/getAll/${parseInt(page)}`
+
+async function getServicios(id=null, nombre=null, fecha=null, estado=null, page=actualPage) {
+    let datos  = await ajax({
+        url: `/api/servicios/getAll/${page}?nombre=${nombre}&fecha=${fecha}&estado=${estado}&id=${id}`
     })
 
     servicios = datos.datos
     next = datos.next
 }
+
+function getToday() {
+    return new Date().toLocaleDateString('es-ES', {
+        timeZone: 'Europe/Madrid',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).split('/').reverse().join('-')
+}
+
 function renderServicios(servicios) {
     if (servicios.length) {
         $servicios.innerHTML = servicios.map(el => {
             let botones = ""
             if ($form && user.rol === 1) {
                 botones = `<td>
-                        <button id="editar" data-id="${el.id}">Editar</button>
-                        <button id="borrar" data-id="${el.id}">Borrar</button>
+                        <button class="editar" data-id="${el.id}">Editar</button>
+                        <button class="borrar" data-id="${el.id}">Borrar</button>
                     </td>`
             }
             return `<tr>
                 <td>${el.nombre}</td>
+                <td>${el.nombre_estado}</td>
                 <td>${el.nombre_cliente}</td>
                 <td>${el.direccion}</td>
                 <td>${el.duracion_estimada.slice(0, 5)}</td>
@@ -80,21 +79,43 @@ function renderServicios(servicios) {
     } else {
         $servicios.innerHTML = "<tr>No hay servicios.</tr>"
     }
+
+    renderPaginacion()
 }
 
 function renderPaginacion() {
     $paginacion.innerHTML = ""
-if (page>1) {
+    let id = user.rol!=1 ? user.id : null
+
+    if (actualPage>1) {
         $paginacion.innerHTML += 
-        `<p class="paginacion">
-            <a href="?page=${parseInt(page)-1}"><- Anterior</a>
-        </p>`
+        `<button class="paginacion" id="anterior">
+            <- Anterior
+        </button>`
+
+        let botonAnterior = $paginacion.querySelector("#anterior")
+        botonAnterior.addEventListener("click", async(ev) => {
+            ev.preventDefault()
+            let anterior = parseInt(actualPage)-1
+            actualPage = anterior
+            await getServicios(id, $clienteF.value, $fechaF.value, $estadoF.value, anterior)
+            renderServicios(servicios)
+        })
     }
     if (next) {
         $paginacion.innerHTML += 
-        `<p class="paginacion">
-            <a href="?page=${parseInt(page)+1}">Siguiente -></a>
-        </p>`
+        `<button class="paginacion" id="siguiente">
+            Siguiente ->
+        </button>`
+
+        let botonSiguiente = $paginacion.querySelector("#siguiente")
+        botonSiguiente.addEventListener("click", async(ev) => {
+            ev.preventDefault()
+            let siguiente = parseInt(actualPage)+1
+            actualPage = siguiente
+            await getServicios(id, $clienteF.value, $fechaF.value, $estadoF.value, siguiente)
+            renderServicios(servicios)
+        })
     }
 }
 
@@ -114,24 +135,53 @@ function formulario(servicio) {
     $submit.textContent = 'Editar'
 }
 
-async function addServicio($form) {
+async function filtrar() {
+    let id = user.rol!=1 ? user.id : null
+    await getServicios(id, $clienteF.value, $fechaF.value, $estadoF.value, 1)
+    renderServicios(servicios)
+}
+
+function startListeners() {
+    $clienteF.addEventListener("input", async(ev) => {
+        ev.preventDefault()
+        await filtrar()
+    })
+
+    $fechaF.value = new Date().toISOString().split("T")[0]
+    $fechaF.addEventListener("change", async(ev) => {
+        ev.preventDefault()
+        await filtrar()
+    })
+
+    $estadoF.addEventListener("change", async(ev) => {
+        ev.preventDefault()
+        await filtrar()
+    }) 
+}
+
+function getDatos() {
     let {id, nombre, cliente, latitud, longitud, direccion, fecha, hora, estimado} = $form
+
+    return {
+            nombre: nombre.value,
+            cliente: cliente.value,
+            latitud: latitud.value,
+            longitud: longitud.value,
+            direccion: direccion.value,
+            fecha: fecha.value,
+            hora: hora.value,
+            tiempoEstimado: estimado.value
+        } 
+}
+
+async function addServicio() {
     
     try {
-        if (!validarForm()) return
+        let datos = getDatos()
         let resp = await ajax({
                     url: "/api/servicios/insert",
                     method: 'POST',
-                    data: {
-                        nombre: nombre.value,
-                        cliente: cliente.value,
-                        latitud: latitud.value,
-                        longitud: longitud.value,
-                        direccion: direccion.value,
-                        fecha: fecha.value,
-                        hora: hora.value,
-                        tiempoEstimado: estimado.value
-                    }
+                    data: datos
                 })
         
         if(resp.respuesta) {
@@ -148,25 +198,13 @@ async function addServicio($form) {
     
 }
 
-async function updateServicio(servicio) {
-    try {
-        if(!validarForm(servicio)) return
-        
-        let {id, nombre, cliente, latitud, longitud, direccion, fecha, hora, estimado} = $form
-
+async function updateServicio() {
+    try {        
+        let datos = getDatos()
         let resp = await ajax({
                     url: `/api/servicios/update/${id.value}`,
                         method: 'PUT',
-                        data: {
-                            nombre: nombre.value,
-                            cliente: cliente.value,
-                            latitud: latitud.value,
-                            longitud: longitud.value,
-                            direccion: direccion.value,
-                            fecha: fecha.value,
-                            hora: hora.value,
-                            tiempoEstimado: estimado.value
-                        } 
+                        data: datos
                     })
         if (resp.respuesta) {
             swal.fire({
@@ -213,20 +251,22 @@ async function handleStatus() {
     let id = $form.querySelector('#id').value
 
     try{
-        if (id.length) {
-            let servicio = servicios.find(el => el.id == id)
+        let servicio = servicios.find(el => el.id == id) ?? null
+        if (!validarForm(servicio)) return
+        if (servicio) {
             await updateServicio(servicio)
         } else {
             await addServicio()
         }
         
         $form.reset()
+        $form.querySelector("#fecha").value = new Date().toISOString().split("T")[0]
+        $form.querySelector("#hora").value = "08:00"
         $submit.textContent = 'Guardar servicio'
     } catch (error) {
         swal.fire({
-            title: 'Error',
-            icon: 'warning',
-            text: 'Fallo en la acción' + error.message
+            title: 'Fallo en la acción.',
+            icon: 'warning'
         })
     }
 }
@@ -241,7 +281,7 @@ function adminPanel() {
             ev.preventDefault()
 
             if (ev.target.dataset.id) {
-                if (ev.target.id === "editar") {
+                if (ev.target.classList.contains("editar")) {
                     let servicio = servicios.find(el => el.id == ev.target.dataset.id)
                     formulario(servicio)
                 } else {
@@ -253,8 +293,9 @@ function adminPanel() {
 
 function validarForm(servicio = null) {
     let errores = []
-    let { id, nombre, cliente, latitud, longitud, direccion, fecha, hora, estimado } = $form
+    let [latitud, longitud, fecha] = $form.querySelectorAll("#latitud, #longitud, #fecha")
     let campos = Array.from($form.querySelectorAll("input, select, textarea"))
+
     // Se hace el slice para no comprobar el id ni el botónN
     campos = campos.slice(1, campos.length - 1)
 
@@ -278,12 +319,11 @@ function validarForm(servicio = null) {
     }
 
     if (servicio) {
-        console.log(servicio)
-        if (new Date(fecha.value).toDateString() < new Date(servicio.fecha_servicio).toDateString()) {
+        if (new Date(fecha.value).setHours(0,0,0,0) < new Date(servicio.fecha_servicio).setHours(0,0,0,0)) {
             errores.push("La fecha del servicio no puede ser anterior a la original")
         }
     } else {
-        if (new Date(fecha.value).toDateString() < new Date().toDateString()) {
+        if (new Date(fecha.value).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
             errores.push("La fecha del servicio no puede ser anterior a la actual")
         }
     }

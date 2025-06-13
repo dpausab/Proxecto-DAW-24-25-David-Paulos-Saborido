@@ -10,10 +10,7 @@ class UbicacionController extends Controller{
             $datos = UbicacionModel::get($id);
             echo json_encode($datos);
         } catch (\Throwable $th) {
-            echo json_encode([
-                'error' => $th->getMessage(),
-                'dato' => $dato
-            ]);
+            throw $th;
         }
     }
     public function getAll($ids) {
@@ -29,48 +26,42 @@ class UbicacionController extends Controller{
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {
-            echo json_encode([
-                'error' => $th->getMessage(),
-                'datos' => $datos
-            ]);
+            throw $th;
         }
     }
     public function delete($id) {
         $dato = null;
-        $mensaje = "Editado con éxito.";
+
         try {
             $dato = UbicacionModel::delete($id[0]);
         } catch (\Throwable $th) {
-            http_response_code(401);
-            $mensaje = $th->getMessage();
+            throw $th;
         }
         
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
+        echo json_encode(['respuesta' => $dato]);
     }
     public function update($json, $id) {
         $dato = null;
-        $mensaje = "Editado con éxito.";
+
         try {
             $datos = json_decode($json, true);
             $dato = UbicacionModel::update($datos, $id[0]);
         } catch (\Throwable $th) {
-            http_response_code(401);
-            $mensaje = $th->getMessage();
+            throw $th;
         }
         
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
+        echo json_encode(['respuesta' => $dato]);
     }
     public function insert($json) {
         $dato = null;
-        $mensaje = "Insertado con éxito.";
+
         try {
             $datos = json_decode($json, true);
             $dato = UbicacionModel::insert($datos);
         } catch (\Throwable $th) {
-            http_response_code(401);
-            $mensaje = $th->getMessage();
+            throw $th;
         }
         
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
+        echo json_encode(['respuesta' => $dato]);
     }  
 }

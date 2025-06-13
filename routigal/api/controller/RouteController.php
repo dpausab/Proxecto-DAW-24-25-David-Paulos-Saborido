@@ -10,57 +10,51 @@ class RouteController extends Controller{
             $dato = RouteModel::get($id[0]);
             echo json_encode($dato);
         } catch (\Throwable $th) {
-            echo json_encode([
-                'error' => $th->getMessage(),
-                'dato' => $dato
-            ]);
+            throw $th;
         }
     }
     public function getAll($ids) {
         $datos = [];
-        $id = null;
-        $id = $_SESSION['user']['rol'] === 2 ? $_SESSION['user']['id'] : null;
         try {
+            $estado = $_GET['estado']!="" && $_GET['estado']!="null" ? $_GET['estado'] : null;
+            $nombre = $_GET['nombre']!="" && $_GET['nombre']!="null" ? $_GET['nombre'] : null;
+            $fecha = $_GET['fecha']!="" && $_GET['fecha']!="null" ? $_GET['fecha'] : null;
+            $id = $_GET['id']!="" && $_GET['id']!="null" ? $_GET['id'] : null;
+            
             if (isset($ids) && count($ids)>0) {
-                $pagina = $ids[0]-1 ?? 1;
+                $pagina = intval($ids[0])-1 ?? 0;
                 $limit =  10;
                 $offset = $pagina * $limit;
-                $datos = RouteModel::getAll($offset, $limit, $id);
+                $datos = RouteModel::getAll($offset, $limit, $estado, $nombre, $fecha, $id);
             } else {
-                $datos = RouteModel::getAll(null, null, $id);
+                $datos = RouteModel::getAll(null, null, $estado, $nombre, $fecha, $id);
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {
-            echo json_encode([
-                'error' => $th->getMessage(),
-                'datos' => $datos
-            ]);
+            throw $th;
         }
     }
+
     public function delete($id) {
         $dato = null;
-        $mensaje = "Borrada con éxito.";
         try {
             $dato = RouteModel::delete($id[0]);
         } catch (\Throwable $th) {
-            http_response_code(401);
-            $mensaje = $th->getMessage();
+            throw $th;
         }
         
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
+        echo json_encode(['respuesta' => $dato]);
     }
     public function update($json, $id) {
         $dato = null;
-        $mensaje = "Editado con éxito.";
         try {
             $datos = json_decode($json, true);
             $dato = RouteModel::update($datos, $id[0]);
         } catch (\Throwable $th) {
-            http_response_code(401);
-            $mensaje = $th->getMessage();
+            throw $th;
         }
         
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
+        echo json_encode(['respuesta' => $dato]);
     }
     public function insert($json) {
         $dato = null;
@@ -69,10 +63,9 @@ class RouteController extends Controller{
             $datos = json_decode($json, true);
             $dato = RouteModel::insert($datos);
         } catch (\Throwable $th) {
-            http_response_code(401);
-            $mensaje = $th->getMessage();
+            throw $th;
         }
         
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
+        echo json_encode(['respuesta' => $dato]);
     }  
 }

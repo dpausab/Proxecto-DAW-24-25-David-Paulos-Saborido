@@ -158,9 +158,9 @@ class UserModel extends Model
     public static function getTecnicos($offset=null, $limit=null)
     {
         if (isset($offset, $limit)) {
-            $sql = "SELECT id, nombre, id_rol FROM usuarios WHERE id_rol=2 ORDER BY id DESC LIMIT $limit OFFSET $offset";
+            $sql = "SELECT id, nombre, usuario, id_rol FROM usuarios WHERE id_rol=2 ORDER BY id DESC LIMIT $limit OFFSET $offset";
         } else {
-            $sql = "SELECT id, nombre, id_rol FROM usuarios WHERE id_rol=2 ORDER BY id DESC";
+            $sql = "SELECT id, nombre, usuario, id_rol FROM usuarios WHERE id_rol=2 ORDER BY id DESC";
         }
         $db = self::getConnection();
         $datos = [];

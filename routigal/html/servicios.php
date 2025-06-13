@@ -74,12 +74,22 @@
           <label for="fecha_filtro">Fecha</label>
           <input type="date" name="fecha_filtro" id="fecha_filtro" />
         </p>
+        <p>
+          <label for="estado_filtro">Estado</label>
+          <select name="estado_filtro" id="estado_filtro">
+            <option value="">Todos</option>
+            <option value="1">Nuevo</option>
+            <option value="2">Asignado</option>
+            <option value="3">Realizado</option>
+          </select>
+        </p>
       </form>
       <div id="paginacion"></div>
       <table>
         <thead>
           <tr>
             <th>Nombre</th>
+            <th>Estado</th>
             <th>Cliente</th>
             <th>Dirección</th>
             <th>Duración estimada</th>

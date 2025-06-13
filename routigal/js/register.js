@@ -49,7 +49,6 @@ async function getRoles() {
 }
 
 function renderRoles(roles) {
-  $rol.innerHTML = `<option value="">Rol</option>`
   if (roles.length) {
     $rol.innerHTML += roles.map(el => 
       `<option value="${el.id}">${el.nombre}</option>`).join('')

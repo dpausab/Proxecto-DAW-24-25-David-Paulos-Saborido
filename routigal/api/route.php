@@ -25,11 +25,13 @@ function getIds(array $uri):array{
  */
 $metodo = $_SERVER["REQUEST_METHOD"];
 $uri = $_SERVER["REQUEST_URI"];
-$uri = explode("/", $uri);
+$path = parse_url($uri, PHP_URL_PATH);
+$uri = explode("/", $path);
 $endpoint = $uri[2];
 $accion = $uri[3];
 $id = null;
 $controlador = null;
+
 
 if (count($uri) >= 4) {
     try {

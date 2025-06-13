@@ -22,12 +22,25 @@
       <h2>Listado de rutas</h2>
       <form class="routigal-form" id="filtros">
         <p>
-          <label for="cliente">Nombre</label>
-          <input type="text" name="nombre_filtro" id="nombre_filtro" placeholder="Nombre del cliente" />
+          <label for="nombre_filtro">Nombre</label>
+          <input type="text" name="nombre_filtro" id="nombre_filtro" placeholder="Nombre de la ruta" />
         </p>
         <p>
-          <label for="fecha">Fecha</label>
+          <label for="fecha_filtro">Fecha</label>
           <input type="date" name="fecha_filtro" id="fecha_filtro" />
+        </p>
+        <?php if ($_SESSION['user']['rol'] === 1) {
+                  echo '<p>
+                    <label for="tecnico_filtro">Técnico</label>
+                    <select name="tecnico_filtro" id="tecnico_filtro"></select>
+                  </p>';
+              }
+        ?>
+        <p>
+          <label for="estado_filtro">Estado</label>
+          <select name="estado_filtro" id="estado_filtro">
+            <option value="">Todos</option>
+          </select>
         </p>
         <?php if ($_SESSION['user']['rol'] === 1) {
                   echo '<p>
@@ -38,6 +51,7 @@
               }
         ?>
       </form>
+      <div id="paginacion"></div>
       <table>
         <thead>
           <tr>

@@ -4,41 +4,64 @@ const $d = document,
             $rutas = $d.querySelector("tbody"),
             $filtros = $d.querySelector("#filtros"),
             $nombreF = $filtros.querySelector("#nombre_filtro"),
-            $fechaF = $filtros.querySelector("#fecha_filtro")
+            $paginacion = $d.querySelector("#paginacion"),
+            $fechaF = $filtros.querySelector("#fecha_filtro"),
+            $tecnicoF = $filtros.querySelector("#tecnico_filtro") ?? null,
+            $estadoF = $filtros.querySelector("#estado_filtro")
 
 
 let rutas = []
-let next = null;
+let tecnicos = []
 
-const page = new URLSearchParams(window.location.search).get("page") ?? 1;
+let next = null;
+let actualPage = 1;
 let user = null
+const today = getToday()
 
 $d.addEventListener("DOMContentLoaded", async () => {
+    $fechaF.value = today
     user = await ajax({url:"/api/auth/getLoggedUser"})
+    startListeners()
     await getRutas()
+    await getTecnicos()
     renderRutas(rutas)
-    
-    if (page>1) {
-        $filtros.innerHTML += 
-        `<p>
-            <a href="?page=${parseInt(page)-1}">Anterior</a>
-        </p>`
-    }
-    if (next) {
-        $filtros.innerHTML += 
-        `<p>
-            <a href="?page=${parseInt(page)+1}">Siguiente</a>
-        </p>`
-    }
+    if (user.rol!=2) renderTecnicos(tecnicos)
+
 })
-async function getRutas() {
-let datos  = await ajax({
-        url: `/api/rutas/getAll/${parseInt(page)}`
+
+function getToday() {
+    return new Date().toLocaleDateString('es-ES', {
+        timeZone: 'Europe/Madrid',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).split('/').reverse().join('-')
+}
+
+async function getRutas(id=null, nombre=null, fecha=null, estado=null, page=actualPage) {
+    let datos  = await ajax({
+        url: `/api/rutas/getAll/${page}?nombre=${nombre}&fecha=${fecha}&estado=${estado}&id=${id}`
     })
 
     rutas = datos.datos
     next = datos.next
 }
+
+async function getTecnicos() {
+    try {
+        let datos  = await ajax({
+            url: `http://localhost/api/usuarios/getTecnicos`
+        })
+
+        tecnicos = datos
+    } catch (error) {
+        swal.fire({
+            title: error.message,
+            icon: 'error'
+        })
+    }
+}
+
 function renderRutas(rutas) {
     if (rutas.length) {
         $rutas.innerHTML = rutas.map(el => {
@@ -70,6 +93,55 @@ function renderRutas(rutas) {
             }).join('')
     } else {
         $rutas.innerHTML = '<tr>No hay coincidencias</tr>'
+    }
+
+    renderPaginacion()
+}
+
+function renderTecnicos(tecnicos) {
+    if (tecnicos.length) {
+        $tecnicoF.innerHTML = '<option value="">Todos</option>'
+        $tecnicoF.innerHTML += tecnicos.map(el => 
+            `<option value="${el.id}">${el.nombre}</option>`
+        ).join('')
+    } else {
+        $tecnicoF.innerHTML = '<option value="">Sin técnicos</option>'
+    }
+}
+
+function renderPaginacion() {
+    $paginacion.innerHTML = ""
+    let id = user.rol!=1 ? user.id : $tecnicoF.value
+
+    if (actualPage>1) {
+        $paginacion.innerHTML += 
+        `<button class="paginacion" id="anterior">
+            <- Anterior
+        </button>`
+
+        let botonAnterior = $paginacion.querySelector("#anterior")
+        botonAnterior.addEventListener("click", async(ev) => {
+            ev.preventDefault()
+            let anterior = parseInt(actualPage)-1
+            actualPage = anterior
+            await getRutas(id, $clienteF.value, $fechaF.value, $estadoF.value, anterior)
+            renderRutas(renderTecnicos)
+        })
+    }
+    if (next) {
+        $paginacion.innerHTML += 
+        `<button class="paginacion" id="siguiente">
+            Siguiente ->
+        </button>`
+
+        let botonSiguiente = $paginacion.querySelector("#siguiente")
+        botonSiguiente.addEventListener("click", async(ev) => {
+            ev.preventDefault()
+            let siguiente = parseInt(actualPage)+1
+            actualPage = siguiente
+            await getRutas(id, $clienteF.value, $fechaF.value, $estadoF.value, anterior)
+            renderRutas(renderTecnicos)
+        })
     }
 }
 
@@ -115,22 +187,38 @@ async function deleteRuta(id) {
     }
 }
 
+async function filtrar() {
+    let id = user.rol!=1 ? user.id : $tecnicoF.value
+    await getRutas(id, $nombreF.value, $fechaF.value, $estadoF.value, 1)
+    renderRutas(rutas)
+}
+
+function startListeners() {
+    $nombreF.addEventListener("input", async(ev) => {
+        ev.preventDefault()
+        await filtrar()
+    })
+
+    $fechaF.addEventListener("change", async(ev) => {
+        ev.preventDefault()
+        await filtrar()
+    })
+
+    if ($tecnicoF) {
+        $tecnicoF.addEventListener("change", async(ev) => {
+            ev.preventDefault()
+            await filtrar()
+        })
+    }
+
+    $estadoF.addEventListener("change", async(ev) => {
+        ev.preventDefault()
+        await filtrar()
+    }) 
+}
+
 $rutas.addEventListener("click", async(ev) => {
     if (ev.target.id === "borrar" && ev.target.dataset.id) {
         await deleteRuta(ev.target.dataset.id)
     }
-})
-
-
-$nombreF.addEventListener("keyup", ev => {
-    ev.preventDefault()
-    let filtrados = rutas.filter(el => el.nombre.toLowerCase().includes(ev.target.value.toLowerCase()))
-    renderRutas(filtrados)
-    
-})
-
-$fechaF.addEventListener("change", ev => {
-    ev.preventDefault()
-    let filtrados = servicios.filter(el => el.fecha === $fechaF.value)
-    renderRutas(filtrados)
 })
