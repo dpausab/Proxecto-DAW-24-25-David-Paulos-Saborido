@@ -18,11 +18,14 @@ class AuthController {
                 }
             } 
             if ($respuesta) {
+                session_regenerate_id(true);
                 $_SESSION['user'] = [
                     'id' => $respuesta['id'],
                     'nombre' => $respuesta['nombre'],
-                    'rol' => $respuesta['id_rol']
+                    'rol' => $respuesta['id_rol'],
+                    'tiempo' => time()
                 ];
+
             }
             echo json_encode(['respuesta' => $respuesta]);
         } catch (\Throwable $th) {

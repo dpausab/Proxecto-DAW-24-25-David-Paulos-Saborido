@@ -4,7 +4,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-  font-family: 'Montserrat', sans-serif;
+    font-family: var(--fuente);
 
 }
 
@@ -14,7 +14,7 @@ section {
     justify-content: center;
     align-items: center;
     gap: 20px;
-    background-color: #ffc107;
+    background-color: var(--color-yellow);
     border-radius: 10px;
 }
 

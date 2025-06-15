@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 main {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--fuente);
   padding: 60px 10%;
 }
 
@@ -50,7 +50,7 @@ form input, form select {
 
 form button {
   height: 40px;
-  background-color: #ffc107;
+  background-color: var(--color-yellow);
   color: black;
   padding: 10px 20px;
   border: none;
@@ -61,7 +61,7 @@ form button {
 }
 
 form button:hover {
-  background-color: #ffa600;
+  background-color: var(--color-highlight);
 }
 
 /* Cards de distanciaTotal y tiempoTotal */
@@ -82,7 +82,7 @@ form button:hover {
 .card h3 {
   font-size: 1.2rem;
   margin-bottom: 10px;
-  color: #ffc107;
+  color: var(--color-highlight);
 }
 
 .card p {
@@ -114,7 +114,7 @@ form button:hover {
   height: 600px;
   width: 100%;
   border-radius: 10px;
-  border: 2px solid #ffc107;
+  border: 2px solid var(--color-yellow);
 }
 
 /* Columnas de servicios */
@@ -128,7 +128,7 @@ form button:hover {
 .servicios-seleccionados h4 {
   margin-bottom: 10px;
   font-size: 1.1rem;
-  color: #ffc107;
+  color: var(--color-yellow);
 }
 
 .lista-servicios ul,
@@ -151,7 +151,7 @@ form button:hover {
 
 .lista-servicios li button,
 .servicios-seleccionados li button {
-  background-color: #ffc107;
+  background-color: var(--color-yellow);
   border: none;
   padding: 5px 10px;
   font-weight: bold;
@@ -161,7 +161,7 @@ form button:hover {
 
 .lista-servicios li button:hover,
 .servicios-seleccionados li button:hover {
-  background-color: #ffa600;
+  background-color: var(--color-highlight);
 }
 
 /* Responsive */

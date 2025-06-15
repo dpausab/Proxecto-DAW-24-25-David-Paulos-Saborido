@@ -86,5 +86,5 @@ Se crees que tes algunha boa idea, podes enviar unha *pull request* a través de
 
 ## Links
 
-> EXPLICACIÓN*: Ligazóns externas e descipciones destas ligazóns que creas conveniente indicar aquí. Xeralmente xa van estar integrados coa túa documentación, pero se requires realizar unha listaxe deles, leste é o lugar.
->
+[Referencias](plantilla-proxecto/doc/templates/6_Referencias.md)
+

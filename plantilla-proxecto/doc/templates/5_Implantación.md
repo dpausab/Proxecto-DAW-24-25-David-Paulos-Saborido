@@ -13,6 +13,18 @@
 
 Para poder ter acceso ó código e traballar no desenvolvemento da aplicación, os pasos a seguir son sinxelos. Para desenvolver a nivel local, a aplicación funcionará perfectamente nun entorno XAMPP/LAMPP, no que únicamente se terá que instalar o programa correspondente (XAMPP en Windows, LAMPP en Linux) coas opcións de Apache e MySQL.
 
+O primeiro unha vez instalado XAMPP, será copiar o myapp.conf da carpeta /apache-vhosts na configuración de Apache.
+
+Para realizalo, copiaremos o arquivo e entraremos na ruta xampp/apache/conf/extra e pegaremos ahí o arquivo.
+
+Despois, dende o panel de Apache en xampp, accedemos ó httpd.conf e,case no final do arquivo, onde se atopa a liña de "# Virtual hosts" haberá que poñer debaixo o seguinte: "Include conf/extra/myapp.conf".
+
+Listo! Configuración rematada. Deberías ver algo asi:
+
+> # Virtual hosts
+> Include conf/extra/httpd-vhosts.conf
+> Include conf/extra/myapp.conf
+
 Posteriormente deberase abrir o programa, iniciar Apache e MySql, entrar ó navegador web preferido e buscar no navegador a ruta: "http://localhost/phpmyadmin/index.php", unha vez dentro terase acceso ó SGBD, haberá que importar o arquivo da base de datos que aparece no código na carpeta SQL.
 
 Unha vez realizado, a aplicación debería funcionar correctamente en local, simplemente entrando en: "http://localhost". Necesitarase iniciar sesión co usuario por defecto, con acceso a todas as funcionalidades, incluídas crear novos usuarios.
@@ -28,6 +40,14 @@ A nivel de despregamento e posta en producción, haberá que ter acceso a unha p
 Unha vez dentro, importar a BBDD (da mesma forma que en local) e subir os archivos, normalmente via FTP, ó servicio. Non debería resultar complicado xa que, similar ó punto anterior, no panel de control normalmente a opción de subir arquivos está visible e clara.
 
 É importante destacar que para que todo funcione correctamente haberá que cambiar o nome da BBDD (se é necesario), hostname e password da conexión á BBDD. Esto será posible dende o arquivo "config.php" na carpeta config do código.
+
+Depende do hosting haberá que facer configuracións a maiores, pero normalmento con poñer un .htaccess que redirixa o tráfico á carpeta de routigal/ no htdocs, non debería haber problema.
+
+Sería así:
+
+> RewriteEngine On
+> RewriteRule ^$ /routigal/ [R=302,L]
+
 
 ### 1.2- Administración do sistema
 
@@ -47,6 +67,8 @@ A nivel usuario, un manual "per se" non é requerido, pero, os pasos a seguir pa
 A nivel de comprensión a aplicación é intuitiva, cun menú sinxelo que deixa claro as funcionalidades e o fluxo dentro das mesmas.
 
 ## 3- Melloras futuras
+
+O primeiro e máis destacable sería modularizar o código de JS.
 
 No apartado de melloras futuras, o proxecto tería a capacidade de vincularse con sistemas como Google Maps para, además de ter a planificación cuberta, ter tamén a función GPS, para que o técnico que realice os servicios non teña que empregar outra ferramenta que non sexa Routigal.
 

@@ -17,6 +17,7 @@ h2 {
 
 .id {
   position: absolute;
+  top: 100;
 }
   .table-container {
     display: flex;
@@ -56,12 +57,12 @@ h2 {
   }
 
   th {
-    background-color: #ffc107;
+    background-color: var(--color-yellow);
     color: black;
   }
 
     thead tr:hover th {
-      background-color: #ffa600;
+      background-color: var(--color-highlight);
     }
 
     .table-container .routigal-form{

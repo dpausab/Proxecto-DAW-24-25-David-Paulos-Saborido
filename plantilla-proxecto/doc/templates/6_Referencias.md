@@ -6,9 +6,12 @@
   - [3- Sitios oficiais do software utilizado](#3--sitios-oficiais-do-software-utilizado)
   - [4- Normas ou documentos legais](#4--normas-ou-documentos-legais)
 
-> *EXPLICACIÓN:* Neste apartado incluirás todas as referencias empregadas: webs, libros, etc. Este anexo débese ir cubrindo a medida que se vaia desenvolvendo o proxecto.
 
 ## 1- Sitios web de documentación técnica
+
+LeafLet: [**LEAFLET**](https://leafletjs.com/).
+LeafLet e OSRM para as rutas: [**GeoDev**](https://www.youtube.com/@geodev/search?query=leaflet)
+SweetAler: [**SWEET ALERT**](https://sweetalert.js.org/guides/#getting-started)
 
 ## 2- Fontes de interes
 

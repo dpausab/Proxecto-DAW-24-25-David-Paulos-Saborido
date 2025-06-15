@@ -24,7 +24,7 @@
 
 span {
   font-weight: bold;
-  color: #ffc107;
+  color: var(--color-yellow);
 }
 
 section {
@@ -39,7 +39,7 @@ h2 {
   margin-bottom: 20px;
 }
 
-.features, .how {
+.caracteristicas, .how {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -62,14 +62,14 @@ h2 {
   width: fit-content;
 }
 
-.features .cards {
+.caracteristicas .cards {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 10px;
 }
 
-.features p, .cards {
+.caracteristicas p, .cards {
   flex: 1;
   align-self: center;
 }
@@ -91,7 +91,7 @@ h2 {
 }
 
 .card:hover {
-  box-shadow: 0 0 4px #ffc107;
+  box-shadow: 0 0 4px var(--color-yellow);
 }
 
 .info {
@@ -117,7 +117,7 @@ h2 {
 }
 
 .highlight {
-  background-color: #ffc107;
+  background-color: var(--color-yellow);
   color: black;
   padding: 20px;
   border-radius: 8px;
@@ -135,7 +135,7 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .features, .how {
+  .caracteristicas, .how {
     flex-direction: column;
     text-align: center;
   }
