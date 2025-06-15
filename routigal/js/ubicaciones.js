@@ -21,6 +21,11 @@ $d.addEventListener("DOMContentLoaded", async () => {
     startListeners()
 })
 
+/**
+ * Función que recupera los datos de las ubicaicones de la BBDD según parámetros de filtrado.
+ * @param {*} nombre 
+ * @param {*} page 
+ */
 async function getUbicaciones(nombre=null, page=actualPage) {
     let datos  = await ajax({
         url: `/api/ubicaciones/getAll/${page}?nombre=${nombre}`
@@ -30,15 +35,10 @@ async function getUbicaciones(nombre=null, page=actualPage) {
     next = datos.next
 }
 
-function getToday() {
-    return new Date().toLocaleDateString('es-ES', {
-        timeZone: 'Europe/Madrid',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    }).split('/').reverse().join('-')
-}
-
+/**
+ * Renderiza las ubicaciones en la tabla.
+ * @param {*} ubicaciones 
+ */
 function renderUbicaciones(ubicaciones) {
     if (ubicaciones.length) {
         $ubicaciones.innerHTML = ubicaciones.map(el => {
@@ -59,6 +59,9 @@ function renderUbicaciones(ubicaciones) {
     renderPaginacion()
 }
 
+/**
+ * Renderiza los botones de paginación según los registros devueltos por la BBDD.
+ */
 function renderPaginacion() {
     $paginacion.innerHTML = ""
 
@@ -94,6 +97,10 @@ function renderPaginacion() {
     }
 }
 
+/**
+ * Rellena el formulario con los campos de la ubicaicón seleccionada.
+ * @param {*} ubicacion 
+ */
 function formulario(ubicacion) {
     let { id, nombre, latitud, longitud } = $form
 
@@ -105,11 +112,17 @@ function formulario(ubicacion) {
     $submit.textContent = 'Editar'
 }
 
+/**
+ * Actualiza los datos recuperando de la BBDD los que cumplan los filtros.
+ */
 async function filtrar() {
     await getUbicaciones($nombreF.value, 1)
     renderUbicaciones(ubicaciones)
 }
 
+/**
+ * Inicia los listeners para los campos de filtrado.
+ */
 function startListeners() {
     $nombreF.addEventListener("input", async(ev) => {
         ev.preventDefault()
@@ -134,6 +147,10 @@ function startListeners() {
     })
 }
 
+/**
+ * Devuelve un objeto con los datos del formulario
+ * @returns 
+ */
 function getDatos() {
     let { nombre, latitud, longitud} = $form
 
@@ -144,6 +161,9 @@ function getDatos() {
         } 
 }
 
+/**
+ * Gestiona la llamada a la API para la inserción de una nueva ubicación.
+ */
 async function addUbicacion() {
     
     try {
@@ -159,8 +179,6 @@ async function addUbicacion() {
                 title: "Ubicaicon agregada",
                 icon: "success"
             })
-            await getUbicaciones()
-            renderUbicaciones(ubicaciones)
         }
     } catch (error) {
         throw new Error()
@@ -168,11 +186,14 @@ async function addUbicacion() {
     
 }
 
-async function updateUbicacion() {
+/**
+ * Gestiona la llamada a la API para la edición de una ubicación.
+ */
+async function updateUbicacion(id) {
     try {        
         let datos = getDatos()
         let resp = await ajax({
-                    url: `/api/ubicaciones/update/${id.value}`,
+                    url: `/api/ubicaciones/update/${id}`,
                         method: 'PUT',
                         data: datos
                     })
@@ -181,8 +202,7 @@ async function updateUbicacion() {
                 title: "Ubicación editada",
                 icon: "success"
             })
-            await getUbicaciones()
-            renderUbicaciones(ubicaciones)
+            
         }
     } catch (error) {
         swal.fire({
@@ -193,6 +213,9 @@ async function updateUbicacion() {
     
 }
 
+/**
+ * Gestiona la llamada a la API para el borrado de una ubicación.
+ */
 async function deleteUbicacion(id) {
     try {
 
@@ -206,8 +229,6 @@ async function deleteUbicacion(id) {
                 title: "Ubicación eliminado",
                 icon: "success"
             })
-            await getUbicaciones()
-            renderUbicaciones(ubicaciones)
         }
     } catch (error) {
         swal.fire({
@@ -217,6 +238,10 @@ async function deleteUbicacion(id) {
     }
 }
 
+/**
+ * Función que gestiona el evento de "inserción" o "edición" según el valor del campo "id".
+ * @returns 
+ */
 async function handleStatus() {
     let id = $form.querySelector('#id').value
 
@@ -224,11 +249,12 @@ async function handleStatus() {
         let ubicacion = ubicaciones.find(el => el.id == id) ?? null
         if (!validarForm()) return
         if (ubicacion) {
-            await updateUbicacion(ubicacion)
+            await updateUbicacion(ubicacion.id)
         } else {
             await addUbicacion()
         }
-        
+        await getUbicaciones()
+        renderUbicaciones(ubicaciones)
         $form.reset()
         $submit.textContent = 'Guardar servicio'
     } catch (error) {
@@ -239,7 +265,10 @@ async function handleStatus() {
     }
 }
 
-
+/**
+ * Validación básica de los inputs del formulario.
+ * @returns 
+ */
 function validarForm() {
     let errores = []
     let [latitud, longitud] = $form.querySelectorAll("#latitud, #longitud")

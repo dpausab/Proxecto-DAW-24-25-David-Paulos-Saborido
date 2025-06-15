@@ -1,4 +1,5 @@
 import { ajax } from "./ajaxF.js"
+import { getToday } from "./utils.js"
 
 const $d = document,
             $rutas = $d.querySelector("tbody"),
@@ -30,15 +31,10 @@ $d.addEventListener("DOMContentLoaded", async () => {
 
 })
 
-function getToday() {
-    return new Date().toLocaleDateString('es-ES', {
-        timeZone: 'Europe/Madrid',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    }).split('/').reverse().join('-')
-}
 
+/**
+ * Función que recibe los datos de las rutas de la BBDD.
+ */
 async function getRutas(id=null, nombre=null, fecha=null, estado=null, page=actualPage) {
     let datos  = await ajax({
         url: `/api/rutas/getAll/${page}?nombre=${nombre}&fecha=${fecha}&estado=${estado}&id=${id}`
@@ -48,6 +44,9 @@ async function getRutas(id=null, nombre=null, fecha=null, estado=null, page=actu
     next = datos.next
 }
 
+/**
+ * Función que recibe los datos de los técnicos de la BBDD.
+ */
 async function getTecnicos() {
     try {
         let datos  = await ajax({
@@ -63,6 +62,10 @@ async function getTecnicos() {
     }
 }
 
+/**
+ * Función que renderiza las rutas dentro de la tabla, si el usuario es un admin, le dará opciones de edición o borrado.
+ * @param {Array} tecnicos
+ */
 function renderRutas(rutas) {
     if (rutas.length) {
         $rutas.innerHTML = rutas.map(el => {
@@ -99,6 +102,10 @@ function renderRutas(rutas) {
     renderPaginacion()
 }
 
+/**
+ * Función que renderiza como opciones de filtrado los técnicos.
+ * @param {Array} tecnicos 
+ */
 function renderTecnicos(tecnicos) {
     if (tecnicos.length) {
         $tecnicoF.innerHTML = '<option value="">Todos</option>'
@@ -110,6 +117,9 @@ function renderTecnicos(tecnicos) {
     }
 }
 
+/**
+ * Función que comprueba si la base de datos contiene más registros, para mostrar los botones de "siguiente" y "anterior" según corresponda, mediante eventos "click".
+ */
 function renderPaginacion() {
     $paginacion.innerHTML = ""
     let id = user.rol!=1 ? user.id : $tecnicoF.value
@@ -146,6 +156,10 @@ function renderPaginacion() {
     }
 }
 
+/**
+ * Función que gestiona el borrado de la ruta, quitando la asignación a los servicios y borrando el registro. Posteriormente renderiza los datos.
+ * @param {int} id 
+ */
 async function deleteRuta(id) {
     try {
         let borrados  = await ajax({
@@ -188,12 +202,18 @@ async function deleteRuta(id) {
     }
 }
 
+/**
+ * Función que gestiona el filtro buscando en la BBDD los datos según los parámetros pasados.
+ */
 async function filtrar() {
     let id = user.rol!=1 ? user.id : $tecnicoF.value
     await getRutas(id, $nombreF.value, $fechaF.value, $estadoF.value, 1)
     renderRutas(rutas)
 }
 
+/**
+ * Función que inicializa los listeners de los campos de filtrado.
+ */
 function startListeners() {
     $nombreF.addEventListener("input", async(ev) => {
         ev.preventDefault()

@@ -9,8 +9,7 @@ const $d = document,
             $clienteF = $d.querySelector("#cliente_filtro"),
             $fechaF = $d.querySelector("#fecha_filtro"),
             $estadoF = $d.querySelector("#estado_filtro"),
-            $submit = $form?.querySelector("button") ?? null,
-            $tabla = $d.querySelector("table")
+            $submit = $form?.querySelector("button") ?? null
 
 
 let servicios = []
@@ -30,15 +29,23 @@ $d.addEventListener("DOMContentLoaded", async () => {
         adminPanel()
         $form.querySelector("#fecha").value = today
         $form.querySelector("#hora").value = "08:00"
-        startListeners()
         await getServicios()
     } else {
         await getServicios(user.id)
     }   
+    startListeners()
     renderServicios(servicios)
     
 })
 
+/**
+ * Función que recupera los datos de la BBDD sobre servicios según los parámetros de filtrado.
+ * @param {int} id 
+ * @param {string} nombre 
+ * @param {date} fecha 
+ * @param {int} estado 
+ * @param {int} page 
+ */
 async function getServicios(id=null, nombre=null, fecha=null, estado=null, page=actualPage) {
     let datos  = await ajax({
         url: `/api/servicios/getAll/${page}?nombre=${nombre}&fecha=${fecha}&estado=${estado}&id=${id}`
@@ -48,7 +55,10 @@ async function getServicios(id=null, nombre=null, fecha=null, estado=null, page=
     next = datos.next
 }
 
-
+/**
+ * Función que renderiza todos los servicios, de forma paginada.
+ * @param {Array} servicios 
+ */
 function renderServicios(servicios) {
     if (servicios.length) {
         $servicios.innerHTML = servicios.map(el => {
@@ -78,6 +88,9 @@ function renderServicios(servicios) {
     renderPaginacion()
 }
 
+/**
+ * Función que comprueba si la base de datos contiene más registros, para mostrar los botones de "siguiente" y "anterior" según corresponda, mediante eventos "click".
+ */
 function renderPaginacion() {
     $paginacion.innerHTML = ""
     let id = user.rol!=1 ? user.id : null
@@ -114,6 +127,10 @@ function renderPaginacion() {
     }
 }
 
+/**
+ * Función que rellena el formulario con los datos del servicio a editar.
+ * @param {object} servicio 
+ */
 function formulario(servicio) {
     let {id, nombre, cliente, latitud, longitud, direccion, fecha, hora, estimado} = $form
 
@@ -130,12 +147,18 @@ function formulario(servicio) {
     $submit.textContent = 'Editar'
 }
 
+/**
+ * Llama a la función "getServicios" con los parámetros actualizados dinámicamente de filtrado.
+ */
 async function filtrar() {
     let id = user.rol!=1 ? user.id : null
     await getServicios(id, $clienteF.value, $fechaF.value, $estadoF.value, 1)
     renderServicios(servicios)
 }
 
+/**
+ * Inicializa los listeners de los campos de filtrado que llaman a la función "filtrar".
+ */
 function startListeners() {
     $clienteF.addEventListener("input", async(ev) => {
         ev.preventDefault()
@@ -154,6 +177,10 @@ function startListeners() {
     }) 
 }
 
+/**
+ * Función que recupera los valores del formulario devolviéndolos como un objeto.
+ * @returns object
+ */
 function getDatos() {
     let {id, nombre, cliente, latitud, longitud, direccion, fecha, hora, estimado} = $form
 
@@ -169,6 +196,9 @@ function getDatos() {
         } 
 }
 
+/**
+ * Función que gestiona la llamada a la API para insertar el nuevo servicio.
+ */
 async function addServicio() {
     
     try {
@@ -184,30 +214,6 @@ async function addServicio() {
                 title: "Servicio agregado",
                 icon: "success"
             })
-            await getServicios()
-            renderServicios(servicios)
-        }
-    } catch (error) {
-        throw new Error(error.message)
-    }
-    
-}
-
-async function updateServicio() {
-    try {        
-        let datos = getDatos()
-        let resp = await ajax({
-                    url: `/api/servicios/update/${id.value}`,
-                        method: 'PUT',
-                        data: datos
-                    })
-        if (resp.respuesta) {
-            swal.fire({
-                title: "Servicio editado",
-                icon: "success"
-            })
-            await getServicios()
-            renderServicios(servicios)
         }
     } catch (error) {
         swal.fire({
@@ -218,6 +224,36 @@ async function updateServicio() {
     
 }
 
+/**
+ * Función que gestiona la llamada a la API para editar el servicio.
+ */
+async function updateServicio(id) {
+    try {        
+        let datos = getDatos()
+        let resp = await ajax({
+                    url: `/api/servicios/update/${id}`,
+                        method: 'PUT',
+                        data: datos
+                    })
+        if (resp.respuesta) {
+            swal.fire({
+                title: "Servicio editado",
+                icon: "success"
+            }) 
+        }
+    } catch (error) {
+        swal.fire({
+            title: error.message,
+            icon: 'warning'
+        })
+    }
+    
+}
+
+/**
+ * Función que gestiona la llamada a la API para borrar un servicio.
+ * @param {int} id 
+ */
 async function deleteServicio(id) {
     try {
 
@@ -231,8 +267,6 @@ async function deleteServicio(id) {
                 title: "Servicio eliminado",
                 icon: "success"
             })
-            await getServicios()
-            renderServicios(servicios)
         }
     } catch (error) {
         swal.fire({
@@ -242,31 +276,39 @@ async function deleteServicio(id) {
     }
 }
 
+/**
+ * Función que gestiona las acciones de "crear" y "editar" según haya valor en el campo "id". Previamente valida los inputs del formulario.
+ * @returns 
+ */
 async function handleStatus() {
     let id = $form.querySelector('#id').value
 
-    try{
-        let servicio = servicios.find(el => el.id == id) ?? null
-        if (!validarForm(servicio)) return
-        if (servicio) {
-            await updateServicio(servicio)
-        } else {
-            await addServicio()
-        }
-        
-        $form.reset()
-        $form.querySelector("#fecha").value = new Date().toISOString().split("T")[0]
-        $form.querySelector("#hora").value = "08:00"
-        $submit.textContent = 'Guardar servicio'
-    } catch (error) {
-        swal.fire({
-            title: 'Error en la acción.',
-            icon: 'warning',
-            html: error.message.split('-').map(el => `<p>${el}</p>`).join('')
-        })
+    let servicio = servicios.find(el => el.id == id) ?? null
+    if (!validarForm(servicio)) return
+    if (servicio) {
+        await updateServicio(servicio.id)
+    } else {
+        await addServicio()
     }
+    await getServicios()
+    renderServicios(servicios)
+    
+    reset()
 }
 
+/**
+ * Resetea el formulario con los valoress por defecto.,
+ */
+function reset() {
+    $form.reset()
+    $form.querySelector("#fecha").value = new Date().toISOString().split("T")[0]
+    $form.querySelector("#hora").value = "08:00"
+    $submit.textContent = 'Guardar servicio'
+}
+
+/**
+ * Gestiona la vista del formulario para los administradores, desde donde se puedne crear y editar servicios.
+ */
 function adminPanel() {
         $form.addEventListener("submit", async(ev) => {
             ev.preventDefault()
@@ -287,12 +329,17 @@ function adminPanel() {
         })
 }
 
+/**
+ * Función básica de validación de parámtros del formulario.
+ * @param {object} servicio 
+ * @returns 
+ */
 function validarForm(servicio = null) {
     let errores = []
     let [latitud, longitud, fecha] = $form.querySelectorAll("#latitud, #longitud, #fecha")
     let campos = Array.from($form.querySelectorAll("input, select, textarea"))
 
-    // Se hace el slice para no comprobar el id ni el botónN
+    // Se hace el slice para no comprobar el id ni botómn
     campos = campos.slice(1, campos.length - 1)
 
     const regexLatitud = /^-?([1-8]?\d(\.\d+)?|90(\.0+)?)$/;

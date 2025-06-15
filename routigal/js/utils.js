@@ -11,6 +11,7 @@ export function formatearHoras(hora) {
     return horas*3600+minutos*60
 }
 
+// Función que retorna el valor de la fecha de hoy en nuestro huso horario.
 export function getToday() {
     return new Date().toLocaleDateString('es-ES', {
         timeZone: 'Europe/Madrid',

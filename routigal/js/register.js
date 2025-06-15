@@ -25,6 +25,7 @@ $d.addEventListener("DOMContentLoaded", async(ev) => {
   }
 })
 
+// Gestión de evento, si hay ID update, si no ADD.
 $form.addEventListener("submit", async(ev) => {
     ev.preventDefault()
     if (!validarForm()) return
@@ -35,6 +36,9 @@ $form.addEventListener("submit", async(ev) => {
     }
 })
 
+/**
+ * Función que recupera los roles de la BBDD.
+ */
 async function getRoles() {
   try {
     let resp = await ajax({
@@ -49,6 +53,10 @@ async function getRoles() {
   }
 }
 
+/**
+ * Función que renderiza los roles como opción para registrar un nuevo usuario.
+ * @param {Array} roles 
+ */
 function renderRoles(roles) {
   if (roles.length) {
     $rol.innerHTML += roles.map(el => 
@@ -56,6 +64,9 @@ function renderRoles(roles) {
   } 
 }
 
+/**
+ * Función que realiza la llamada a la API para el registro del nuevo usuario.
+ */
 async function insertUser() {
   try {
       let nombre = $nombre.value
@@ -80,10 +91,7 @@ async function insertUser() {
           text: 'Usuario registrado correctamente.'
         })
         window.location.href = "usuarios.php"
-      } else {
-        throw new Error(resp.mensaje)
-      }
-      
+      } 
     } catch (error) {
       await swal.fire({
           title: 'Ha ocurrido un error',
@@ -94,6 +102,10 @@ async function insertUser() {
     }
 }
 
+/**
+ * Función que realiza la llamada a la API para la edición del nuevo usuario.
+ * @param {id} id
+ */
 async function updateUser(id) {
   try {
     let resp = await ajax({
@@ -119,6 +131,10 @@ async function updateUser(id) {
   }
 }
 
+/**
+ * Función simple que rellena el formulario con los campos del usuario.
+ * @param {integer} id 
+ */
 async function fillUser(id) {
   let datos = await ajax({
     url: `/api/usuarios/get/${parseInt(id)}`
@@ -133,6 +149,10 @@ async function fillUser(id) {
   }
 }
 
+/**
+ * Función que hace una validación básica de los datos enviados por el formulario.
+ * @returns bool
+ */
 function validarForm() {
     let errores = []
     let [nombre, usuario, pwd, rol] = $form.querySelectorAll("input")

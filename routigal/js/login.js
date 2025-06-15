@@ -5,6 +5,7 @@ const $d = document,
             $pwd = $d.querySelector("#pwd"),
             $form = $d.querySelector("form")
 
+// Script que se encarga de comprobar el usuario en la BBDD.
 $form.addEventListener("submit", async(ev) => {
     ev.preventDefault()
 

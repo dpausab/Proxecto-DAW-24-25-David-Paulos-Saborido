@@ -14,6 +14,18 @@ class RouteController extends Controller{
             echo json_encode(['message' => $th->getMessage()]);
         }
     }
+
+    public function getByUser($id) {
+        $dato=null;
+        try {
+            $dato = RouteModel::getByUser($id[0]);
+            echo json_encode($dato);
+        } catch (\Throwable $th) {
+            http_response_code(400);
+            echo json_encode(['message' => $th->getMessage()]);
+        }
+    }
+
     public function getAll($ids) {
         $datos = [];
         try {

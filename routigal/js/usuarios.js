@@ -5,18 +5,17 @@ const $d = document,
             $filtros = $d.querySelector("#filtros"),
             $nombreF = $filtros.querySelector("#nombre_filtro"),
             $rolF = $filtros.querySelector("#rol_filtro"),
+            $paginacion = $d.querySelector("#paginacion"),
             $tabla = $d.querySelector("table"),
             $crear = $d.querySelector("#crear") ?? null
 
 let usuarios = []
 let roles = []
 let next = null;
+let actualPage = 1
 
-const page = new URLSearchParams(window.location.search).get("page") ?? 1;
-let user = null
 
 $d.addEventListener("DOMContentLoaded", async () => {
-    user = await ajax({url:"/api/auth/getLoggedUser"})
    
     await getUsuarios()
     await getRoles()
@@ -25,15 +24,22 @@ $d.addEventListener("DOMContentLoaded", async () => {
     renderPaginacion()
     
 })
-async function getUsuarios() {
+
+/**
+ * Recupera los datos de los usuarios de la BBDD
+ */
+async function getUsuarios(nombre=null, rol=null, page=actualPage) {
     let datos  = await ajax({
-        url: `/api/usuarios/getAll/${parseInt(page)}`
+        url: `/api/usuarios/getAll/${parseInt(page)}?nombre=${nombre}&rol=${rol}`
     })
 
     usuarios = datos.datos
     next = datos.next
 }
 
+ /**
+ * Recupera los datos de los roles de la BBDD
+ */
 async function getRoles() {
     let datos  = await ajax({
         url: `/api/roles/getAll`
@@ -42,6 +48,10 @@ async function getRoles() {
     roles = datos
 }
 
+/**
+ * Renderiza los usuarios como registros en la tabla.
+ * @param {*} usuarios 
+ */
 function renderUsuarios(usuarios) {
     if (usuarios.length) {
         $usuarios.innerHTML = usuarios.map(el => {
@@ -62,6 +72,10 @@ function renderUsuarios(usuarios) {
     }
 }
 
+/**
+ * Renderiza los roles como opciones del select de roles.
+ * @param {*} roles 
+ */
 function renderRoles(roles) {
     if (roles.length) {
         $rolF.innerHTML = `<option value="">Rol</option>`
@@ -73,24 +87,68 @@ function renderRoles(roles) {
     }
 }
 
+/**
+ * Renderiza los botones de paginación según los datos existentes en la BBDD.
+ */
 function renderPaginacion() {
-if (page>1) {
-        $filtros.innerHTML += 
-        `<p>
-            <a href="?page=${parseInt(page)-1}">Anterior</a>
-        </p>`
+    $paginacion.innerHTML = ""
+
+    if (actualPage>1) {
+        $paginacion.innerHTML += 
+        `<button class="paginacion" id="anterior">
+            <- Anterior
+        </button>`
+
+        let botonAnterior = $paginacion.querySelector("#anterior")
+        botonAnterior.addEventListener("click", async(ev) => {
+            ev.preventDefault()
+            let anterior = parseInt(actualPage)-1
+            actualPage = anterior
+            await filtrar($nombreF.value, $rolF.value, actualPage)
+        })
     }
     if (next) {
-        $filtros.innerHTML += 
-        `<p>
-            <a href="?page=${parseInt(page)+1}">Siguiente</a>
-        </p>`
+        $paginacion.innerHTML += 
+        `<button class="paginacion" id="siguiente">
+            Siguiente ->
+        </button>`
+
+        let botonSiguiente = $paginacion.querySelector("#siguiente")
+        botonSiguiente.addEventListener("click", async(ev) => {
+            ev.preventDefault()
+            let siguiente = parseInt(actualPage)+1
+            actualPage = siguiente
+            await filtrar($nombreF.value, $rolF.value, actualPage)
+        })
     }
 }
 
+/**
+ * Recupera los datos filtrados de la BBDD y los renderiza
+ * @param {*} nombre 
+ * @param {*} rol 
+ */
+async function filtrar(nombre=null, rol=null) {
+    await getUsuarios(nombre, rol)
+    renderUsuarios(usuarios)
+}
 
+/**
+ * Función que gestiona la llamada a la API para el borrado de usuarios.
+ * @param {*} id 
+ */
 async function deleteUsuario(id) {
     try {
+        let rutasUsuario = await ajax({
+            url: `/api/rutas/getByUser/${id}`
+        })
+
+        let ruta = rutasUsuario
+        if (ruta) {
+            throw new Error("No se puede borrar el usuario, tiene rutas asignadas.")
+        } else {
+            console.log("CHILL")
+        }
         let datos  = await ajax({
                     url: `/api/usuarios/delete/${id}`,
                     method: 'DELETE'
@@ -101,18 +159,22 @@ async function deleteUsuario(id) {
             renderUsuarios(usuarios)
         }
     } catch (error) {
-        throw new Error()
+        swal.fire({
+            title: error.message,
+            icon: 'error'
+        })
     }
 }
 
+// Gestiona el evento de borrado.
 $usuarios.addEventListener("click", async(ev) => {
 
     if (ev.target.id === "borrar" && ev.target.dataset.id) {
-        await deleteUsuario(ev.target.dataset.id)
-        
+        await deleteUsuario(ev.target.dataset.id)   
     }
 })
 
+// Si existe el botón de crear, redirige a la pantalla de registro.
 if ($crear) {
     $crear.addEventListener("click", ev => {
         ev.preventDefault()
@@ -120,15 +182,13 @@ if ($crear) {
     })
 }
 
-$nombreF.addEventListener("input", ev => {
+// Inicialización de los listeners para el filtrado.
+$nombreF.addEventListener("input", async(ev) => {
     ev.preventDefault()
-    let filtrados = usuarios.filter(el => el.nombre.toLowerCase().includes(ev.target.value.toLowerCase()))
-    console.log(filtrados)
-    renderUsuarios(filtrados)
+    await filtrar($nombreF.value, $rolF.value, actualPage)
 })
 
-$rolF.addEventListener("change", ev => {
+$rolF.addEventListener("change", async(ev) => {
     ev.preventDefault()
-    let filtrados = $rolF.value.length ? usuarios.filter(el => el.rol == $rolF.value) : usuarios
-    renderUsuarios(filtrados)
+    await filtrar($nombreF.value, $rolF.value, actualPage)
 })

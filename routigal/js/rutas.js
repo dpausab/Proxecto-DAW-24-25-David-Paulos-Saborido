@@ -14,6 +14,7 @@ const $d = document,
         $fecha = $d.querySelector("#fecha-ruta"),
         [calcular, guardar, completar] = $d.querySelectorAll("#calcular, #guardar, #completar")
 
+// Guardo las variables en un objeto por tema de limpieza, ya que son muchos.
 const VARIABLES = {
     servicios: [],
     serviciosMap: [],
@@ -38,7 +39,10 @@ const VARIABLES = {
 
 const rutaId = new URLSearchParams(window.location.search).get("ruta") ?? null
 
-
+/**
+ * Función que renderiza el mapa obtenido de Open Street Map en el contenedor del html, crea el Routing.control, que es el gestor de la ruta y le agrega una
+ * función para crear automáticamente las etiquetas en cada punto con su nombre y su indice.
+ */
 function loadMap() {
     const map = L.map('map').setView([42.43, -8.64], 13); // Centrado en Pontevedra
     
@@ -70,6 +74,10 @@ function loadMap() {
     }).addTo(map);
 }
 
+/**
+ * Recupera los servicios de la BBDD.
+ * @param {*} $id 
+ */
 async function getServicios($id=null) {
     try {
         let datos  = await ajax({
@@ -88,6 +96,9 @@ async function getServicios($id=null) {
     }
 }
 
+/**
+ * Recupera los técnicos de la BBDD.
+ */
 async function getTecnicos() {
     try {
         let datos  = await ajax({
@@ -104,6 +115,9 @@ async function getTecnicos() {
     }
 }
 
+/**
+ * Recupera las ubicaciones de la BBDD.
+ */
 async function getUbicaciones() {
     try {
         let datos  = await ajax({
@@ -120,6 +134,10 @@ async function getUbicaciones() {
     }
 }
 
+/**
+ * Comprueba, a la hora de recargar una ruta, los servicios ya seleccionados, los checkea y vuelve a calcularla.
+ * @param {*} $id 
+ */
 function checkSeleccionados($id=null) {
     if ($id) {
         let checks = Array.from($disponibles.querySelectorAll('input[type="checkbox"]'))
@@ -134,6 +152,10 @@ function checkSeleccionados($id=null) {
     }
 }
 
+/**
+ * Renderiza todos los servicios de forma que tengan un campo donde se refleja el tiempo estimado de cada servicio, la información básica y un checkbox para interactuar.
+ * @param {} servicios 
+ */
 function renderServicios(servicios) {
     $disponibles.innerHTML = servicios.map(el => 
         `<div class="servicio">
@@ -148,6 +170,10 @@ function renderServicios(servicios) {
     VARIABLES.horasMap = new Map(VARIABLES.horas.map(el => [parseInt(el.dataset.id), el]))
 }
 
+/**
+ * Renderiza los técnicos para poder asignar la ruta.
+ * @param {} tecnicos 
+ */
 function renderTecnicos(tecnicos) {
     if (tecnicos.length) {
         $tecnicos.innerHTML = tecnicos.map(el => 
@@ -158,6 +184,10 @@ function renderTecnicos(tecnicos) {
     }
 }
 
+/**
+ * Renderiza las ubicaciones para seleccionar el punto de partida/destino.
+ * @param {*} ubicaciones 
+ */
 function renderUbicaciones(ubicaciones) {
     if (ubicaciones.length) {
         $puntoPartida.innerHTML = ubicaciones.map(el => 
@@ -168,6 +198,10 @@ function renderUbicaciones(ubicaciones) {
     }
 }
 
+/**
+ * Renderiza los servicios seleccionados con los KM de su tramo, el tiempo del tramo, el tiempo estimado, hora de llegada y hora de salida.
+ * @param {*} seleccionados 
+ */
 function renderSeleccionados(seleccionados) {
     $seleccionados.innerHTML = seleccionados.map((el, i) => 
         `<div class="drag" draggable="true" data-index="${i}">
@@ -188,6 +222,10 @@ function renderSeleccionados(seleccionados) {
     }) 
 }
 
+/**
+ * Renderiza la información de cada tramo hasta el servicio de destino desde el anterior punto.
+ * @param {*} tramos 
+ */
 function renderTramos(tramos) {
     let info = Array.from($seleccionados.querySelectorAll(".info-tramo"))
     tramos.forEach(el => {
@@ -205,6 +243,10 @@ function renderTramos(tramos) {
     })
 }
 
+/**
+ * Renderiza la información del tiempo total y distancia total de la ruta.
+ * @param {*} tramos 
+ */
 function renderInfo(tramos) {
     VARIABLES.tiempoRuta = 0
     VARIABLES.distanciaRuta = 0
@@ -219,6 +261,10 @@ function renderInfo(tramos) {
     $tiempoTotal.textContent = `${horas ? tiempoF[0] + " h " : ""}${tiempoF[1] + " minutos"}`
 }
 
+/**
+ * Rellena el formulario con los campos correspondientes a la ruta que se está editando.
+ * @param {*} ruta 
+ */
 function formulario(ruta) {
     if (ruta) {
         guardar.textContent = "Editar"
@@ -237,6 +283,9 @@ function formulario(ruta) {
 
 }
 
+/**
+ * Función que inicializa las funcionalidades dejando todo a disposición dle usuario para interactuar.
+ */
 async function start() {
     VARIABLES.user = await ajax({url:"http://localhost/api/auth/getLoggedUser"})
     loadMap()
@@ -254,6 +303,7 @@ async function start() {
     renderServicios(VARIABLES.servicios)
     checkSeleccionados(rutaId)
 
+    // Cuando la ruta está completada, no se permite seguir editándola, asi que se desactivan los campos y los eventos.
     if (VARIABLES.ruta && VARIABLES.ruta.estado==2) {
         let campos = Array.from($d.querySelectorAll("input, select"))
         calcular.style.display='none'
@@ -274,6 +324,11 @@ async function start() {
 
 }
 
+/**
+ * Devuelve el servicio como objeto latLng para poder añadirlo al mapa y que reconozca las coordenadas, manteniendo el resto de datos.
+ * @param {*} servicio 
+ * @returns 
+ */
 function formatWaypoint(servicio) {
     let waypoint = L.latLng(servicio.latitud, servicio.longitud)
     waypoint.servicio = servicio
@@ -281,6 +336,10 @@ function formatWaypoint(servicio) {
     return waypoint
 }
 
+/**
+ * Calcula la ruta manteniendo el orden de principio y final, añadiendo entre medias los objetos latLng creados a partir de los servicios seleccionados.
+ * @param {*} seleccionados 
+ */
 async function calcularRuta(seleccionados) {
     let auxiliar = [...seleccionados]
     VARIABLES.routeWaypoints = []
@@ -300,7 +359,13 @@ async function calcularRuta(seleccionados) {
     auxiliar = []
 }
 
+/**
+ * Función que calcula todos los tramos a partir del array de objetos latLng de servicios seleccionados.
+ * @param {*} waypoints 
+ * @param {*} horaSalida 
+ */
 export async function simularTramos(waypoints, horaSalida) {
+    // Se inicia una pantalla de carga mientras se procesa el cálculo.
     swal.fire({
         title: 'Calculando ruta...',
         allowOutsideClick: false,
@@ -314,7 +379,7 @@ export async function simularTramos(waypoints, horaSalida) {
     VARIABLES.tramos = [];
     let currentHoraSalida = formatearHoras(horaSalida);
     
-    
+    //Hay que quitar el final para evitar salirse del índice.
     const rutas = await Promise.all(waypoints.slice(0, -1).map(async (origen, i) => {
         const destino = waypoints[i + 1];
         const route = await calcularTramo(origen, destino);
@@ -350,6 +415,12 @@ export async function simularTramos(waypoints, horaSalida) {
     swal.close();
 }
 
+/**
+ * Por cada tramo se realiza individualmente la llamada a la api de OSRM para que calcule el mismo, devolviendo los datos.
+ * @param {*} origen 
+ * @param {*} destino 
+ * @returns 
+ */
 export async function calcularTramo(origen, destino) {
     const url = `https://router.project-osrm.org/route/v1/driving/${origen.lng},${origen.lat};${destino.lng},${destino.lat}?overview=full&geometries=geojson`;
     
@@ -365,6 +436,9 @@ export async function calcularTramo(origen, destino) {
     } 
 }
 
+/**
+ * Gestiona el guardado de la ruta, actualizando a su vez los servicios seleccionados, asignándoles un id_ruta y el orden dentro de la misma, y el estado "asignado".
+ */
 async function crearRuta() {
     try {
         let ruta = await ajax({
@@ -405,6 +479,9 @@ async function crearRuta() {
     
 }
 
+/**
+ * Gestiona la edición de la ruta, actualizando a su vez los servicios seleccionados, desasignándolos y dejándolos reseteados.
+ */
 async function modificarRuta(id) {
     try {
         let ruta = await ajax({
@@ -440,13 +517,17 @@ async function modificarRuta(id) {
         }
     } catch (error) {
         swal.fire({
-            title: 'Error editando la ruta.',
+            title: error.message,
             icon: 'error'
         })
     }
     
 }
 
+/**
+ * Le asigna el estado de completado a la ruta y sus servicios, no permitiendo que sean editados.
+ * @param {*} id 
+ */
 async function completarRuta(id) {
     try {
         let ruta = await ajax({
@@ -469,6 +550,11 @@ async function completarRuta(id) {
     }
 }
 
+/**
+ * Función básica para checkear los valores del formulario.
+ * @param {*} ruta 
+ * @returns 
+ */
 function checkForm(ruta) {
     try {
         if (!$inputs.every(el => el.value.length) || !VARIABLES.seleccionados.length) {
@@ -507,6 +593,10 @@ function checkForm(ruta) {
     }
 }
 
+/**
+ * Función que primero valida el formulario y después maneja si es una "inserción" o una "edición".
+ * @returns 
+ */
 async function handleStatus() {
     if (!checkForm()) return;
     try {
@@ -538,6 +628,7 @@ async function handleStatus() {
 
 $d.addEventListener("DOMContentLoaded", start)
 
+// Maneja el evento de las checkbox, si se hace check, se formatea el servicio y se añade a los seleccionados, si no, se quita.
 $disponibles.addEventListener("click", ev => {
     if (!VARIABLES.flag) ev.preventDefault()
     let target = ev.target
@@ -554,6 +645,7 @@ $disponibles.addEventListener("click", ev => {
     }
 })
 
+// Gestiona el click del botón de recalcular, recalculando la ruta.
 calcular.addEventListener("click", ev => {
     ev.preventDefault()
 
@@ -584,6 +676,7 @@ completar.addEventListener("click", async(ev) => {
 })
 // Esta sección de código es básicamente para intercambiar el orden dentro del array de una forma más dinámica.
 // Tuve que buscar la forma porque al intentarlo no me daba salido, al final lo adapté un poco a mi forma, porque la forma que encontré me parecía demasiaod larga para conseguir algo tan secillo.
+// Lo que hace es básicamente intercambiar los datos entre posiciones del array.
 function handleDragStart(e) {
     this.style.opacity = '0.4';
     VARIABLES.dragElement = this

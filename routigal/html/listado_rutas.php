@@ -44,6 +44,8 @@
           <label for="estado_filtro">Estado</label>
           <select name="estado_filtro" id="estado_filtro">
             <option value="">Todos</option>
+            <option value="1">Asignada</option>
+            <option value="2">Realizada</option>
           </select>
         </p>
         <?php if ($user->getRol() === 1) {

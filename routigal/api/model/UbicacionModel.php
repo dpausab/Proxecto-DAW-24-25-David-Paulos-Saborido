@@ -106,11 +106,20 @@ class UbicacionModel extends Model
 
     public static function getAll($offset=null, $limit=null, $nombre=null)
     {
-        
-        $sql = "SELECT * FROM ubicaciones";
+        $filtrosQuery = [];
+        $filtrosBind = [];
+
         if (isset($nombre) && !empty($nombre)) {
-            $sql.= " WHERE nombre LIKE :nombre";
+            $filtrosQuery[] = 'nombre LIKE :nombre';
+            $filtrosBind[':nombre'] = '%'.$nombre.'%';
         }
+
+        $sql = "SELECT * FROM ubicaciones";
+        
+        if (count($filtrosQuery) && !empty($filtrosQuery)) {
+            $sql.= " WHERE ". implode(" AND ", $filtrosQuery);
+        }
+
         $sql.= " ORDER BY id ASC";
 
         if (isset($offset, $limit) && is_numeric($limit) && is_numeric($offset)) {
@@ -122,11 +131,13 @@ class UbicacionModel extends Model
         $next = false;
         try {
             $stmt = $db->prepare($sql);
-            if (isset($nombre) && !empty($nombre)) {
-                $stmt->bindValue(':nombre', '%'.$nombre.'%', PDO::PARAM_STR);
+            if (count($filtrosBind) && !empty($filtrosBind)) {
+                foreach($filtrosBind as $key => $value) {
+                    $pdo_param = is_numeric($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+                    $stmt->bindValue($key, $value, $pdo_param);
+                }
             }
-            $stmt->execute();
-            $datos = [];
+            $stmt -> execute();
             foreach($stmt as $s){   
                 $ubicacion = new Ubicacion($s['nombre'], $s['latitud'], $s['longitud'], $s['id']);
                 $datos[] = $ubicacion;
@@ -144,6 +155,8 @@ class UbicacionModel extends Model
         } catch (PDOException $th) {
             error_log("Error UbicacionModel->getAll()");
             error_log($th->getMessage());
+            throw new Exception("Error recuperando las ubicacioness");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -166,6 +179,8 @@ class UbicacionModel extends Model
         } catch (Throwable $th) {
             error_log("Error UbicacionModel->get($ubicacionId)");
             error_log($th->getMessage());
+            throw new Exception("Error recuperando la ubicación");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -196,6 +211,8 @@ class UbicacionModel extends Model
             $db->rollBack();
             error_log("Error UbicacionModel->insert()");
             error_log($th->getMessage());
+            throw new Exception("Error insertando la ubicación");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -231,6 +248,8 @@ class UbicacionModel extends Model
             error_log("Error UbicacionModel->update(" . implode(",", $ubicacion) . ", $ubicacionId)");
             error_log($th->getMessage());
             echo "ERROR".$th->getMessage();
+            throw new Exception("Error editando la ubicación");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -256,6 +275,8 @@ class UbicacionModel extends Model
             $db->rollBack();
             error_log("Error UbicacionModel->delete($ubicacionId)");
             error_log($th->getMessage());
+            throw new Exception("Error borrando la ubicación");
+
         } finally {
             $stmt = null;
             $db = null;

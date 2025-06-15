@@ -1,13 +1,13 @@
 <?php
 session_start();
 
-include_once("./controller/Controller.php");
-include_once("./controller/RouteController.php");
-include_once("./controller/ServiceController.php");
-include_once("./controller/AuthController.php");
-include_once("./controller/UserController.php");
-include_once("./controller/UbicacionController.php");
-include_once("./controller/RolController.php");
+include_once("controller/Controller.php");
+include_once("controller/RouteController.php");
+include_once("controller/ServiceController.php");
+include_once("controller/AuthController.php");
+include_once("controller/UserController.php");
+include_once("controller/UbicacionController.php");
+include_once("controller/RolController.php");
 
 function getIds(array $uri):array{
     $ids = [];

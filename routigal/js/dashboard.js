@@ -11,60 +11,71 @@ const $d = document,
 let servicios = []
 let rutas = []
 let user = null
+
 $d.addEventListener("DOMContentLoaded", async () => {
     user = await ajax({url:"/api/auth/getLoggedUser"}) ?? null
     
     await getServicios()
     await getRutas()
-    $totales.textContent = servicios.length
-    $completados.textContent = servicios.filter(el => el.id_estado == 3).length
-    let tiempoTotal = rutas.reduce((anterior, actual) => {
-        return anterior + formatearHoras(actual.tiempoTotal)
-    },0)
-    tiempoTotal = formatearTiempo(tiempoTotal).split(':')
-
-    $tiempo.textContent = `${tiempoTotal[0]} h ${tiempoTotal[1]} minutos`
-
-    let distanciaTotal = rutas.reduce((anterior, actual) => {
-        return anterior + parseFloat(actual.distanciaTotal)
-    },0)
-
-    $kmTotales.textContent = distanciaTotal+' km'
     
     renderDatos()
 })
 
+/**
+ * Función que recibe los datos de los servicios de la BBDD.
+ */
 async function getServicios() {
     let serviciosData = []
 
-    if (user.rol === 1) {
-        serviciosData = await ajax({
-            url: `/api/servicios/getAll`
-        })
-    } else {
-        serviciosData = await ajax({
-            url: `/api/servicios/getAll?id=${user.id}`
+    try {
+        if (user.rol === 1) {
+            serviciosData = await ajax({
+                url: `/api/servicios/getAll`
+            })
+        } else {
+            serviciosData = await ajax({
+                url: `/api/servicios/getAll?id=${user.id}`
+            })
+        }
+        servicios = serviciosData.datos
+    } catch (error) {
+        swal.fire({
+            title: error.message,
+            icon: 'error'
         })
     }
 
-    servicios = serviciosData.datos
 }
+
+/**
+ * Función que recibe los datos de las rutas de la BBDD.
+ */
 async function getRutas() {
     let rutasData = []
-
-    if (user.rol === 1) {
-        rutasData = await ajax({
-            url: `/api/rutas/getAll`
-        })
-    } else {
-        rutasData = await ajax({
-            url: `/api/rutas/getAll?id=${user.id}`
+    try {
+        if (user.rol === 1) {
+            rutasData = await ajax({
+                url: `/api/rutas/getAll`
+            })
+        } else {
+            rutasData = await ajax({
+                url: `/api/rutas/getAll?id=${user.id}`
+            })
+        }
+        
+        rutas = rutasData.datos
+    } catch (error) {
+         swal.fire({
+            title: error.message,
+            icon: 'error'
         })
     }
 
-    rutas = rutasData.datos
 }
 
+/**
+ * Función que renderiza los datos recibidos, mostrando las rutas creadas, las completadas, el total de horas y total de km.
+ */
 function renderDatos() {
     $totales.textContent = rutas.length
 

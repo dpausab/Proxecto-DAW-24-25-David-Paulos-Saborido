@@ -238,6 +238,8 @@ class ServiceModel extends Model {
         } catch (PDOException $th) {
             error_log("Error ServicioModel->getAll()");
             error_log($th->getMessage());
+            throw new Exception("Error recuperando los servicios");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -285,6 +287,8 @@ class ServiceModel extends Model {
         } catch (PDOException $th) {
             error_log("Error ServicioModel->getAll()");
             error_log($th->getMessage());
+            throw new Exception("Error recuperando los servicios");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -328,8 +332,10 @@ class ServiceModel extends Model {
             }
             $respuesta = $datos;
         } catch (PDOException $th) {
-            error_log("Error ServicioModel->getAll()");
+            error_log("Error ServicioModel->getPorRuta()");
             error_log($th->getMessage());
+            throw new Exception("Error recuperando los servicios");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -366,6 +372,8 @@ class ServiceModel extends Model {
         } catch (Throwable $th) {
             error_log("Error ServicioModel->get($servicioId)");
             error_log($th->getMessage());
+            throw new Exception("Error recuperando el servicio");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -401,6 +409,8 @@ class ServiceModel extends Model {
             $db->rollBack();
             error_log("Error ServicioModel->insert()");
             error_log($th->getMessage());
+            throw new Exception("Error creando el servicio");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -445,6 +455,7 @@ class ServiceModel extends Model {
             $db->rollBack();
             error_log("Error ServicioModel->update(" . implode(",", $servicio) . ", $servicioId)");
             error_log($th->getMessage());
+            throw new Exception("Error editando el servicio");
         } finally {
             $stmt = null;
             $db = null;
@@ -475,6 +486,8 @@ class ServiceModel extends Model {
             $resultado = $th->getMessage();
             error_log("Error ServicioModel->updateRutaId()");
             error_log($th->getMessage());
+            throw new Exception("Error actualizando el servicio");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -501,6 +514,8 @@ class ServiceModel extends Model {
             $resultado = $th->getMessage();
             error_log("Error ServicioModel->updateRutaId()");
             error_log($th->getMessage());
+            throw new Exception("Error completando el servicio");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -524,6 +539,8 @@ class ServiceModel extends Model {
             $resultado = $th->getMessage();
             error_log("Error ServicioModel->updateRutaId()");
             error_log($th->getMessage());
+            throw new Exception("Error reseteando el servicio");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -548,6 +565,7 @@ class ServiceModel extends Model {
             $db->rollBack();
             error_log("Error ServicioModel->delete($servicioId)");
             error_log($th->getMessage());
+            throw new Exception("Error borrando el servicio");
         } finally {
             $stmt = null;
             $db = null;

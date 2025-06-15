@@ -43,6 +43,7 @@
           </button>
         </p>
       </form>
+      <div id="paginacion"></div>
       <table class="usuarios-table">
         <thead>
           <tr>

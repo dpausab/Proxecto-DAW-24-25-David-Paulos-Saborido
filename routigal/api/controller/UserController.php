@@ -18,13 +18,16 @@ class UserController extends Controller{
     public function getAll($ids) {
         $datos = [];
         try {
+            $nombre = isset($_GET['nombre']) &&$_GET['nombre']!="" && $_GET['nombre']!="null" ? $_GET['nombre'] : null;
+            $rol = isset($_GET['rol']) &&$_GET['rol']!="" && $_GET['rol']!="null" ? $_GET['rol'] : null;
+
             if (isset($ids) && count($ids)>0) {
                 $pagina = $ids[0]-1 ?? 1;
                 $limit =  10;
                 $offset = $pagina * $limit;
-                $datos = UserModel::getAll($offset, $limit);
+                $datos = UserModel::getAll($offset, $limit, $nombre, $rol);
             } else {
-                $datos = UserModel::getAll();
+                $datos = UserModel::getAll(null, null, $nombre, $rol);
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {

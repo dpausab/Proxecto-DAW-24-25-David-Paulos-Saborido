@@ -124,18 +124,47 @@ class User implements JsonSerializable{
 class UserModel extends Model
 {
 
-    public static function getAll($offset=null, $limit=null)
+    public static function getAll($offset=null, $limit=null, $nombre=null, $rol=null)
     {
-        $sql = "SELECT id, nombre, usuario, id_rol FROM usuarios ORDER BY id DESC";
-        if (isset($offset, $limit)) {
-            $sql .= " LIMIT $limit OFFSET $offset";
-        } 
+
+        $filtrosQuery = [];
+        $filtrosBind = [];
+
+        if (isset($nombre) && !empty($nombre)) {
+            $filtrosQuery[] = 'nombre LIKE :nombre';
+            $filtrosBind[':nombre'] = '%'.$nombre.'%';
+        }
+
+        if (isset($rol) && is_numeric($rol)) {
+            $filtrosQuery[] = 'id_rol = :rol';
+            $filtrosBind[':rol'] = $rol;
+        }
+
+        $sql = "SELECT id, nombre, usuario, id_rol FROM usuarios";
+
+        if (count($filtrosQuery) && !empty($filtrosQuery)) {
+            $sql.= " WHERE ". implode(" AND ", $filtrosQuery);
+        }
+
+        $sql.= " ORDER BY id ASC";
+
+        if (isset($offset, $limit) && is_numeric($limit) && is_numeric($offset)) {
+            $sql.= " LIMIT $limit OFFSET $offset";
+        }
         $db = self::getConnection();
         $datos = [];
         $respuesta = null;
         $next = false;
         try {
-            $stmt = $db->query($sql);
+            $stmt = $db->prepare($sql);
+            if (count($filtrosBind) && !empty($filtrosBind)) {
+                foreach($filtrosBind as $key => $value) {
+                    $pdo_param = is_numeric($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+                    $stmt->bindValue($key, $value, $pdo_param);
+                }
+            }
+
+            $stmt->execute();
             $datos = [];
             foreach($stmt as $s){   
                 $user = new user($s['nombre'], $s['usuario'], $s['id_rol'], $s['id']);
@@ -152,6 +181,8 @@ class UserModel extends Model
         } catch (PDOException $th) {
             error_log("Error UserModel->getAll()");
             error_log($th->getMessage());
+            throw new Exception("Error recuperando los usuarios");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -178,6 +209,8 @@ class UserModel extends Model
         } catch (PDOException $th) {
             error_log("Error UserModel->getAll()");
             error_log($th->getMessage());
+            throw new Exception("Error recuperando los tecnicos");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -200,6 +233,8 @@ class UserModel extends Model
         } catch (Throwable $th) {
             error_log("Error UserModel->get($userId)");
             error_log($th->getMessage());
+            throw new Exception("Error recuperando el usuario");
+
         } finally {
             $stmt = null;
             $db = null;
@@ -239,6 +274,8 @@ class UserModel extends Model
             $db->rollBack();
             error_log("Error userModel->insert()");
             error_log($th->getMessage());
+            throw new Exception("Error registrando el usuario");
+
             throw $th;
         } finally {
             $stmt = null;
@@ -262,7 +299,7 @@ class UserModel extends Model
         $user = self::get($userId);
         $db = null;
         if (!$user) {
-            throw new Error("El usuario no existe.");
+            throw new Exception("El usuario no existe.");
         } else {
             $sql = "SELECT pwd FROM usuarios WHERE id=:id";
             $db = self::getConnection();
@@ -272,7 +309,7 @@ class UserModel extends Model
             $pwd = $stmt->fetchColumn();
 
             if ($pwd !== sha1($data['old_pwd'])) {
-                throw new Error("La contraseña actual no coincide.");
+                throw new Exception("La contraseña actual no coincide.");
             }
         }
         $sql = "UPDATE usuarios SET
@@ -298,7 +335,7 @@ class UserModel extends Model
             $db->rollBack();
             error_log("Error UserModel->update(" . implode(",", $data) . ", $userId)");
             error_log($th->getMessage());
-            throw $th;
+            throw new Exception("Error editando el usuario");
         } finally {
             $stmt = null;
             $db = null;
@@ -324,7 +361,8 @@ class UserModel extends Model
             $db->rollBack();
             error_log("Error UserModel->delete($userId)");
             error_log($th->getMessage());
-            throw $th;
+            throw new Exception("Error borrando el usuario");
+
         } finally {
             $stmt = null;
             $db = null;

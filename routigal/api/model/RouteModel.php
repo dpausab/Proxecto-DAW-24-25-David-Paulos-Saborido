@@ -310,6 +310,31 @@ class RouteModel extends Model
         return $datos;
     }
 
+    public static function getByUser($tecnicoId):Route|null
+    {
+        $sql = "SELECT * FROM rutas WHERE id_tecnico=?";
+        $db = self::getConnection();
+        $datos = null;
+        try {
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(1, $tecnicoId, PDO::PARAM_INT);
+            $stmt->execute();
+            if($r = $stmt->fetch()){
+                $datos = new Route($r['nombre'], $r['tiempo_total'],$r['km_totales'], $r['id_origen'], $r['id_estado'], $r['id_tecnico'], $r['fecha'], $r['hora_salida'], $r['id']);
+            }
+            
+        } catch (Throwable $th) {
+            error_log("Error RouteModel->get($tecnicoId)");
+            error_log($th->getMessage());
+            throw new Exception("Error recuperando la ruta.");
+        } finally {
+            $stmt = null;
+            $db = null;
+        }
+
+        return $datos;
+    }
+
     public static function insert($ruta)
     {
         $sql = "INSERT INTO rutas (nombre, tiempo_total, km_totales, id_origen, id_estado, id_tecnico, fecha, hora_salida) 
@@ -357,7 +382,7 @@ class RouteModel extends Model
             id_tecnico=:tecnico,
             fecha=:fecha,
             hora_salida=:hora
-            WHERE id=:id";
+            WHERE id=:id AND id!=2";
 
         $db = self::getConnection();
         $datos = false;
@@ -427,7 +452,7 @@ class RouteModel extends Model
         } catch (PDOException $th) {
             error_log("Error RouteModel->delete($rutaId)");
             error_log($th->getMessage());
-            throw new Exception("Error editando la ruta.");
+            throw new Exception("Error borrando la ruta.");
         } finally {
             $stmt = null;
             $db = null;
