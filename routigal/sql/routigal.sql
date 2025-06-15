@@ -1,163 +1,424 @@
--- Tabla de roles
-CREATE TABLE roles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
-);
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 15-06-2025 a las 19:19:16
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
--- Tabla de usuarios
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    usuario VARCHAR(50) NOT NULL UNIQUE,
-    pwd VARCHAR(255) NOT NULL,
-    id_rol INT NOT NULL,
-    FOREIGN KEY (id_rol) REFERENCES roles(id)
-);
-
--- Tabla de ubicaciones
-CREATE TABLE ubicaciones (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    latitud DECIMAL(10,8) NOT NULL,
-    longitud DECIMAL(11,8) NOT NULL
-);
-
--- Tabla de estados para rutas
-CREATE TABLE estados_ruta (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
-);
-
--- Tabla de estados para servicios
-CREATE TABLE estados_servicio (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
-);
-
--- Tabla de rutas
-CREATE TABLE rutas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    tiempo_total TIME NOT NULL,
-    km_totales DECIMAL(6,2) NOT NULL,
-    id_origen INT NOT NULL,
-    id_tecnico INT NOT NULL,
-    id_estado INT NOT NULL,
-    fecha DATE NOT NULL,
-    hora_salida TIME NOT NULL,
-    FOREIGN KEY (id_origen) REFERENCES ubicaciones(id),
-    FOREIGN KEY (id_tecnico) REFERENCES usuarios(id),
-    FOREIGN KEY (id_estado) REFERENCES estados_ruta(id)
-);
-
--- Tabla de servicios
-CREATE TABLE servicios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    id_estado INT NOT NULL,
-    nombre_cliente VARCHAR(100) NOT NULL,
-    latitud DECIMAL(10,8) NOT NULL,
-    longitud DECIMAL(11,8) NOT NULL,
-    direccion VARCHAR(255) NOT NULL,
-    fecha_servicio DATE NOT NULL,
-    hora_servicio TIME NOT NULL,
-    id_ruta INT DEFAULT NULL,
-    orden INT DEFAULT NULL,
-    duracion_estimada TIME NOT NULL,
-    id_tecnico INT DEFAULT NULL,
-    descripcion TEXT,
-    FOREIGN KEY (id_estado) REFERENCES estados_servicio(id),
-    FOREIGN KEY (id_ruta) REFERENCES rutas(id)
-);
-
--- Tabla de endpoints (para escalabilidad)
-CREATE TABLE endpoints (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(50) NOT NULL UNIQUE
-);
-
--- Tabla de permisos, controlando por método
-CREATE TABLE permisos (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    rol_id INT NOT NULL,
-    endpoint_id INT NOT NULL,
-    metodo ENUM('GET','POST','PUT','DELETE') NOT NULL,
-    permitido BOOLEAN NOT NULL DEFAULT FALSE,
-    FOREIGN KEY (rol_id) REFERENCES roles(id),
-    FOREIGN KEY (endpoint_id) REFERENCES endpoints(id)
-);
-
--- INSERT --
-
--- Roles
-INSERT INTO roles (id, nombre) VALUES 
-(1, 'admin'),
-(2, 'tecnico');
-
--- Usuarios
-INSERT INTO usuarios (id, nombre, usuario, pwd, id_rol) VALUES
-(1, 'Admin Gallego', 'admin', 'admin123', 1),
-(2, 'Técnico Salnés', 'tecnico1', 'tecnico123', 2);
-
--- Estados para rutas
-INSERT INTO estados_ruta (id, nombre) VALUES
-(1, 'asignada'),
-(2, 'realizada');
-
--- Estados para servicios
-INSERT INTO estados_servicio (id, nombre) VALUES
-(1, 'nuevo'),
-(2, 'asignado'),
-(3, 'realizado');
-
--- Ubicación base (origen de rutas)
-INSERT INTO ubicaciones (id, nombre, latitud, longitud) VALUES
-(1, 'Tienda Vilagarcía', 42.5946, -8.7645);
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
 
--- Servicios en la comarca do Salnés
-INSERT INTO servicios (nombre, id_estado, nombre_cliente, latitud, longitud, direccion, fecha_servicio, hora_servicio, duracion_estimada, descripcion) VALUES
-('Instalación de enchufe exterior', 1, 'Ana Rivas', 42.5119, -8.8120, 'Avenida Rosalía de Castro, Vilagarcía', '2025-03-05', '10:00', '00:30:00', 'Instalación de punto de luz en jardín.'),
-('Revisión caldera', 2, 'Miguel Torres', 42.4791, -8.7943, 'Calle Castelao, Sanxenxo', '2025-03-05', '11:00', '01:00:00', 'Comprobación e limpeza de caldeira.'),
-('Cambio de termostato', 1, 'Lucía Fernández', 42.4898, -8.8100, 'Rua Real, O Grove', '2025-03-05', '12:30', '00:45:00', 'Substitución por termostato intelixente.'),
-('Revisión de instalación', 3, 'Javier Lema', 42.5045, -8.8129, 'Rua da Igrexa, Ribadumia', '2025-03-05', '14:00', '01:00:00', 'Verificación de cableado e cadro xeral.'),
-('Arranxo timbre', 2, 'Marta Piñeiro', 42.4982, -8.8250, 'Rua do Viño, Meaño', '2025-03-05', '15:30', '00:20:00', 'Revisión do circuíto e substitución.'),
-('Cambio de enchufes', 1, 'Iván Rodríguez', 42.5220, -8.8015, 'Rua do Mar, Cambados', '2025-03-06', '09:00', '00:40:00', 'Actualización de enchufes vellos.'),
-('Revisión luminarias', 2, 'Sandra Vázquez', 42.5170, -8.7935, 'Rua dos Viños, A Illa de Arousa', '2025-03-06', '10:30', '00:45:00', 'Revisión de 4 puntos de luz interiores.'),
-('Instalación lámpada colgante', 1, 'Óscar Costa', 42.5111, -8.7866, 'Rua do Porto, Vilanova de Arousa', '2025-03-06', '12:00', '00:30:00', 'Instalación e conexión de lámpada no salón.'),
-('Revisión xeral instalación', 3, 'Patricia Lago', 42.5342, -8.8280, 'Rua Principal, Meaño', '2025-03-06', '13:30', '01:15:00', 'Revisión por subidas de tensión.'),
-('Instalación extractor baño', 2, 'Diego Fariña', 42.5166, -8.8190, 'Rua da Fonte, Ribadumia', '2025-03-06', '15:00', '00:35:00', 'Montaxe e conexión á rede eléctrica.'),
-('Comprobación diferencial', 2, 'Andrea Souto', 42.4785, -8.7888, 'Avda. da Lanzada, Sanxenxo', '2025-03-07', '09:30', '00:25:00', 'Saltan os magnetotérmicos continuamente.'),
-('Revisión enchufes cociña', 1, 'Ramón Silva', 42.5020, -8.8133, 'Rua do Mercado, Vilagarcía', '2025-03-07', '11:00', '00:50:00', 'Fallo ao conectar electrodomésticos.'),
-('Cambio interruptores', 2, 'Natalia Domínguez', 42.5192, -8.8108, 'Rua das Escaleiras, Cambados', '2025-03-07', '12:30', '00:30:00', 'Instalación de interruptores dobres.'),
-('Instalación LED exteriores', 1, 'Sergio Barreiro', 42.4950, -8.8300, 'Camino do Río, Meaño', '2025-03-07', '14:00', '01:00:00', 'Montaxe de 3 puntos de luz con sensor.'),
-('Arranxo cadro xeral', 3, 'Beatriz Gómez', 42.5090, -8.7955, 'Rua Nova, A Illa de Arousa', '2025-03-07', '15:30', '01:10:00', 'Problema con conexións no cadro eléctrico.');
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
-INSERT INTO endpoints (endpoint) VALUES ('rutas'), ('servicios'), ('ubicaciones'), ('usuarios'), ('roles');
+--
+-- Base de datos: `routigal`
+--
 
-INSERT INTO permisos (rol_id, endpoint_id, metodo, permitido) VALUES
-(1, 1, 'GET', TRUE),
-(1, 1, 'POST', TRUE),
-(1, 1, 'PUT', TRUE),
-(1, 1, 'DELETE', TRUE),
-(1, 2, 'GET', TRUE),
-(1, 2, 'POST', TRUE),
-(1, 2, 'PUT', TRUE),
-(1, 2, 'DELETE', TRUE),
-(1, 3, 'GET', TRUE),
-(1, 3, 'POST', TRUE),
-(1, 3, 'PUT', TRUE),
-(1, 3, 'DELETE', TRUE),
-(1, 4, 'GET', TRUE),
-(1, 4, 'POST', TRUE),
-(1, 4, 'PUT', TRUE),
-(1, 4, 'DELETE', TRUE),
-(2, 1, 'GET', TRUE),
-(2, 2, 'GET', TRUE),
-(2, 3, 'GET', TRUE),
-(2, 4, 'GET', TRUE),
-(2, 1, 'PUT', TRUE),
-(1, 5, 'POST', TRUE),
-(1, 5, 'GET', TRUE),
-(1, 5, 'PUT', TRUE),
-(1, 5, 'DELETE', TRUE),
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `endpoints`
+--
+
+CREATE TABLE `endpoints` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `endpoints`
+--
+
+INSERT INTO `endpoints` (`id`, `nombre`) VALUES
+(5, 'roles'),
+(1, 'rutas'),
+(2, 'servicios'),
+(3, 'ubicaciones'),
+(4, 'usuarios');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `estados_ruta`
+--
+
+CREATE TABLE `estados_ruta` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `estados_ruta`
+--
+
+INSERT INTO `estados_ruta` (`id`, `nombre`) VALUES
+(1, 'Asignada'),
+(2, 'Realizada');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `estados_servicio`
+--
+
+CREATE TABLE `estados_servicio` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `estados_servicio`
+--
+
+INSERT INTO `estados_servicio` (`id`, `nombre`) VALUES
+(1, 'Nuevo'),
+(2, 'Asignado'),
+(3, 'Realizado');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `permisos`
+--
+
+CREATE TABLE `permisos` (
+  `id` int(11) NOT NULL,
+  `rol_id` int(11) NOT NULL,
+  `endpoint_id` int(11) NOT NULL,
+  `metodo` enum('GET','POST','PUT','DELETE') NOT NULL,
+  `permitido` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `permisos`
+--
+
+INSERT INTO `permisos` (`id`, `rol_id`, `endpoint_id`, `metodo`, `permitido`) VALUES
+(17, 1, 1, 'GET', 1),
+(18, 1, 1, 'POST', 1),
+(19, 1, 1, 'PUT', 1),
+(20, 1, 1, 'DELETE', 1),
+(21, 1, 2, 'GET', 1),
+(22, 1, 2, 'POST', 1),
+(23, 1, 2, 'PUT', 1),
+(24, 1, 2, 'DELETE', 1),
+(25, 1, 3, 'GET', 1),
+(26, 1, 3, 'POST', 1),
+(27, 1, 3, 'PUT', 1),
+(28, 1, 3, 'DELETE', 1),
+(29, 1, 4, 'GET', 1),
+(30, 1, 4, 'POST', 1),
+(31, 1, 4, 'PUT', 1),
+(32, 1, 4, 'DELETE', 1),
+(33, 2, 1, 'GET', 1),
+(34, 2, 2, 'GET', 1),
+(35, 2, 3, 'GET', 1),
+(36, 2, 4, 'GET', 1),
+(37, 2, 1, 'PUT', 1),
+(38, 1, 5, 'GET', 1),
+(39, 1, 5, 'POST', 1),
+(40, 1, 5, 'DELETE', 1),
+(41, 1, 5, 'PUT', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`id`, `nombre`) VALUES
+(1, 'Admin'),
+(2, 'Tecnico');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rutas`
+--
+
+CREATE TABLE `rutas` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `tiempo_total` time NOT NULL,
+  `km_totales` decimal(6,2) NOT NULL,
+  `id_origen` int(11) NOT NULL,
+  `id_tecnico` int(11) NOT NULL,
+  `id_estado` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora_salida` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `rutas`
+--
+
+INSERT INTO `rutas` (`id`, `nombre`, `tiempo_total`, `km_totales`, `id_origen`, `id_tecnico`, `id_estado`, `fecha`, `hora_salida`) VALUES
+(32, 'test', '01:11:00', 24.13, 1, 12, 2, '2025-06-10', '08:00:00'),
+(33, 'test_02', '02:29:00', 28.04, 1, 13, 2, '2025-06-14', '08:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `servicios`
+--
+
+CREATE TABLE `servicios` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `id_estado` int(11) NOT NULL,
+  `nombre_cliente` varchar(100) NOT NULL,
+  `latitud` decimal(10,8) NOT NULL,
+  `longitud` decimal(11,8) NOT NULL,
+  `direccion` varchar(255) NOT NULL,
+  `fecha_servicio` date NOT NULL,
+  `hora_servicio` time NOT NULL,
+  `id_ruta` int(11) DEFAULT NULL,
+  `orden` int(11) DEFAULT NULL,
+  `duracion_estimada` time DEFAULT NULL,
+  `id_tecnico` int(11) DEFAULT NULL,
+  `nombre_estado` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `servicios`
+--
+
+INSERT INTO `servicios` (`id`, `nombre`, `id_estado`, `nombre_cliente`, `latitud`, `longitud`, `direccion`, `fecha_servicio`, `hora_servicio`, `id_ruta`, `orden`, `duracion_estimada`, `id_tecnico`, `nombre_estado`) VALUES
+(8, 'Instalación lámpada colgante', 3, 'Óscar Costa', 42.51110000, -8.78660000, 'Rua do Porto, Vilanova de Arousa', '2025-03-06', '12:00:00', 32, 0, '00:45:00', 12, 'Instalación e conexión de lámpada no salón.'),
+(9, 'Revisión xeral instalación', 3, 'Patricia Lago', 42.53420000, -8.82800000, 'Rua Principal, Meaño', '2025-03-06', '13:30:00', 33, 0, '01:15:00', 13, 'Revisión por subidas de tensión.'),
+(10, 'Instalación extractor baño', 3, 'Diego Fariña', 42.51660000, -8.81900000, 'Rua da Fonte, Ribadumia', '2025-03-06', '15:00:00', 33, 1, '00:35:00', 13, 'Montaxe e conexión á rede eléctrica.'),
+(11, 'Comprobación diferencial', 1, 'Andrea Souto', 42.47850000, -8.78880000, 'Avda. da Lanzada, Sanxenxo', '2025-03-07', '09:30:00', NULL, NULL, '00:25:00', NULL, 'Saltan os magnetotérmicos continuamente.'),
+(12, 'Revisión enchufes cociña 1', 1, 'Ramón Silva', 42.50200000, -8.81330000, 'Rua do Mercado, Vilagarcía', '2025-03-07', '11:00:00', NULL, NULL, '00:00:00', NULL, 'Fallo ao conectar electrodomésticos.'),
+(17, 'Instalación de enchufe exterior', 1, 'Ana Rivas', 42.51190000, -8.81200000, 'Avenida Rosalía de Castro, Vilagarcía', '2025-03-05', '10:00:00', NULL, NULL, '00:30:00', NULL, 'Instalación de punto de luz en jardín.'),
+(18, 'Revisión caldera', 1, 'Miguel Torres', 42.47910000, -8.79430000, 'Calle Castelao, Sanxenxo', '2025-03-05', '11:00:00', NULL, NULL, '01:00:00', NULL, 'Comprobación e limpeza de caldeira.'),
+(19, 'Cambio de termostato', 1, 'Lucía Fernández', 42.48980000, -8.81000000, 'Rua Real, O Grove', '2025-03-05', '12:30:00', NULL, NULL, '00:00:00', NULL, 'Substitución por termostato intelixente.'),
+(20, 'Revisión de instalación', 1, 'Javier Lema', 42.50450000, -8.81290000, 'Rua da Igrexa, Ribadumia', '2025-03-05', '14:00:00', NULL, NULL, '01:00:00', NULL, 'Verificación de cableado e cadro xeral.'),
+(21, 'Arranxo timbre', 1, 'Marta Piñeiro', 42.49820000, -8.82500000, 'Rua do Viño, Meaño', '2025-03-05', '15:30:00', NULL, NULL, '00:20:00', NULL, 'Revisión do circuíto e substitución.'),
+(22, 'Cambio de enchufes', 1, 'Iván Rodríguez', 42.52200000, -8.80150000, 'Rua do Mar, Cambados', '2025-03-06', '09:00:00', NULL, NULL, '00:40:00', NULL, 'Actualización de enchufes vellos.'),
+(23, 'Revisión luminarias', 1, 'Sandra Vázquez', 42.51700000, -8.79350000, 'Rua dos Viños, A Illa de Arousa', '2025-03-06', '10:30:00', NULL, NULL, '00:45:00', NULL, 'Revisión de 4 puntos de luz interiores.'),
+(24, 'Instalación lámpada colgante', 1, 'Óscar Costa', 42.51110000, -8.78660000, 'Rua do Porto, Vilanova de Arousa', '2025-03-06', '12:00:00', NULL, NULL, '00:30:00', NULL, 'Instalación e conexión de lámpada no salón.'),
+(25, 'Revisión xeral instalación', 1, 'Patricia Lago', 42.53420000, -8.82800000, 'Rua Principal, Meaño', '2025-03-06', '13:30:00', NULL, NULL, '01:15:00', NULL, 'Revisión por subidas de tensión.'),
+(26, 'Instalación extractor baño', 1, 'Diego Fariña', 42.51660000, -8.81900000, 'Rua da Fonte, Ribadumia', '2025-03-06', '15:00:00', NULL, NULL, '00:35:00', NULL, 'Montaxe e conexión á rede eléctrica.'),
+(27, 'Comprobación diferencial', 1, 'Andrea Souto', 42.47850000, -8.78880000, 'Avda. da Lanzada, Sanxenxo', '2025-03-07', '09:30:00', NULL, NULL, '00:25:00', NULL, 'Saltan os magnetotérmicos continuamente.');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ubicaciones`
+--
+
+CREATE TABLE `ubicaciones` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `latitud` decimal(10,8) NOT NULL,
+  `longitud` decimal(11,8) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `ubicaciones`
+--
+
+INSERT INTO `ubicaciones` (`id`, `nombre`, `latitud`, `longitud`) VALUES
+(1, 'Tienda Vilagarcía', 42.59460000, -8.76450000);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `usuario` varchar(50) NOT NULL,
+  `pwd` varchar(255) NOT NULL,
+  `id_rol` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `nombre`, `usuario`, `pwd`, `id_rol`) VALUES
+(10, 'PRUEBAS', 'admin', 'bba2d1bec283dd3b90add09797a9235b08069064', 1),
+(12, 'pruebas', 'tecnico', 'bba2d1bec283dd3b90add09797a9235b08069064', 2),
+(13, 'pruebas2', 'pruebas', 'bba2d1bec283dd3b90add09797a9235b08069064', 2);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `endpoints`
+--
+ALTER TABLE `endpoints`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombre` (`nombre`);
+
+--
+-- Indices de la tabla `estados_ruta`
+--
+ALTER TABLE `estados_ruta`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `estados_servicio`
+--
+ALTER TABLE `estados_servicio`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `permisos`
+--
+ALTER TABLE `permisos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `rol_id` (`rol_id`),
+  ADD KEY `endpoint_id` (`endpoint_id`);
+
+--
+-- Indices de la tabla `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `rutas`
+--
+ALTER TABLE `rutas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_origen` (`id_origen`),
+  ADD KEY `id_tecnico` (`id_tecnico`),
+  ADD KEY `id_estado` (`id_estado`);
+
+--
+-- Indices de la tabla `servicios`
+--
+ALTER TABLE `servicios`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_estado` (`id_estado`),
+  ADD KEY `id_ruta` (`id_ruta`);
+
+--
+-- Indices de la tabla `ubicaciones`
+--
+ALTER TABLE `ubicaciones`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `usuario` (`usuario`),
+  ADD KEY `id_rol` (`id_rol`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `endpoints`
+--
+ALTER TABLE `endpoints`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `estados_ruta`
+--
+ALTER TABLE `estados_ruta`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `estados_servicio`
+--
+ALTER TABLE `estados_servicio`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `permisos`
+--
+ALTER TABLE `permisos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT de la tabla `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `rutas`
+--
+ALTER TABLE `rutas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- AUTO_INCREMENT de la tabla `servicios`
+--
+ALTER TABLE `servicios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+
+--
+-- AUTO_INCREMENT de la tabla `ubicaciones`
+--
+ALTER TABLE `ubicaciones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `permisos`
+--
+ALTER TABLE `permisos`
+  ADD CONSTRAINT `permisos_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`),
+  ADD CONSTRAINT `permisos_ibfk_2` FOREIGN KEY (`endpoint_id`) REFERENCES `endpoints` (`id`);
+
+--
+-- Filtros para la tabla `rutas`
+--
+ALTER TABLE `rutas`
+  ADD CONSTRAINT `rutas_ibfk_1` FOREIGN KEY (`id_origen`) REFERENCES `ubicaciones` (`id`),
+  ADD CONSTRAINT `rutas_ibfk_2` FOREIGN KEY (`id_tecnico`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `rutas_ibfk_3` FOREIGN KEY (`id_estado`) REFERENCES `estados_ruta` (`id`);
+
+--
+-- Filtros para la tabla `servicios`
+--
+ALTER TABLE `servicios`
+  ADD CONSTRAINT `servicios_ibfk_1` FOREIGN KEY (`id_estado`) REFERENCES `estados_servicio` (`id`),
+  ADD CONSTRAINT `servicios_ibfk_2` FOREIGN KEY (`id_ruta`) REFERENCES `rutas` (`id`);
+
+--
+-- Filtros para la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
