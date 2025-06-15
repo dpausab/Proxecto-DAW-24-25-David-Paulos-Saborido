@@ -62,10 +62,10 @@ class ServiceController extends Controller{
         }
     }
 
-    public function reset() {
+    public function reset($id) {
         $dato = null;
         try {
-            $dato = ServiceModel::reset();
+            $dato = ServiceModel::reset($id[0]);
             echo json_encode(['respuesta' => $dato]);
         } catch (\Throwable $th) {
             http_response_code(400);

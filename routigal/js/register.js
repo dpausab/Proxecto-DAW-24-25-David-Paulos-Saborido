@@ -7,6 +7,7 @@ const $d = document,
             $form = $d.querySelector("form"),
             $rol = $d.querySelector("#rol"),
             $register = $d.querySelector("#register"),
+            $old_container = $d.querySelector("#old"),
             $old = $d.querySelector("#old_pwd")
 
 
@@ -19,7 +20,7 @@ $d.addEventListener("DOMContentLoaded", async(ev) => {
   renderRoles(roles)
 
   if (!usuario) {
-    $old.style.display = "none"
+    $old_container.style.display = "none"
   } else {
     fillUser(usuario)
   }
@@ -155,14 +156,22 @@ async function fillUser(id) {
  */
 function validarForm() {
     let errores = []
-    let [nombre, usuario, pwd, rol] = $form.querySelectorAll("input")
+    let [nombre, usuario, old_pwd, pwd, rol] = $form.querySelectorAll("input, password, select")
 
-    if (!nombre.value.length || !usuario.value.length || !pwd.value.length || !rol.value.length) {
-        errores.push("Todos los campos son obligatorios")
+    console.log("NOMBRE", nombre.value)
+    console.log("USUARIO", usuario.value)
+    console.log("PWD", pwd)
+    console.log("ROL", rol.value)
+    
+
+    if ($old.style.display != "none") {
+      if (!old_pwd.value.trim().length) {
+        errores.push("La contraseña es obligatoria")
+      }
     }
 
-    if (isNaN(pwd.value)) {
-      errores.push("El rol es inválido")
+    if (!nombre.value.trim().length || !usuario.value.trim().length || !pwd.value.trim().length || !rol.value.trim().length) {
+        errores.push("Todos los campos son obligatorios")
     }
 
     if (errores.length){

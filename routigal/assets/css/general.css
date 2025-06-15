@@ -101,9 +101,13 @@ button:not(.hamburger):hover {
   background-color: var(--color-highlight);
 }
 
-a {
+p a {
   text-decoration: none;
   color: var(--color-yellow);
+}
+
+button a {
+  color: black;
 }
 
 .btn-yellow {

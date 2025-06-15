@@ -43,13 +43,16 @@ function renderUbicaciones(ubicaciones) {
     if (ubicaciones.length) {
         $ubicaciones.innerHTML = ubicaciones.map(el => {
             return `<tr>
-                <td>${el.nombre}</td>
-                <td>${el.latitud}</td>
-                <td>${el.longitud}</td>
-                <td>
-                    <button class="editar" data-id="${el.id}">Editar</button>
-                    <button class="borrar" data-id="${el.id}">Borrar</button>
-                </td>
+                    <td>${el.nombre}</td>
+                    <td>${el.latitud}</td>
+                    <td>${el.longitud}</td>
+                    <td>
+                        <div class="acciones">
+                            <button class="editar" data-id="${el.id}">Editar</button>
+                            <button class="borrar" data-id="${el.id}">Borrar</button>
+                        </div>
+                        
+                    </td>
                 </tr>`
             }).join('')
     } else {

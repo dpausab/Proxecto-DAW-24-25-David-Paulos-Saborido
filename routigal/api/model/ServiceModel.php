@@ -525,13 +525,15 @@ class ServiceModel extends Model {
     
     }
 
-    public static function reset() {
-        $sql = "UPDATE servicios SET id_ruta = null, id_estado = 1, orden=null, id_tecnico=null";
+    public static function reset($id) {
+        $sql = "UPDATE servicios SET id_ruta = null, id_estado = 1, orden=null, id_tecnico=null WHERE id_ruta=:id";
 
         $db = self::getConnection();
         $db->beginTransaction();
         try {
-            $stmt = $db->query($sql);
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
             $resultado = $stmt->rowCount() >= 1;
             $db->commit();
         } catch (PDOException $th) {

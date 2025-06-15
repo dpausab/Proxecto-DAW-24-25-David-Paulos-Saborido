@@ -61,10 +61,12 @@ function renderUsuarios(usuarios) {
                 <td>${el.nombre}</td>
                 <td>${rol}</td>
                 <td>
-                    <button id="editar" data-id="${el.id}">
-                        <a href="register.php?usuario=${el.id}">Editar</a>
-                    </button>
-                    <button id="borrar" data-id="${el.id}">Borrar</button>
+                    <div class="acciones">
+                        <button id="editar" data-id="${el.id}">
+                            <a href="register.php?usuario=${el.id}">Editar</a>
+                        </button>
+                        <button id="borrar" data-id="${el.id}">Borrar</button>
+                    </div>
                 </tr>`
             }).join('')
     } else {
@@ -170,7 +172,19 @@ async function deleteUsuario(id) {
 $usuarios.addEventListener("click", async(ev) => {
 
     if (ev.target.id === "borrar" && ev.target.dataset.id) {
-        await deleteUsuario(ev.target.dataset.id)   
+        try {
+            await deleteUsuario(ev.target.dataset.id)   
+            swal.fire({
+                title: 'Usuario borrado',
+                icon: 'success'
+            })
+        } catch (error) {
+            swal.fire({
+                title: 'Algo ha fallado',
+                icon: 'success'
+            })
+        }
+
     }
 })
 

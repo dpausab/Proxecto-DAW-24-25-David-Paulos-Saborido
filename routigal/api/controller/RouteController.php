@@ -107,7 +107,7 @@ class RouteController extends Controller{
         if (empty($ruta['nombre'])) {
             $errores[]='El nombre no puede estar vacío.';
         }
-        if (!empty($ruta['tiempoTotal'])) {
+        if (empty($ruta['tiempoTotal'])) {
             $errores[]='El tiempo no tiene formato válido.';
         }
         if (!is_numeric($ruta['distanciaTotal'])) {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-06-2025 a las 19:19:16
+-- Tiempo de generación: 15-06-2025 a las 23:25:12
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -22,7 +22,10 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
+DROP DATABASE IF EXISTS routigal;
+CREATE DATABASE routigal;
 
+use routigal;
 --
 -- Estructura de tabla para la tabla `endpoints`
 --
@@ -164,14 +167,6 @@ CREATE TABLE `rutas` (
   `hora_salida` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `rutas`
---
-
-INSERT INTO `rutas` (`id`, `nombre`, `tiempo_total`, `km_totales`, `id_origen`, `id_tecnico`, `id_estado`, `fecha`, `hora_salida`) VALUES
-(32, 'test', '01:11:00', 24.13, 1, 12, 2, '2025-06-10', '08:00:00'),
-(33, 'test_02', '02:29:00', 28.04, 1, 13, 2, '2025-06-14', '08:00:00');
-
 -- --------------------------------------------------------
 
 --
@@ -200,11 +195,11 @@ CREATE TABLE `servicios` (
 --
 
 INSERT INTO `servicios` (`id`, `nombre`, `id_estado`, `nombre_cliente`, `latitud`, `longitud`, `direccion`, `fecha_servicio`, `hora_servicio`, `id_ruta`, `orden`, `duracion_estimada`, `id_tecnico`, `nombre_estado`) VALUES
-(8, 'Instalación lámpada colgante', 3, 'Óscar Costa', 42.51110000, -8.78660000, 'Rua do Porto, Vilanova de Arousa', '2025-03-06', '12:00:00', 32, 0, '00:45:00', 12, 'Instalación e conexión de lámpada no salón.'),
-(9, 'Revisión xeral instalación', 3, 'Patricia Lago', 42.53420000, -8.82800000, 'Rua Principal, Meaño', '2025-03-06', '13:30:00', 33, 0, '01:15:00', 13, 'Revisión por subidas de tensión.'),
-(10, 'Instalación extractor baño', 3, 'Diego Fariña', 42.51660000, -8.81900000, 'Rua da Fonte, Ribadumia', '2025-03-06', '15:00:00', 33, 1, '00:35:00', 13, 'Montaxe e conexión á rede eléctrica.'),
+(8, 'Instalación lámpada colgante', 1, 'Óscar Costa', 42.51110000, -8.78660000, 'Rua do Porto, Vilanova de Arousa', '2025-03-06', '12:00:00', NULL, NULL, '00:45:00', NULL, 'Instalación e conexión de lámpada no salón.'),
+(9, 'Revisión xeral instalación', 1, 'Patricia Lago', 42.53420000, -8.82800000, 'Rua Principal, Meaño', '2025-03-06', '13:30:00', NULL, NULL, '01:15:00', NULL, 'Revisión por subidas de tensión.'),
+(10, 'Instalación extractor baño', 1, 'Diego Fariña', 42.51660000, -8.81900000, 'Rua da Fonte, Ribadumia', '2025-03-06', '15:00:00', NULL, NULL, '00:50:00', NULL, 'Montaxe e conexión á rede eléctrica.'),
 (11, 'Comprobación diferencial', 1, 'Andrea Souto', 42.47850000, -8.78880000, 'Avda. da Lanzada, Sanxenxo', '2025-03-07', '09:30:00', NULL, NULL, '00:25:00', NULL, 'Saltan os magnetotérmicos continuamente.'),
-(12, 'Revisión enchufes cociña 1', 1, 'Ramón Silva', 42.50200000, -8.81330000, 'Rua do Mercado, Vilagarcía', '2025-03-07', '11:00:00', NULL, NULL, '00:00:00', NULL, 'Fallo ao conectar electrodomésticos.'),
+(12, 'Revisión enchufes cociña 1', 1, 'Ramón Silva', 42.50200000, -8.81330000, 'Rua do Mercado, Vilagarcía', '2025-03-07', '11:00:00', NULL, NULL, '00:30:00', NULL, 'Fallo ao conectar electrodomésticos.'),
 (17, 'Instalación de enchufe exterior', 1, 'Ana Rivas', 42.51190000, -8.81200000, 'Avenida Rosalía de Castro, Vilagarcía', '2025-03-05', '10:00:00', NULL, NULL, '00:30:00', NULL, 'Instalación de punto de luz en jardín.'),
 (18, 'Revisión caldera', 1, 'Miguel Torres', 42.47910000, -8.79430000, 'Calle Castelao, Sanxenxo', '2025-03-05', '11:00:00', NULL, NULL, '01:00:00', NULL, 'Comprobación e limpeza de caldeira.'),
 (19, 'Cambio de termostato', 1, 'Lucía Fernández', 42.48980000, -8.81000000, 'Rua Real, O Grove', '2025-03-05', '12:30:00', NULL, NULL, '00:00:00', NULL, 'Substitución por termostato intelixente.'),
@@ -257,8 +252,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `nombre`, `usuario`, `pwd`, `id_rol`) VALUES
 (10, 'PRUEBAS', 'admin', 'bba2d1bec283dd3b90add09797a9235b08069064', 1),
-(12, 'pruebas', 'tecnico', 'bba2d1bec283dd3b90add09797a9235b08069064', 2),
-(13, 'pruebas2', 'pruebas', 'bba2d1bec283dd3b90add09797a9235b08069064', 2);
+(12, 'pruebas', 'tecnico', 'bba2d1bec283dd3b90add09797a9235b08069064', 2);
 
 --
 -- Índices para tablas volcadas
@@ -366,7 +360,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT de la tabla `rutas`
 --
 ALTER TABLE `rutas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT de la tabla `servicios`
@@ -384,7 +378,7 @@ ALTER TABLE `ubicaciones`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Restricciones para tablas volcadas

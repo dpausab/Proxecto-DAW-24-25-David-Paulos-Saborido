@@ -30,7 +30,7 @@
             </p>
             <p id="old">
                 <label for="old_pwd">Contraseña actual</label>
-                <input type="password" name="old_pwd" id="old_pwd" required>
+                <input type="password" name="old_pwd" id="old_pwd">
             </p>
             <p>
                 <label for="pwd">Contraseña</label>

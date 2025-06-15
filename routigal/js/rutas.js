@@ -85,6 +85,8 @@ async function getServicios($id=null) {
         })
 
         VARIABLES.servicios = datos
+        VARIABLES.servicios.sort((a, b) => a.orden - b.orden)
+        console.log(VARIABLES.servicios)
         VARIABLES.servicios.forEach(el => el.duracion_estimada = el.duracion_estimada.slice(0, 5))
         VARIABLES.serviciosMap = new Map(VARIABLES.servicios.map(el => [el.id, el]))
 
@@ -124,7 +126,7 @@ async function getUbicaciones() {
             url: `http://localhost/api/ubicaciones/getAll`
         })
 
-        VARIABLES.ubicaciones = datos
+        VARIABLES.ubicaciones = datos.datos
         VARIABLES.ubicacionesMap = new Map(VARIABLES.ubicaciones.map(el => [el.id, el]))
     } catch (error) {
         swal.fire({
@@ -472,7 +474,7 @@ async function crearRuta() {
         ));
     } catch (error) {
         swal.fire({
-            title: 'Error creando la ruta',
+            title: error.message,
             icon: 'error'
         })
     }
@@ -500,7 +502,7 @@ async function modificarRuta(id) {
         })
 
         if (ruta.respuesta) {
-            await ajax({url: "/api/servicios/reset"})
+            await ajax({url: `/api/servicios/reset/${id}`})
             await Promise.all(VARIABLES.seleccionados.map((el, i) =>
                 ajax({
                     url: `/api/servicios/updateRutaId/${el.servicio.id}`,
@@ -530,6 +532,12 @@ async function modificarRuta(id) {
  */
 async function completarRuta(id) {
     try {
+        let servicios = await ajax({
+            url: `/api/servicios/getPorRuta/${id}`
+        })
+
+        if (!servicios || !servicios.length) throw new Error("No se puede completar una ruta que no ha sido creada.")
+
         let ruta = await ajax({
             url: `/api/rutas/completar/${id}`
         })
@@ -543,10 +551,7 @@ async function completarRuta(id) {
             ));
         }
     } catch (error) {
-        swal.fire({
-            title: error.message,
-            icon: 'error'
-        })
+        throw new Error(error.message)
     }
 }
 
@@ -611,16 +616,16 @@ async function handleStatus() {
             } else {
                 await modificarRuta(rutaId)
             }
-            swal.fire({
+            await swal.fire({
                 title: 'Completado!',
                 icon: 'success'
             })
         } else return
             
-        window.location.href('/html/listado_rutas.php')
+        window.location.href = '/html/listado_rutas.php'
     } catch (error){
         swal.fire({
-            title: 'No se ha podido realizar la acción.',
+            title: 'Error en la acción!',
             icon: 'error'
         })
     }
@@ -662,7 +667,7 @@ completar.addEventListener("click", async(ev) => {
     ev.preventDefault()
     try {
         await completarRuta(rutaId)
-        swal.fire({
+        await swal.fire({
             title: 'Ruta completada.',
             icon: 'success'
         })

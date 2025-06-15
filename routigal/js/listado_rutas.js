@@ -72,16 +72,20 @@ function renderRutas(rutas) {
             let botones = ""
             if (user.rol === 1) {
                 botones = `<td>
-                        <button id="editar" data-id="${el.id}">
+                        <div class="acciones">
+                            <button class="editar" data-id="${el.id}">
                             <a href="rutas.php?ruta=${el.id}">Editar</a>
-                        </button>
-                        <button id="borrar" data-id="${el.id}">Borrar</button>
+                            </button>
+                            <button class="borrar" data-id="${el.id}">Borrar</button>
+                        </div>
                     </td>`
             } else {
                 botones = `<td>
-                        <button id="editar" data-id="${el.id}">
+                        <div class="acciones">
+                            <button class="editar" data-id="${el.id}">
                             <a href="rutas.php?ruta=${el.id}">Editar</a>
-                        </button>
+                            </button>
+                        </div>
                     </td>`
             }
             return `<tr>
@@ -239,7 +243,7 @@ function startListeners() {
 }
 
 $rutas.addEventListener("click", async(ev) => {
-    if (ev.target.id === "borrar" && ev.target.dataset.id) {
+    if (ev.target.classList.contains('borrar') && ev.target.dataset.id) {
         await deleteRuta(ev.target.dataset.id)
     }
 })

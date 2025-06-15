@@ -15,7 +15,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Usuarios - Routigal</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <link rel="stylesheet" href="../assets/css/servicios.css">
+  <link rel="stylesheet" href="../assets/css/listado.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
   <script type="module" src="../js/usuarios.js" defer></script>
   <script src="../js/menu-hamburguesa.js" defer></script>
