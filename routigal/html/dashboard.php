@@ -1,5 +1,8 @@
 <?php
   include_once('auth.php');
+  include_once("../api/controller/AuthController.php");
+
+  $user = AuthController::getSessionUser();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -17,14 +20,14 @@
   <?php include_once("header.php"); ?>
 
   <main>
-    <h1>¡Bienvenido de nuevo, <?php echo $_SESSION['user']['nombre']; ?>!</h1>
+    <h1>¡Bienvenido de nuevo, <?php echo $user->getNombre(); ?>!</h1>
     <section class="cards-servicios">
       <article class="card-servicio">
-        <h2>Servicios</h2>
+        <h2>Rutas</h2>
         <p id="totales"></p>
       </article>
       <article class="card-servicio">
-        <h2>Completados</h2>
+        <h2>Completadas</h2>
         <p id="completados"></p>
       </article>
       <article class="card-servicio">

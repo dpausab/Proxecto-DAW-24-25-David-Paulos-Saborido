@@ -27,6 +27,7 @@ $d.addEventListener("DOMContentLoaded", async(ev) => {
 
 $form.addEventListener("submit", async(ev) => {
     ev.preventDefault()
+    if (!validarForm()) return
     if (usuario) {
       await updateUser(usuario)
     } else {
@@ -130,4 +131,28 @@ async function fillUser(id) {
     $rol.value = user.rol
     $register.textContent = "Actualizar Usuario"
   }
+}
+
+function validarForm() {
+    let errores = []
+    let [nombre, usuario, pwd, rol] = $form.querySelectorAll("input")
+
+    if (!nombre.value.length || !usuario.value.length || !pwd.value.length || !rol.value.length) {
+        errores.push("Todos los campos son obligatorios")
+    }
+
+    if (isNaN(pwd.value)) {
+      errores.push("El rol es inválido")
+    }
+
+    if (errores.length){
+        swal.fire({
+            title: 'Error',
+            icon: 'warning',
+            html: errores.map(el => `<p>${el}</p>`).join('')
+        })
+        return false
+    }
+
+    return true
 }

@@ -1,7 +1,7 @@
 <?php
 
 include_once("Controller.php");
-include_once("model/UserModel.php");
+include_once(API_ROUTE."model/UserModel.php");
 
 class UserController extends Controller{
 
@@ -11,7 +11,8 @@ class UserController extends Controller{
             $datos = UserModel::get($id[0]);
             echo json_encode($datos);
         } catch (\Throwable $th) {
-            throw $th;
+            http_response_code(400);
+            echo json_encode(['message' => $th->getMessage()]);
         }
     }
     public function getAll($ids) {
@@ -27,7 +28,8 @@ class UserController extends Controller{
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {
-            throw $th;
+            http_response_code(400);
+            echo json_encode(['message' => $th->getMessage()]);
         }
     }
 
@@ -44,7 +46,8 @@ class UserController extends Controller{
             }
             echo json_encode($datos);
         } catch (\Throwable $th) {
-            throw $th;
+            http_response_code(400);
+            echo json_encode(['message' => $th->getMessage()]);
         }
     }
 
@@ -52,36 +55,59 @@ class UserController extends Controller{
         $dato = null;
         try {
             $dato = UserModel::delete($id[0]);
+            echo json_encode(['respuesta' => $dato]);
         } catch (\Throwable $th) {
-            throw $th;
+            http_response_code(400);
+            echo json_encode(['message' => $th->getMessage()]);
         }
         
-        echo json_encode(['respuesta' => $dato]);
     }
     public function update($json, $id) {
         $dato = null;
-        $mensaje = "Editado con éxito.";
         try {
             $datos = json_decode($json, true);
             $dato = UserModel::update($datos, $id[0]);
+            echo json_encode(['respuesta' => $dato]);
         } catch (\Throwable $th) {
-            $mensaje = "Error al editar el usuario.";
-            throw $th;
+            http_response_code(400);
+            echo json_encode(['message' => $th->getMessage()]);
         }
         
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
     }
     public function insert($json) {
         $dato = null;
-        $mensaje = "Insertado con éxito.";
         try {
             $datos = json_decode($json, true);
             $dato = UserModel::insert($datos);
+            echo json_encode(['respuesta' => $dato]);
         } catch (\Throwable $th) {
-            $mensaje = "Error al insertar el usuario.";
-            throw $th;
+            http_response_code(400);
+            echo json_encode(['message' => $th->getMessage()]);
         }
         
-        echo json_encode(['respuesta' => $dato, 'mensaje' => $mensaje]);
     }  
+
+    function validarDatos($datos) {
+        $errores = [];
+
+        if (empty($datos['nombre'])) {
+            $errores[] = "El nombre es obligatorio";
+        }
+
+        if (empty($datos['usuario'])) {
+            $errores[] = "El usuario es obligatorio";
+        }
+
+        if (empty($datos['pwd'])) {
+            $errores[] = "La contraseña es obligatorio";
+        }
+
+        if (empty($datos['rol'])) {
+            $errores[] = "El rol es obligatorio";
+        }
+
+        if (count($errores)) {
+            throw new Exception(implode(' - ', $errores));
+        }
+    }
 }

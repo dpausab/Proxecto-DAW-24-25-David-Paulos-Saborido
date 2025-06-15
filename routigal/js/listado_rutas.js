@@ -21,8 +21,9 @@ const today = getToday()
 $d.addEventListener("DOMContentLoaded", async () => {
     $fechaF.value = today
     user = await ajax({url:"/api/auth/getLoggedUser"})
+    let id = user.rol!=1 ? user.id : null
     startListeners()
-    await getRutas()
+    await getRutas(id)
     await getTecnicos()
     renderRutas(rutas)
     if (user.rol!=2) renderTecnicos(tecnicos)
@@ -222,3 +223,5 @@ $rutas.addEventListener("click", async(ev) => {
         await deleteRuta(ev.target.dataset.id)
     }
 })
+
+$filtros.addEventListener("submit", ev => ev.preventDefault())

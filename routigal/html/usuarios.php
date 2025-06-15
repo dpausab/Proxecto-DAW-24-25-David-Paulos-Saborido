@@ -1,6 +1,9 @@
 <?php
     include_once("auth.php");
-    if ($_SESSION['user']['rol'] != 1) {
+    include_once("../api/controller/AuthController.php");
+
+    $user = AuthController::getSessionUser();
+    if ($user->getRol() != 1) {
         header("Location: 403.php");
     }
 ?>
@@ -9,7 +12,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Servicios - Routigal</title>
+  <title>Usuarios - Routigal</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <link rel="stylesheet" href="/assets/css/servicios.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
@@ -20,7 +23,7 @@
   <?php include_once('header.php'); ?>
 
   <main>
-    <h1>Gestión de usuarios</h1>
+    <h1>Usuarios</h1>
     <section class="table-container">
       <h2>Listado de usuarios</h2>
       <form class="routigal-form" id="filtros">
@@ -33,16 +36,13 @@
           <select name="rol_filtro" id="rol_filtro">
           </select>
         </p>
-        <?php if ($_SESSION['user']['rol'] === 1) {
-                  echo '<p>
-                      <button id="crear">
-                        Crear
-                      </button>
-                    </p>';
-              }
-        ?>
+        <p>
+          <button id="crear">
+            Crear
+          </button>
+        </p>
       </form>
-      <table>
+      <table class="usuarios-table">
         <thead>
           <tr>
             <th>Nombre</th>

@@ -49,6 +49,7 @@ Este proyecto cumpre coa Ley Orgánica 3/2018, do 5 de decembro, de Protección 
 - Planificación automática de rutas optimizadas segundo tempo ou distancia.
 - Integración con SMS ou WhatsApp para avisos.
 - Sistema de valoración do cliente cos servizos.
+- Cálculo dos custos de forma automatizada segundo os datos das rutas.
 - App móbil nativa para maior comodidade.
 
 [**<-Anterior**](../../../README.md)

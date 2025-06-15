@@ -1,36 +1,47 @@
 <?php
 
 include_once("Controller.php");
-include_once("model/AuthModel.php");
-include_once("model/UserModel.php");
+include_once(API_ROUTE."model/AuthModel.php");
+include_once(API_ROUTE."model/UserModel.php");
 
 class AuthController {
 
     public function login($data){
         $respuesta = false;
-        if(isset($data)) {
-            $json = json_decode($data, true);
-            if (isset($json['user']) && isset($json['pwd'])) {
-                $respuesta = AuthModel::login($json['user'], sha1($json['pwd']));
+        try {
+            if(isset($data)) {
+                $json = json_decode($data, true);
+                if (isset($json['user']) && isset($json['pwd'])) {
+                    $respuesta = AuthModel::login($json['user'], sha1($json['pwd']));
+                } else {
+                    throw new Exception("Los campos son obligatorios.");
+                }
+            } 
+            if ($respuesta) {
+                $_SESSION['user'] = [
+                    'id' => $respuesta['id'],
+                    'nombre' => $respuesta['nombre'],
+                    'rol' => $respuesta['id_rol']
+                ];
             }
-        } 
-        if ($respuesta) {
-            $_SESSION['user'] = [
-                'id' => $respuesta['id'],
-                'nombre' => $respuesta['nombre'],
-                'rol' => $respuesta['id_rol']
-            ];
+            echo json_encode(['respuesta' => $respuesta]);
+        } catch (\Throwable $th) {
+            http_response_code(400);
+            echo json_encode(['message' => $th->getMessage()]);
         }
-        echo json_encode(['respuesta' => $respuesta]);
     }
 
     public static function getSessionUser() {
-        if (isset($_SESSION['user'])) {
-            $respuesta = UserModel::get($_SESSION['user']['id']);
-            return $respuesta;
-        } 
+        try {
+            if (isset($_SESSION['user'])) {
+                $respuesta = UserModel::get($_SESSION['user']['id']);
+                return $respuesta;
+            } 
+            return null;
+        } catch (\Throwable $th) {
+            http_response_code(400);
+        }
 
-        return null;
     }
 
     public static function getLoggedUser() {
@@ -40,17 +51,18 @@ class AuthController {
         } 
 
         echo json_encode(null);
+        
     }
 
     public static function hasPermission($userId, $endpoint, $method) {
         $respuesta = false;
         try {
             $respuesta = AuthModel::hasPermission($userId, $endpoint, $method);
+            return $respuesta;
         } catch (\Throwable $th) {
-            echo json_encode(['mensaje' => 'Error en la comprobación de permisos.']);
-            $respuesta = false;
+            http_response_code(400);
+            echo json_encode(['message' => $th->getMessage()]);
         } 
-        return $respuesta;
     }
 
     public function logout(){

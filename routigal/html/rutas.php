@@ -29,27 +29,28 @@
       <form class="routigal-form">
           <p>
             <label for="nombre">Nombre de la ruta</label>
-            <input type="text" name="nombre" id="nombre" placeholder="Ej: Ruta_01">
+            <input type="text" name="nombre" id="nombre" placeholder="Ej: Ruta_01" required>
           </p>
           <p>
             <label for="punto-partida">Punto de partida</label>
-            <select name="punto-partida" id="punto-partida"></select>
+            <select name="punto-partida" id="punto-partida"></select required>
           </p>
           <p>
             <label>Técnico</label>
-            <select name="tecnico" id="tecnico">
+            <select name="tecnico" id="tecnico" required>
             </select>
           </p>
           <p>
             <label>Hora de salida</label>
-            <input type="time" name="hora-salida" id="hora-salida">
+            <input type="time" name="hora-salida" id="hora-salida" required>
           </p>
           <p>
             <label for="fecha-ruta">Fecha</label>
-            <input type="date" name="fecha-ruta" id="fecha-ruta">
+            <input type="date" name="fecha-ruta" id="fecha-ruta" required>
           </p>
           <button id="calcular">Recalcular</button>
           <button id="guardar">Guardar</button>
+          <button id="completar">Completar</button>
         </form>
     </section>
 

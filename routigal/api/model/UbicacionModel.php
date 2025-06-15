@@ -1,5 +1,6 @@
 <?php
-include_once("Model.php");
+include_once(API_ROUTE."model/Model.php");
+
 
 class Ubicacion implements JsonSerializable{
     protected $id;
@@ -103,22 +104,43 @@ class Ubicacion implements JsonSerializable{
 class UbicacionModel extends Model
 {
 
-    public static function getAll($offset=null, $limit=null)
+    public static function getAll($offset=null, $limit=null, $nombre=null)
     {
-        if (isset($offset, $limit)) {
-            $sql = "SELECT * FROM ubicaciones ORDER BY id DESC LIMIT $limit OFFSET $offset";
-        } else {
-            $sql = "SELECT * FROM ubicaciones ORDER BY id DESC";
+        
+        $sql = "SELECT * FROM ubicaciones";
+        if (isset($nombre) && !empty($nombre)) {
+            $sql.= " WHERE nombre LIKE :nombre";
+        }
+        $sql.= " ORDER BY id ASC";
+
+        if (isset($offset, $limit) && is_numeric($limit) && is_numeric($offset)) {
+            $sql.= " LIMIT $limit OFFSET $offset";
         }
         $db = self::getConnection();
         $datos = [];
+        $respuesta = null;
+        $next = false;
         try {
-            $stmt = $db->query($sql);
+            $stmt = $db->prepare($sql);
+            if (isset($nombre) && !empty($nombre)) {
+                $stmt->bindValue(':nombre', '%'.$nombre.'%', PDO::PARAM_STR);
+            }
+            $stmt->execute();
             $datos = [];
             foreach($stmt as $s){   
                 $ubicacion = new Ubicacion($s['nombre'], $s['latitud'], $s['longitud'], $s['id']);
                 $datos[] = $ubicacion;
             }
+
+            if (count($datos)>=11)  {
+                $next = true;
+                array_pop($datos);
+            }
+
+            $respuesta = [
+                'datos' => $datos,
+                'next' => $next
+            ];
         } catch (PDOException $th) {
             error_log("Error UbicacionModel->getAll()");
             error_log($th->getMessage());
@@ -126,7 +148,7 @@ class UbicacionModel extends Model
             $stmt = null;
             $db = null;
         }
-        return $datos;
+        return $respuesta;
     }
 
     public static function get($ubicacionId):Ubicacion|null

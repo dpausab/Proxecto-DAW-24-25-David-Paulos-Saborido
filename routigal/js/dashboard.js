@@ -43,7 +43,7 @@ async function getServicios() {
         })
     } else {
         serviciosData = await ajax({
-            url: `/api/servicios/getByUser/${user.id}`
+            url: `/api/servicios/getAll?id=${user.id}`
         })
     }
 
@@ -58,7 +58,7 @@ async function getRutas() {
         })
     } else {
         rutasData = await ajax({
-            url: `/api/rutas/getByUser/${user.id}`
+            url: `/api/rutas/getAll?id=${user.id}`
         })
     }
 
@@ -66,9 +66,9 @@ async function getRutas() {
 }
 
 function renderDatos() {
-    $totales.textContent = servicios.length
+    $totales.textContent = rutas.length
 
-    $completados.textContent = servicios.filter(el => el.id_estado == 3).length
+    $completados.textContent = rutas.filter(el => el.estado == 'Realizada').length
     let tiempoTotal = rutas.reduce((anterior, actual) => {
         return anterior + formatearHoras(actual.tiempoTotal)
     },0)

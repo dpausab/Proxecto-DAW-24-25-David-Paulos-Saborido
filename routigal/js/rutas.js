@@ -12,7 +12,7 @@ const $d = document,
         $distanciaTotal = $d.querySelector("#distancia-total"),
         $tiempoTotal = $d.querySelector("#tiempo-total"),
         $fecha = $d.querySelector("#fecha-ruta"),
-        [calcular, guardar] = $d.querySelectorAll("#calcular, #guardar")
+        [calcular, guardar, completar] = $d.querySelectorAll("#calcular, #guardar, #completar")
 
 const VARIABLES = {
     servicios: [],
@@ -79,6 +79,7 @@ async function getServicios($id=null) {
         VARIABLES.servicios = datos
         VARIABLES.servicios.forEach(el => el.duracion_estimada = el.duracion_estimada.slice(0, 5))
         VARIABLES.serviciosMap = new Map(VARIABLES.servicios.map(el => [el.id, el]))
+
     } catch (error) {
         swal.fire({
             title: 'No se han podido cargar los servicios.',
@@ -177,14 +178,14 @@ function renderSeleccionados(seleccionados) {
 
     // En esta parte se les añaden las funciones de drag a los servicios seleccionados.
     let info = document.querySelectorAll(".drag")
-        info.forEach(function(el) {
-            el.addEventListener('dragstart', handleDragStart);
-            el.addEventListener('dragover', handleDragOver);
-            el.addEventListener('dragenter', handleDragEnter);
-            el.addEventListener('dragleave', handleDragLeave);
-            el.addEventListener('dragend', handleDragEnd);
-            el.addEventListener('drop', handleDrop);
-        }) 
+    info.forEach(function(el) {
+        el.addEventListener('dragstart', handleDragStart);
+        el.addEventListener('dragover', handleDragOver);
+        el.addEventListener('dragenter', handleDragEnter);
+        el.addEventListener('dragleave', handleDragLeave);
+        el.addEventListener('dragend', handleDragEnd);
+        el.addEventListener('drop', handleDrop);
+    }) 
 }
 
 function renderTramos(tramos) {
@@ -217,7 +218,6 @@ function renderInfo(tramos) {
     $distanciaTotal.textContent = `${VARIABLES.distanciaRuta.toFixed(2)} km`.replace('.', ',')
     $tiempoTotal.textContent = `${horas ? tiempoF[0] + " h " : ""}${tiempoF[1] + " minutos"}`
 }
-
 
 function formulario(ruta) {
     if (ruta) {
@@ -253,6 +253,24 @@ async function start() {
     formulario(VARIABLES.ruta)
     renderServicios(VARIABLES.servicios)
     checkSeleccionados(rutaId)
+
+    if (VARIABLES.ruta && VARIABLES.ruta.estado==2) {
+        let campos = Array.from($d.querySelectorAll("input, select"))
+        calcular.style.display='none'
+        guardar.style.display='none'
+        completar.style.display='none'
+        campos.forEach(el => el.disabled=true)
+
+        let info = document.querySelectorAll(".drag")
+        info.forEach(function(el) {
+            el.removeEventListener('dragstart', handleDragStart);
+            el.removeEventListener('dragover', handleDragOver);
+            el.removeEventListener('dragenter', handleDragEnter);
+            el.removeEventListener('dragleave', handleDragLeave);
+            el.removeEventListener('dragend', handleDragEnd);
+            el.removeEventListener('drop', handleDrop);
+        }) 
+    }
 
 }
 
@@ -347,30 +365,6 @@ export async function calcularTramo(origen, destino) {
     } 
 }
 
-$d.addEventListener("DOMContentLoaded", start)
-
-$disponibles.addEventListener("click", ev => {
-    if (!VARIABLES.flag) ev.preventDefault()
-    let target = ev.target
-    if (target.id == "servicio" && flag) {
-        if (target.checked) {
-            let servicio = VARIABLES.serviciosMap.get(parseInt(target.dataset.id))
-            let waypoint = formatWaypoint(servicio)
-            VARIABLES.seleccionados.push(waypoint)        
-        } else {
-            let servicioIndex = VARIABLES.seleccionados.findIndex(el => el.servicio.id === parseInt(target.dataset.id))
-            VARIABLES.seleccionados.splice(servicioIndex, 1)
-        }
-        calcularRuta(VARIABLES.seleccionados)
-    }
-})
-
-calcular.addEventListener("click", ev => {
-    ev.preventDefault()
-
-    simularTramos(VARIABLES.routeWaypoints, $horaSalida.value)
-})
-
 async function crearRuta() {
     try {
         let ruta = await ajax({
@@ -427,20 +421,23 @@ async function modificarRuta(id) {
                 horaSalida: $horaSalida.value
             }
         })
-        await ajax({url: "/api/servicios/reset"})
-        await Promise.all(VARIABLES.seleccionados.map((el, i) =>
-            ajax({
-                url: `/api/servicios/updateRutaId/${el.servicio.id}`,
-                method: "PUT",
-                data: {
-                    orden: i,
-                    id_ruta: parseInt(id),
-                    estimado: VARIABLES.horasMap.get(el.servicio.id).value+':00',
-                    id_estado: 2,
-                    tecnico: $tecnicos.value
-                }
-            })
-        ));
+
+        if (ruta.respuesta) {
+            await ajax({url: "/api/servicios/reset"})
+            await Promise.all(VARIABLES.seleccionados.map((el, i) =>
+                ajax({
+                    url: `/api/servicios/updateRutaId/${el.servicio.id}`,
+                    method: "PUT",
+                    data: {
+                        orden: i,
+                        id_ruta: parseInt(id),
+                        estimado: VARIABLES.horasMap.get(el.servicio.id).value+':00',
+                        id_estado: 2,
+                        tecnico: $tecnicos.value
+                    }
+                })
+            ));
+        }
     } catch (error) {
         swal.fire({
             title: 'Error editando la ruta.',
@@ -448,6 +445,28 @@ async function modificarRuta(id) {
         })
     }
     
+}
+
+async function completarRuta(id) {
+    try {
+        let ruta = await ajax({
+            url: `/api/rutas/completar/${id}`
+        })
+
+        if (ruta.respuesta) {
+            let asignados = VARIABLES.servicios.filter(el => el.id_ruta == id)
+            await Promise.all(asignados.map((el, i) =>
+                ajax({
+                    url: `/api/servicios/completar/${el.id}`
+                })
+            ));
+        }
+    } catch (error) {
+        swal.fire({
+            title: error.message,
+            icon: 'error'
+        })
+    }
 }
 
 function checkForm(ruta) {
@@ -460,7 +479,7 @@ function checkForm(ruta) {
             return false
         } 
         if(ruta) {
-            if (new Date(ruta.fecha).getTime() < new Date().getTime()) {
+            if (new Date(ruta.fecha).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
                 swal.fire({
                     title: 'La fecha no puede ser anterior a la actual.',
                     icon: 'warning'
@@ -468,7 +487,7 @@ function checkForm(ruta) {
                 return false
             }
         } else {
-            if (new Date($fecha.value).getTime() < new Date().getTime()) {
+            if (new Date($fecha.value).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
                 swal.fire({
                     title: 'La fecha no puede ser anterior a la actual.',
                     icon: 'warning'
@@ -482,32 +501,87 @@ function checkForm(ruta) {
     } catch (error) {
         swal.fire({
             title: 'Ha habido un error comprobando el formulario.',
-            icon: 'warning'
+            icon: 'warning',
+            text: error.message
         })
     }
 }
-guardar.addEventListener("click", async (ev) => {
-    ev.preventDefault()
+
+async function handleStatus() {
     if (!checkForm()) return;
     try {
-        if (!rutaId) {
-            await crearRuta()
-        } else {
-            await modificarRuta(rutaId)
-        }
-        await swal.fire({
-            title: 'Completado!',
-            icon: 'success'
+        let confirm = await swal.fire({
+            title: '¿Seguro que quieres editar la ruta?',
+            icon: 'info'
         })
-        window.location.reload()
+
+        if (confirm.isConfirmed) {
+            if (!rutaId) {
+                await crearRuta()
+            } else {
+                await modificarRuta(rutaId)
+            }
+            swal.fire({
+                title: 'Completado!',
+                icon: 'success'
+            })
+        } else return
+            
+        window.location.href('/html/listado_rutas.php')
     } catch (error){
         swal.fire({
             title: 'No se ha podido realizar la acción.',
             icon: 'error'
         })
     }
+}
+
+$d.addEventListener("DOMContentLoaded", start)
+
+$disponibles.addEventListener("click", ev => {
+    if (!VARIABLES.flag) ev.preventDefault()
+    let target = ev.target
+    if (target.id == "servicio" && VARIABLES.flag) {
+        if (target.checked) {
+            let servicio = VARIABLES.serviciosMap.get(parseInt(target.dataset.id))
+            let waypoint = formatWaypoint(servicio)
+            VARIABLES.seleccionados.push(waypoint)        
+        } else {
+            let servicioIndex = VARIABLES.seleccionados.findIndex(el => el.servicio.id === parseInt(target.dataset.id))
+            VARIABLES.seleccionados.splice(servicioIndex, 1)
+        }
+        calcularRuta(VARIABLES.seleccionados)
+    }
 })
 
+calcular.addEventListener("click", ev => {
+    ev.preventDefault()
+
+    simularTramos(VARIABLES.routeWaypoints, $horaSalida.value)
+})
+
+guardar.addEventListener("click", async (ev) => {
+    ev.preventDefault()
+    await handleStatus()
+
+})
+
+completar.addEventListener("click", async(ev) => {
+    ev.preventDefault()
+    try {
+        await completarRuta(rutaId)
+        swal.fire({
+            title: 'Ruta completada.',
+            icon: 'success'
+        })
+        window.location.reload()
+    } catch (error) {
+        swal.fire({
+            title: error.message,
+            icon: 'error'
+        })
+    }
+})
 // Esta sección de código es básicamente para intercambiar el orden dentro del array de una forma más dinámica.
 // Tuve que buscar la forma porque al intentarlo no me daba salido, al final lo adapté un poco a mi forma, porque la forma que encontré me parecía demasiaod larga para conseguir algo tan secillo.
 function handleDragStart(e) {

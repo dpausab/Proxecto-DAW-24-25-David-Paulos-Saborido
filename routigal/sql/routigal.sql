@@ -63,7 +63,7 @@ CREATE TABLE servicios (
     hora_servicio TIME NOT NULL,
     id_ruta INT DEFAULT NULL,
     orden INT DEFAULT NULL,
-    duracion_estimada TIME,
+    duracion_estimada TIME NOT NULL,
     id_tecnico INT DEFAULT NULL,
     descripcion TEXT,
     FOREIGN KEY (id_estado) REFERENCES estados_servicio(id),

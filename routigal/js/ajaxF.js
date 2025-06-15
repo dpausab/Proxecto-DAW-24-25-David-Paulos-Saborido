@@ -25,11 +25,16 @@ export async function ajax(options, credentials=null) {
             })
         }
 
+        const json = await resp.json()
+
         if (!resp.ok) {
-            throw new Error(`Error ${resp.status} - ${resp.statusText}`)
+            if (json.message) {
+                throw new Error(`${json.message}`)
+            } else {
+                throw new Error(`Error ${resp.status} - ${resp.statusText}`)
+            }
         } 
 
-        const json = await resp.json()
         return json
     } catch(error) {
         console.log(error.message)

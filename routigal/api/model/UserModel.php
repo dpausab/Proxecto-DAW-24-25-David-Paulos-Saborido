@@ -1,5 +1,6 @@
 <?php
-include_once("Model.php");
+include_once(API_ROUTE."model/Model.php");
+
 
 class User implements JsonSerializable{
     protected $id;
@@ -105,7 +106,7 @@ class User implements JsonSerializable{
      */ 
     public function getRol()
     {
-        return $this->nombre;
+        return $this->rol;
     }
 
     /**
@@ -131,16 +132,19 @@ class UserModel extends Model
         } 
         $db = self::getConnection();
         $datos = [];
+        $respuesta = null;
         $next = false;
         try {
             $stmt = $db->query($sql);
-            if ($stmt->rowCount()===11) $next=true;
             $datos = [];
             foreach($stmt as $s){   
                 $user = new user($s['nombre'], $s['usuario'], $s['id_rol'], $s['id']);
                 $datos[] = $user;
             }
-            if ($next) array_pop($datos);
+            if (count($datos)>=11)  {
+                $next = true;
+                array_pop($datos);
+            }
             $respuesta = [
                 'datos' => $datos,
                 'next' => $next
@@ -203,30 +207,6 @@ class UserModel extends Model
         return $datos;
     }
 
-    public static function getActual():user|null
-    {
-        $sql = "SELECT id, nombre, usuario, id_rol FROM usuarios WHERE id=?";
-        $db = self::getConnection();
-        $datos = null;
-        $userId = $_SESSION['user']['id'];
-        try {
-            $stmt = $db->prepare($sql);
-            $stmt->bindValue(1, $userId, PDO::PARAM_INT);
-            $stmt->execute();
-            if($s = $stmt->fetch()){
-                $datos = new user($s['nombre'], $s['usuario'], $s['id_rol'], $s['id']);
-            }
-        } catch (Throwable $th) {
-            error_log("Error UserModel->get($userId)");
-            error_log($th->getMessage());
-        } finally {
-            $stmt = null;
-            $db = null;
-        }
-
-        return $datos;
-    }
-
     public static function insert($user)
     {
         $respuesta = false;
@@ -270,10 +250,19 @@ class UserModel extends Model
 
     public static function update($data, $userId)
     {
+        $sql = "SELECT * FROM usuarios WHERE usuario=:user";
+        $db = self::getConnection();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(":user", $data['usuario'], PDO::PARAM_STR);
+        $stmt->execute();
+        $usuarioEditar = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($usuarioEditar['id']!=$userId) {
+            throw new Error("Usuario no disponible.");
+        } 
         $user = self::get($userId);
         $db = null;
         if (!$user) {
-            throw new Exception("El usuario no existe.");
+            throw new Error("El usuario no existe.");
         } else {
             $sql = "SELECT pwd FROM usuarios WHERE id=:id";
             $db = self::getConnection();
@@ -283,7 +272,7 @@ class UserModel extends Model
             $pwd = $stmt->fetchColumn();
 
             if ($pwd !== sha1($data['old_pwd'])) {
-                throw new Exception("La contraseña actual no coincide.");
+                throw new Error("La contraseña actual no coincide.");
             }
         }
         $sql = "UPDATE usuarios SET
@@ -309,6 +298,7 @@ class UserModel extends Model
             $db->rollBack();
             error_log("Error UserModel->update(" . implode(",", $data) . ", $userId)");
             error_log($th->getMessage());
+            throw $th;
         } finally {
             $stmt = null;
             $db = null;
@@ -334,6 +324,7 @@ class UserModel extends Model
             $db->rollBack();
             error_log("Error UserModel->delete($userId)");
             error_log($th->getMessage());
+            throw $th;
         } finally {
             $stmt = null;
             $db = null;

@@ -32,8 +32,6 @@ O modelo de negocio baséase nunha suscrición mensual, ofrecendo unha alternati
 
 ## 2- Empresa
 
-> ** TODO **
-
 ### 2.1- Idea de negocio
 
 O producto central trátase dunha aplicación web que permite aos seus usuarios ter unha xestión directa, interactiva e sinxela das rutas que necesiten en base ós traballos ou visitas por realizar. Para conseguir facer viable dito proxecto, comercializarase cun formato de suscripción único, de 30€ / mensuais sen restriccións.
@@ -76,7 +74,7 @@ O público obxectivo son grupos concretos:
 
 Existen ferramentas como RouteXL e OptimoRoute, que poden ser alternativas claramente competitivas, xa que ofrecen un funcionamento similar.
 
-O importante na diferencia de Routigal é a simpleza, buscamos que calqueira usuario poida desde o primeiro minuto adaptarse á nosa usabilidade e empezar a traballar coa nosa interface. Ademáis, non dispoñemos de variabilidade nos precios, é un precio único de 40€ / mes por cliente, sin límite de paradas como RouteXL ou custo a maiores por usuario coma OptimoRoute.
+O importante na diferencia de *Routigal* é a simpleza, buscamos que calqueira usuario poida desde o primeiro minuto adaptarse á nosa usabilidade e empezar a traballar coa nosa interface. Ademáis, non dispoñemos de variabilidade nos precios, é un precio único de 25€ / mes por cliente, sin límite de paradas como RouteXL ou custo a maiores por usuario coma OptimoRoute.
 
 Ademáis, OptimoRoute, sendo principal competidor de servizo, non conta cunha interface en castelán e RouteXL ofrece servizos con peticións limitadas.
 
@@ -87,6 +85,10 @@ O servizo que se ofrece é totalmente flexible e independente do negocio a reali
 ### 2.6- Forma xurídica
 
 A forma xurídica será a de autónomo, xa que é máis viable e sinxela de forma inicial para lanzar o producto dado os baixos custos de investimento iniciais, e acadar visualización no mercado, para posteriormente se os resultados son óptimos transicionar a Sociedade Limitada Unipersonal, para acadar maior capacidade de expansión, investimentos e protección fiscal.
+
+Ademáis da falta de capital para considerar o cambio a SL ou SLu. A idea é aproveitarse de axudas que se ofrecen ó autónomo como por exemplo:
+- [TR341D - Promoción del Empleo Autónomo de las personas trabajadoras autónomas - 2025](https://oficinadoautonomo.gal/es/portfolio/6117)
+- [Subvenciones para apoyar iniciativas de emprendimiento - 2025](https://oficinadoautonomo.gal/es/portfolio/6235)
 
 ### 2.7- Investimentos
 
@@ -115,11 +117,11 @@ Os custos fixos anuais serían:
 
 Os custos variables serían:
 
-- Nómina: 15,000€ netos (mínimo), sendo variable segundo o beneficio xerado.
-- Cota de autónomo (con bonificación): 960€ primeiro ano / 1,560€ segundo ano / 1,920€ terceiro ano.
+- Nómina: 17,000€, sendo variable segundo o beneficio xerado. 
+- Cota de autónomo (con bonificación): 0€ primeiro ano pola "cota cero" da Xunta / 960€ segundo ano (prórroga da tarifa plana) / 3,600€ terceiro ano (estimación).
 - Custos de pasarela de pago (Stripe): 3% do valor de venda. Unha previsión posible sería:
-    1ª ano: 288€.
-    2º ano: 720€.
+    1ª ano: 540€.
+    2º ano: 900€.
     3º ano: 1,440€.
 - IRPF: pola reducción de autónomos, é dun 7% os primeiros 3 anos.
 - IVA: 21%.
@@ -128,27 +130,27 @@ Os custos variables serían:
 - Publicidade: 600€, variando segundo beneficios.
 
 É dicir os custos variables anuais serían, de forma estimada:
-- Primeiro ano: 18,348€
-- Segundo ano: 18,880€
-- Terceiro ano: 20,460€
+- Primeiro ano: 19,640€
+- Segundo ano: 20,960€
+- Terceiro ano: 24,140€
 
 Gasto total anual:
-- Primeiro ano: 25,614€
-- Segundo ano: 26,146€
-- Terceiro ano: 27,726€
+- Primeiro ano: 26,846€
+- Segundo ano: 28,166€
+- Terceiro ano: 31,346€
 
 
 #### 2.7.2- Ingresos
 
-O precio da aplicación será de tipo subscripción, 35€ con IVA / mensuais.
+O precio da aplicación será de tipo subscripción, 25€ con IVA / mensuais.
 
 A continuación realizo unha previsión, na miña opinión conservadora, dado que únicamente en Galicia existen máis de 225,000 autónomos, moitos deles destinados a servizos a domicilio.
 
-- **Primeiro ano**: é o máis complicado de estimar, se estimamos de forma conservadora, poderíamos falar de 40 clientes sostidos, xerando mensualmente 1,400€, é decir, 16,800€ anuais.
+- **Primeiro ano**: é o máis complicado de estimar, se estimamos de forma conservadora, poderíamos falar de 60 clientes sostidos, xerando mensualmente 1,500€, é decir, 18,000€ anuais.
 
-- **Segundo ano**: aquí falaríamos de tentar acadar estables os 80 usuarios fixos, xerando un aproximado mensual de 2,800€, é decir, 33,600€ anuais.
+- **Segundo ano**: aquí falaríamos de tentar acadar estables os 100 usuarios fixos, xerando un aproximado mensual de 2,500€, é decir, 30,000€ anuais.
 
-- **Terceiro ano**: dada a confianza obtida, e a publicidade, o obxectivo é acadar os 130 usuarios fixos, xerando mensualmente de forma sostida 4,550€, é decir, 54,600€ anuais.
+- **Terceiro ano**: dada a confianza obtida, e a publicidade, o obxectivo é acadar os 160 usuarios fixos, xerando mensualmente de forma sostida 4,000€, é decir, 48,000€ anuais.
 
 ### 2.8- Viabilidade
 
@@ -166,27 +168,26 @@ Para calcular a viabilidade económica vamos realizar uns cálculos sinxelos:
 
 **Primeiro ano**:
 
-- Ingresos: 16,800€ - 21% = 13,272€
-- Gastos totais: 25,614€
-- Balance anual: 11,407.60€ - 25,614€ = -12,342€
+- Ingresos: 18,000e / 1.21 (Desconto do IVA sobre a base) = 14,876€
+- Gastos totais: 26,846€
+- Balance anual: 14,876€ - 26,846€ = -11,970€
 
 **Segundo ano**:
 
-- Ingresos: 33,600€ - 21% = 26,554€
-- Gastos totais: 26,146€
-- BAI: 26,554€ - 26,146€ = 398€
-- Beneficio neto: 398€ - 7% = 370,14€
+- Ingresos: 30,000€ / 1.21 (Desconto do IVA sobre a base) = 24,793€
+- Gastos totais: 28,166€
+- BAI: 24,793€ - 28,166€ = -3,373€
 
 **Terceiro ano**:
 
-- Ingresos: 54,600€ - 21% = 43,134€
-- Gastos totais: 27,726€
-- BAI: 43,134€ - 27,726€ = 15,408€
-- Beneficio neto: 15,408€ - 7% = 14,329.44€
+- Ingresos: 48,000€ / 1.21 (Desconto do IVA sobre a base) = 39,670€
+- Gastos totais: 31,346€
+- BAI: 39,670€ - 31,346€ = 8,124€
+- Beneficio neto: 8,124€ - 7% = 7,555€
 
-Con estos datos podemos chegar á conclusión de que os dous primeiros anos estaríamos nunha situación complicada, que poderíamos solventar cun préstamo no primeiro ano de 15,000€ de ser necesario, fácilmente amortizable a partir do terceiro ano, dados os datos aportados. 
+Con estos datos podemos chegar á conclusión de que os dous primeiros anos estaríamos nunha situación complicada, que poderíamos solventar cun préstamo no primeiro ano de 20,000€ de ser necesario, fácilmente amortizable a partir do terceiro ano, dados os datos aportados. 
 
-Pero, a partir do terceiro ano, os beneficios do exercicio serían moito máis prometedores, xa que tengo en conta unha nómina neta de 1,250€ mensuais, teríamos aínda 14,329.44€ de beneficio neto de marxen, para poder paliar a inversión inicial e buscar novos investementos ou, de querer, aumentar o salario.
+Pero, a partir do terceiro ano, os beneficios do exercicio serían moito máis prometedores, xa que o salario continuaría sendo o mínimo, teríamos aínda 7,555€ de beneficio neto de marxen, para poder paliar o préstamo e a inversión inicial e buscar novos investementos ou, de querer, aumentar o salario.
 
 #### 2.8.3- Conclusión
 
@@ -196,10 +197,7 @@ A idea é viable a nivel técnico e, potencialmente económico. Aporta valor rea
 
 - **Infraestructura:** empregarase un servidor de hosting do proveedor SiteGround para a posta en producción é despgregue.
 - **Backend:** para o backend empregarase o lenguaxe de PHP, xa que é un lenguaxe moi axeitado pola súa efectividade para traballar no entorno web. Para o almacenamento de datos empregarse MySQL.
-- **Frontend:** para o frontend empregarase HTML5, CSS e JavaScript con Leaflet, que é a librería que nos permitirá ter o mapa interactivo.
-
-
-Este apartado podería cambiar á hora do emprego de PHP base ou o framework Laravel.
+- **Frontend:** para o frontend empregarase HTML5, CSS e JavaScript con Leaflet, que é a librería que nos permitirá ter o mapa interactivo, e SweetAlert para ter unhas alertas coidadas e mellorar a experiencia do usuario.
 
 ## 4- Planificación
 

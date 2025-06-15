@@ -1,5 +1,6 @@
 <?php
-include_once("Model.php");
+include_once(API_ROUTE."model/Model.php");
+
 
 class Route implements JsonSerializable {
     protected $id;
@@ -276,7 +277,7 @@ class RouteModel extends Model
         } catch (PDOException $th) {
             error_log("Error ServiceModel->getAll()");
             error_log($th->getMessage());
-            throw new Error("Error recuperando las rutas.");
+            throw new Exception("Error recuperando las rutas.");
         } finally {
             $stmt = null;
             $db = null;
@@ -300,7 +301,7 @@ class RouteModel extends Model
         } catch (Throwable $th) {
             error_log("Error RouteModel->get($rutaId)");
             error_log($th->getMessage());
-            throw new Error("Error recuperando la ruta.");
+            throw new Exception("Error recuperando la ruta.");
         } finally {
             $stmt = null;
             $db = null;
@@ -332,11 +333,10 @@ class RouteModel extends Model
             $datos = $db->lastInsertId();
             $db->commit();
         } catch (PDOException $th) {
-            $datos = $th->getMessage();
             error_log("Error RouteModel->insert()");
             error_log($th->getMessage());
             $db->rollBack();
-            throw new Error("Error creando la ruta.");
+            throw new Exception("Error creando la ruta.");
         } finally {
             $stmt = null;
             $db = null;
@@ -373,12 +373,38 @@ class RouteModel extends Model
             $stmt->bindValue(":fecha", $ruta['fecha'], PDO::PARAM_STR);
             $stmt->bindValue(":hora", $ruta['horaSalida'], PDO::PARAM_STR);
 
-            $datos = $stmt->execute();
+            $stmt->execute();
             $datos = $stmt->rowCount() == 1;
         } catch (PDOException $th) {
             error_log("Error RouteModel->update(" . implode(",", $ruta) . ", $rutaId)");
             error_log($th->getMessage());
-            throw new Error("Error editando la ruta.");
+            throw new Exception("Error editando la ruta.");
+        } finally {
+            $stmt = null;
+            $db = null;
+        }
+
+        return $datos;
+    }
+
+    public static function completar($rutaId)
+    {
+        $sql = "UPDATE rutas SET
+            id_estado=2
+            WHERE id=:id";
+
+        $db = self::getConnection();
+        $datos = false;
+        try {
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(":id", $rutaId, PDO::PARAM_INT);
+
+            $stmt->execute();
+            $datos = true;
+        } catch (PDOException $th) {
+            error_log("Error RouteModel->completar()");
+            error_log($th->getMessage());
+            throw new Exception("Error editando la ruta.");
         } finally {
             $stmt = null;
             $db = null;
@@ -401,6 +427,7 @@ class RouteModel extends Model
         } catch (PDOException $th) {
             error_log("Error RouteModel->delete($rutaId)");
             error_log($th->getMessage());
+            throw new Exception("Error editando la ruta.");
         } finally {
             $stmt = null;
             $db = null;

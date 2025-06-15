@@ -1,5 +1,8 @@
 <?php
     include_once("auth.php");
+    include_once("../api/controller/AuthController.php");
+
+    $user = AuthController::getSessionUser();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -17,9 +20,9 @@
   <?php include_once('header.php'); ?>
 
   <main>
-    <h1>Gestión de servicios</h1>
+    <h1>Servicios</h1>
     <?php 
-    if ($_SESSION['user']['rol'] === 1) {
+    if ($user->getRol() === 1) {
       echo '<section id="form">
           <form class="routigal-form" id="form-servicios">
             <p class="id">
@@ -94,7 +97,7 @@
             <th>Dirección</th>
             <th>Duración estimada</th>
             <th>Fecha y hora</th>
-            <?php if ($_SESSION['user']['rol'] === 1) {
+            <?php if ($user->getRol() === 1) {
               echo '<th>Acciones</th>';
             } ?>
           </tr>

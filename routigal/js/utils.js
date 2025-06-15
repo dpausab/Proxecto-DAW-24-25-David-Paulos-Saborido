@@ -10,3 +10,12 @@ export function formatearHoras(hora) {
     let [horas, minutos] = hora.split(':').map(Number)
     return horas*3600+minutos*60
 }
+
+function getToday() {
+    return new Date().toLocaleDateString('es-ES', {
+        timeZone: 'Europe/Madrid',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).split('/').reverse().join('-')
+}

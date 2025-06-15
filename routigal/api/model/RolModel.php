@@ -1,5 +1,5 @@
 <?php
-include_once("Model.php");
+include_once(API_ROUTE."model/Model.php");
 
 class Rol implements JsonSerializable{
     protected $id;

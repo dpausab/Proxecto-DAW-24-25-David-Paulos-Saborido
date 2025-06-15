@@ -22,23 +22,23 @@
         <form class="routiga-form" action="">
             <p>
                 <label for="nombre">Nombre</label>
-                <input type="text" name="nombre" id="nombre">
+                <input type="text" name="nombre" id="nombre" required>
             </p>
             <p>
                 <label for="user">Usuario</label>
-                <input type="text" name="user" id="user">
+                <input type="text" name="user" id="user" required>
             </p>
             <p id="old">
                 <label for="old_pwd">Contraseña actual</label>
-                <input type="password" name="old_pwd" id="old_pwd">
+                <input type="password" name="old_pwd" id="old_pwd" required>
             </p>
             <p>
                 <label for="pwd">Contraseña</label>
-                <input type="password" name="pwd" id="pwd">
+                <input type="password" name="pwd" id="pwd" required>
             </p>
             <p>
                 <label for="rol">Rol</label>
-                <select name="rol" id="rol"></select>
+                <select name="rol" id="rol"></select required>
             </p>
             <p id="buttons">
                 <button>

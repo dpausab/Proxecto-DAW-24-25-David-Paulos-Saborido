@@ -1,3 +1,9 @@
+<?php
+include_once("../api/controller/AuthController.php");
+
+$user = AuthController::getSessionUser();
+
+?>
 <header>
   <figure class="logo">Routigal</figure>
 
@@ -13,7 +19,8 @@
       <li><a href="/html/listado_rutas.php">Rutas</a></li>
       <li><a href="/html/servicios.php">Servicios</a></li>
       <?php 
-        if ($_SESSION['user']['rol'] === 1) {
+        if ($user->getRol() === 1) {
+          echo '<li><a href="/html/ubicaciones.php">Ubicaciones</a></li>';
           echo '<li><a href="/html/usuarios.php">Usuarios</a></li>';
         }
       ?>

@@ -1,5 +1,5 @@
 <?php
-include_once("Model.php");
+include_once(API_ROUTE."model/Model.php");
 
 class AuthModel extends Model
 {
@@ -18,8 +18,7 @@ class AuthModel extends Model
             $access = $stmt->fetch(PDO::FETCH_ASSOC);
             
         } catch (PDOException $th) {
-            echo json_encode(['mensaje' => 'Error iniciando sesión']);
-            $access = false;
+            throw new Exception('Fallo realizando el login.');
         }finally{
             $stmt = null;
             $db = null;
@@ -43,13 +42,12 @@ class AuthModel extends Model
             $stmt->execute();
             $result = $stmt->rowCount()>=1;
         } catch (PDOException $ex) {
-            $result = false;
-            echo json_encode(['mensaje' => 'Error consultando los permisos']);
+            throw new Exception('Error obteniendo permiso.');
         } finally {
             $db = null;
             $stmt = null;
         }
-
+        
         return $result;
     }
 
@@ -67,8 +65,7 @@ class AuthModel extends Model
             
             $result = $stmt->rowCount() >= 1;
         } catch (PDOException $th) {
-            echo json_encode(['mensaje' => 'Error registrando al usuario']);
-            $result = false;
+            throw new Exception('Error registrando al usuario.');
         } finally {
             $db = null;
             $stmt = null;

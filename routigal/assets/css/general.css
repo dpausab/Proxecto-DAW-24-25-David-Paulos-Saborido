@@ -157,7 +157,7 @@ nav ul.show {
   display: flex;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 780px) {
   .hamburger {
     display: none;
   }

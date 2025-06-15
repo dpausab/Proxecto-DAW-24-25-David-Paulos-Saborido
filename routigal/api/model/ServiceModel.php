@@ -1,5 +1,6 @@
 <?php
-include_once("Model.php");
+include_once(API_ROUTE."model/Model.php");
+
 
 class Service implements JsonSerializable {
     protected $id;
@@ -207,7 +208,6 @@ class ServiceModel extends Model {
             }
 
             $stmt->execute();
-            if ($stmt->rowCount()>=11) $next = true;
             foreach ($stmt as $s) {
                 $servicio = new Service(
                     $s['nombre'],
@@ -227,7 +227,10 @@ class ServiceModel extends Model {
                 );
                 $datos[] = $servicio;
             }
-            if ($next) array_pop($datos);
+            if (count($datos)>=11)  {
+                $next = true;
+                array_pop($datos);
+            }
             $respuesta = [
                 'datos' => $datos,
                 'next' => $next
@@ -478,6 +481,33 @@ class ServiceModel extends Model {
         }
 
         return $resultado;
+    }
+
+    public static function completar($id) {
+        $sql = "UPDATE servicios SET id_estado = 3 WHERE id = :id";
+
+        $db = self::getConnection();
+        $db->beginTransaction();
+        $resultado = false;
+        try {
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+            $stmt->execute();
+            $resultado = $stmt->rowCount() === 1;
+            $db->commit();
+        } catch (PDOException $th) {
+            $db->rollBack();
+            $resultado = $th->getMessage();
+            error_log("Error ServicioModel->updateRutaId()");
+            error_log($th->getMessage());
+        } finally {
+            $stmt = null;
+            $db = null;
+        }
+
+        return $resultado;
+    
     }
 
     public static function reset() {

@@ -1,4 +1,5 @@
 import { ajax } from "./ajaxF.js"
+import { getToday } from "./utils.js"
 
 const $d = document,
             $servicios = $d.querySelector("tbody"),
@@ -47,14 +48,6 @@ async function getServicios(id=null, nombre=null, fecha=null, estado=null, page=
     next = datos.next
 }
 
-function getToday() {
-    return new Date().toLocaleDateString('es-ES', {
-        timeZone: 'Europe/Madrid',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    }).split('/').reverse().join('-')
-}
 
 function renderServicios(servicios) {
     if (servicios.length) {
@@ -62,8 +55,10 @@ function renderServicios(servicios) {
             let botones = ""
             if ($form && user.rol === 1) {
                 botones = `<td>
-                        <button class="editar" data-id="${el.id}">Editar</button>
-                        <button class="borrar" data-id="${el.id}">Borrar</button>
+                        <div class="acciones">
+                            <button class="editar" data-id="${el.id}">Editar</button>
+                            <button class="borrar" data-id="${el.id}">Borrar</button>
+                        </div>
                     </td>`
             }
             return `<tr>
@@ -193,7 +188,7 @@ async function addServicio() {
             renderServicios(servicios)
         }
     } catch (error) {
-        throw new Error()
+        throw new Error(error.message)
     }
     
 }
@@ -265,8 +260,9 @@ async function handleStatus() {
         $submit.textContent = 'Guardar servicio'
     } catch (error) {
         swal.fire({
-            title: 'Fallo en la acción.',
-            icon: 'warning'
+            title: 'Error en la acción.',
+            icon: 'warning',
+            html: error.message.split('-').map(el => `<p>${el}</p>`).join('')
         })
     }
 }
@@ -328,7 +324,6 @@ function validarForm(servicio = null) {
         }
     }
 
-
     if (errores.length){
         swal.fire({
             title: 'Error',
@@ -339,7 +334,6 @@ function validarForm(servicio = null) {
     }
 
     return true
-    
 }
 
 $filtros.addEventListener("submit", ev => {

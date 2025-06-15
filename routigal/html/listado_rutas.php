@@ -1,12 +1,15 @@
 <?php
     include_once("auth.php");
+    include_once("../api/controller/AuthController.php");
+
+    $user = AuthController::getSessionUser();
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Servicios - Routigal</title>
+  <title>Listado de rutas - Routigal</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <link rel="stylesheet" href="/assets/css/servicios.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -17,7 +20,7 @@
   <?php include_once("header.php"); ?>
 
   <main>
-    <h1>Gestión de rutas</h1>
+    <h1>Rutas</h1>
     <section class="table-container">
       <h2>Listado de rutas</h2>
       <form class="routigal-form" id="filtros">
@@ -29,7 +32,7 @@
           <label for="fecha_filtro">Fecha</label>
           <input type="date" name="fecha_filtro" id="fecha_filtro" />
         </p>
-        <?php if ($_SESSION['user']['rol'] === 1) {
+        <?php if ($user->getRol() === 1) {
                   echo '<p>
                     <label for="tecnico_filtro">Técnico</label>
                     <select name="tecnico_filtro" id="tecnico_filtro"></select>
@@ -42,7 +45,7 @@
             <option value="">Todos</option>
           </select>
         </p>
-        <?php if ($_SESSION['user']['rol'] === 1) {
+        <?php if ($user->getRol() === 1) {
                   echo '<p>
                       <button>
                         <a href="/html/rutas.php">Crear</a>

@@ -16,6 +16,7 @@ class Model{
         } catch (PDOException $e) {
             error_log("Error conectando a la base de datos...");
             error_log($e->getMessage());
+            throw new Exception('Fallo obteniendo la conexión a la BBDD');
         }
         return $pdo;
     }

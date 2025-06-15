@@ -1,5 +1,5 @@
 <?php
-
+include_once($_SERVER['DOCUMENT_ROOT'].'/assets/dir.php');
 /**
  * Definicion de los nombres asociados a cada controlador en la URI.
  */

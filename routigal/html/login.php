@@ -15,11 +15,11 @@
         <form class="routigal-form" action="">
             <p>
                 <label for="user">Usuario</label>
-                <input type="text" name="user" id="user">
+                <input type="text" name="user" id="user" required>
             </p>
             <p>
                 <label for="pwd">Contraseña</label>
-                <input type="password" name="pwd" id="pwd">
+                <input type="password" name="pwd" id="pwd" required>
             </p>
             <button type="submit" id="login">Login</button>
         </form>
