@@ -8,7 +8,9 @@
 </head>
 <body>
   <header>
-    <figure class="logo">Routigal</figure>
+    <figure class="logo">
+      <a href="index.php">Routigal</a>
+    </figure>
     <nav>
       <ul>
         <li>

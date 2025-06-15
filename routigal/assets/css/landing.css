@@ -1,5 +1,12 @@
 @import url('general.css');
 
+.logo a{
+  text-decoration: none;
+  color: var(--color-yellow);
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
 .portada {
   background-image: url('../imagenes/aron-visuals-BXOXnQ26B7o-unsplash.jpg');
   background-size: cover;
