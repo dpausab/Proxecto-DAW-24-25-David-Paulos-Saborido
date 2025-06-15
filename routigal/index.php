@@ -96,8 +96,6 @@
     </section>
   </main>
 
-  <footer>
-    Routigal
-  </footer>
+  <?php include_once("html/footer.php"); ?>
 </body>
 </html>

@@ -103,7 +103,7 @@ button:not(.hamburger):hover {
 
 a {
   text-decoration: none;
-  color: black;
+  color: var(--color-yellow);
 }
 
 .btn-yellow {

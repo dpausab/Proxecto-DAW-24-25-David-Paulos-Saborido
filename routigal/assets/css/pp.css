@@ -1,0 +1,12 @@
+@import url('general.css');
+
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+}
+
+p a {
+    color: var(--color-yellow);
+}
