@@ -5,7 +5,9 @@ $user = AuthController::getSessionUser();
 
 ?>
 <header>
-  <figure class="logo">Routigal</figure>
+  <figure class="logo">
+    <a href="dashboard.php">Routigal</a>
+  </figure>
 
   <button id="boton-hamburguesa" class="hamburger">
     <span></span>
