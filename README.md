@@ -15,6 +15,8 @@
 
 > Proxecto rematado, á espera de implementar novas funcionalidades.
 
+Para probalo, hay unha máquina con todo dispoñíbel: [**XAMPP**](https://drive.google.com/file/d/12f-TfJgZWk0MoRL4Kgd9wxSrgXTXAIX7/view?usp=drive_link)
+
 ## Descrición
 
 O proxecto *Routigal* consiste no desenvolvemento dunha aplicación de xestión de rutas, principalmente enfocado en pequenos negocios, que necesiten unha orientación rápida e interactiva do tempo e distancia que lles levará realizar unha ruta de servizos, sendo asignados a un perfil "técnico", que no caso de autónomos pode ser o propio administrador da aplicación ou, no caso de empresas con varios traballadores, usuarios cun perfil especializado na aplicación. A aplicación permitirá visualizar os servizos pendentes de asignar, tendo cada entrega unha ubicación, que será representada como punto na ruta, de forma dinámica, á sua vez, a aplicación contará que o punto de saída e de regreso é o mesmo.
