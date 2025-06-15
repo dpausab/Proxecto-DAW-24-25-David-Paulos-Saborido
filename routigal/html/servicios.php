@@ -1,6 +1,7 @@
 <?php
+    include_once("../assets/dir.php");
     include_once("auth.php");
-    include_once("../api/controller/AuthController.php");
+    include_once(API_ROUTE."controller/AuthController.php");
 
     $user = AuthController::getSessionUser();
 ?>
@@ -10,7 +11,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Servicios - Routigal</title>
-  <link rel="stylesheet" href="/assets/css/servicios.css">
+  <link rel="stylesheet" href="../assets/css/servicios.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script type="module" src="/js/servicios.js" defer></script>

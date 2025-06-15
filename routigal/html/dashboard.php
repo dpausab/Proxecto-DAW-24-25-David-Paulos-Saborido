@@ -1,6 +1,7 @@
 <?php
+  include_once("../assets/dir.php");
   include_once('auth.php');
-  include_once("../api/controller/AuthController.php");
+  include_once(API_ROUTE."controller/AuthController.php");
 
   $user = AuthController::getSessionUser();
 ?>
@@ -10,10 +11,10 @@
   <meta charset="UTF-8">
   <title>Inicio - Routigal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/assets/css/dashboard.css">
+  <link rel="stylesheet" href="../assets/css/dashboard.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="/js/menu-hamburguesa.js" defer></script>
-  <script type="module" src="/js/dashboard.js" defer></script>
+  <script src="../js/menu-hamburguesa.js" defer></script>
+  <script type="module" src="../js/dashboard.js" defer></script>
   
 </head>
 <body>

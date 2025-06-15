@@ -1,8 +1,6 @@
 <?php
-DEFINE("API_ROUTE", $_SERVER['DOCUMENT_ROOT']."/api/");
-DEFINE("CONFIG_ROUTE", $_SERVER['DOCUMENT_ROOT']."/config/");
-DEFINE("HTML_ROUTE", $_SERVER['DOCUMENT_ROOT']."/html/");
-DEFINE("JS_ROUTE", $_SERVER['DOCUMENT_ROOT']."/js/");
-
+DEFINE("API_ROUTE", realpath(__DIR__)."/../api/");
+DEFINE("CONFIG_ROUTE", realpath(__DIR__)."/../config/");
+DEFINE("HTML_ROUTE", realpath(__DIR__)."/../html/");
 
 ?>

@@ -11,7 +11,7 @@ export function formatearHoras(hora) {
     return horas*3600+minutos*60
 }
 
-function getToday() {
+export function getToday() {
     return new Date().toLocaleDateString('es-ES', {
         timeZone: 'Europe/Madrid',
         year: 'numeric',

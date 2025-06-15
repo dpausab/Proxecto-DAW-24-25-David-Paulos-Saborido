@@ -1,6 +1,7 @@
 <?php
 
 $config = file_get_contents(__DIR__ . '/../../config/config.json');
+
 $datos_config = json_decode($config, true)['conexion'];
 
 define("DB_DSN","mysql:host=".$datos_config['host'].";dbname=".$datos_config['database'].";charset=utf8mb4");
