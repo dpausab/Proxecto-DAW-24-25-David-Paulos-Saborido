@@ -15,8 +15,6 @@
 
 > Proxecto rematado, á espera de implementar novas funcionalidades.
 
-Para probalo, hay unha máquina con todo dispoñíbel: [**XAMPP**](https://drive.google.com/file/d/12f-TfJgZWk0MoRL4Kgd9wxSrgXTXAIX7/view?usp=drive_link)
-
 ## Descrición
 
 O proxecto *Routigal* consiste no desenvolvemento dunha aplicación de xestión de rutas, principalmente enfocado en pequenos negocios, que necesiten unha orientación rápida e interactiva do tempo e distancia que lles levará realizar unha ruta de servizos, sendo asignados a un perfil "técnico", que no caso de autónomos pode ser o propio administrador da aplicación ou, no caso de empresas con varios traballadores, usuarios cun perfil especializado na aplicación. A aplicación permitirá visualizar os servizos pendentes de asignar, tendo cada entrega unha ubicación, que será representada como punto na ruta, de forma dinámica, á sua vez, a aplicación contará que o punto de saída e de regreso é o mesmo.
@@ -29,23 +27,15 @@ Empregará as tecnoloxías web recoñecidas, PHP, JavaScript (con Leaflet), HTML
 
 ## Instalación / Posta en marcha
 
-A instalación en local do proxecto é bastante sinxela, simplemente requírese o programa XAMPP e realizar os seguintes pasos:
+A instalación en local do proxecto é bastante sinxela, simplemente requírese ter docker instalado e realizar os seguintes pasos:
 
 > 1.- Clonar ou descargar o repositorio.
 
-2.- Copiar os ficheiros no directorio htdocs de XAMPP.
+2.- Crear un arquivo .env coas variables que saen no .env_ejemplo, aquí porás as credenciais que queiras para a BBDD.
 
-3.- Importar o ficheiro routigal.sql na base de datos usando phpMyAdmin.
+3.- Executar o comando docker-compose up --build (en Windows), en Linux será sudo docker-compose up.
 
-4.- Configurar config.php coas credenciais da túa base de datos.
-
-5.- Incluir o arquivo myapp.conf, que se atopa na carpeta apache-vhost, en "xampp/apache/conf/extra".
-
-6.- Abrir o arquivo de configuración "httpd.conf" de Apache no XAMPP e engadir a liña: "Include conf/extra/myapp.conf".
-
-7.- Iniciar Apache e MySQL dende o panel de control de XAMPP.
-
-8.- Acceder á app desde o navegador: http://localhost/routigal.
+4.- Acceder en http://localhost:8080
 
 ## Uso
 

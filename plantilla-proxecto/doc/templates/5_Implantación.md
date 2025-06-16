@@ -11,25 +11,13 @@
 
 ### 1.1- Instalación
 
-Para poder ter acceso ó código e traballar no desenvolvemento da aplicación, os pasos a seguir son sinxelos. Para desenvolver a nivel local, a aplicación funcionará perfectamente nun entorno XAMPP/LAMPP, no que únicamente se terá que instalar o programa correspondente (XAMPP en Windows, LAMPP en Linux) coas opcións de Apache e MySQL.
+Para instalar en local o proxecto necesítase descargar docker, clonar o repositorio e:
 
-O primeiro unha vez instalado XAMPP, será copiar o myapp.conf da carpeta /apache-vhosts na configuración de Apache.
+1. Crear un .env cos datos que queiras para a tua BBDD, usar a plantilla .env_ejemplo.
+2. Executar o comando docker-compose up
+3. Acceder no navegador a http://localhost:8080 e http://localhost:8081 para p PhpMyAdmin.
 
-Para realizalo, copiaremos o arquivo e entraremos na ruta xampp/apache/conf/extra e pegaremos ahí o arquivo.
-
-Despois, dende o panel de Apache en xampp, accedemos ó httpd.conf e,case no final do arquivo, onde se atopa a liña de "# Virtual hosts" haberá que poñer debaixo o seguinte: "Include conf/extra/myapp.conf".
-
-Listo! Configuración rematada. Deberías ver algo asi:
-
-> # Virtual hosts
-> Include conf/extra/httpd-vhosts.conf
-> Include conf/extra/myapp.conf
-
-Posteriormente deberase abrir o programa, iniciar Apache e MySql, entrar ó navegador web preferido e buscar no navegador a ruta: "http://localhost/phpmyadmin/index.php", unha vez dentro terase acceso ó SGBD, haberá que importar o arquivo da base de datos que aparece no código na carpeta SQL.
-
-Unha vez realizado, a aplicación debería funcionar correctamente en local, simplemente entrando en: "http://localhost". Necesitarase iniciar sesión co usuario por defecto, con acceso a todas as funcionalidades, incluídas crear novos usuarios.
-
-As credenciais serán:
+As credenciais de login serán:
 - Usuario: admin
 - Contrasinail: abc123.
 
