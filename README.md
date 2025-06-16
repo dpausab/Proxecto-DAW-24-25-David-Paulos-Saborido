@@ -31,9 +31,9 @@ A instalación en local do proxecto é bastante sinxela, simplemente requírese 
 
 > 1.- Clonar ou descargar o repositorio.
 
-2.- Crear un arquivo .env coas variables que saen no .env_ejemplo, aquí porás as credenciais que queiras para a BBDD.
+2.- Na carpeta routigal, crear un arquivo .env coas variables que saen no .env_ejemplo, aquí porás as credenciais que queiras para a BBDD.
 
-3.- Executar o comando docker-compose up --build (en Windows), en Linux será sudo docker-compose up.
+3.- Dende a carpeta routigal, executar o comando docker-compose up --build (en Windows), en Linux será sudo docker-compose up.
 
 4.- Acceder en http://localhost:8080
 

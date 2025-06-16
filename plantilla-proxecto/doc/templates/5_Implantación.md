@@ -13,8 +13,8 @@
 
 Para instalar en local o proxecto necesítase descargar docker, clonar o repositorio e:
 
-1. Crear un .env cos datos que queiras para a tua BBDD, usar a plantilla .env_ejemplo.
-2. Executar o comando docker-compose up
+1. Na carpeta routigal, crear un .env cos datos que queiras para a tua BBDD, usar a plantilla .env_ejemplo.
+2. Dende a carpeta routigal, executar o comando docker-compose up
 3. Acceder no navegador a http://localhost:8080 e http://localhost:8081 para p PhpMyAdmin.
 
 As credenciais de login serán:
