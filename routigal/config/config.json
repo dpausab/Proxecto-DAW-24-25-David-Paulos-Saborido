@@ -1,8 +1,8 @@
 {
     "conexion" : {
-        "host": "localhost",
-        "user": "root",
-        "password": "",
-        "database": "routigal"
+        "host": "db",
+        "user": "routigal_user",
+        "password": "abc123.",
+        "database": "routigal_db"
     }
 }

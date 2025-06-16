@@ -81,7 +81,7 @@ function loadMap() {
 async function getServicios($id=null) {
     try {
         let datos  = await ajax({
-            url: $id ? `http://localhost/api/servicios/getDisponibles/${parseInt($id)}` : `http://localhost/api/servicios/getDisponibles`
+            url: $id ? `/api/servicios/getDisponibles/${parseInt($id)}` : `/api/servicios/getDisponibles`
         })
 
         VARIABLES.servicios = datos
@@ -104,7 +104,7 @@ async function getServicios($id=null) {
 async function getTecnicos() {
     try {
         let datos  = await ajax({
-            url: `http://localhost/api/usuarios/getTecnicos`
+            url: `/api/usuarios/getTecnicos`
         })
 
         VARIABLES.tecnicos = datos
@@ -123,7 +123,7 @@ async function getTecnicos() {
 async function getUbicaciones() {
     try {
         let datos  = await ajax({
-            url: `http://localhost/api/ubicaciones/getAll`
+            url: `/api/ubicaciones/getAll`
         })
 
         VARIABLES.ubicaciones = datos.datos
@@ -289,14 +289,14 @@ function formulario(ruta) {
  * Función que inicializa las funcionalidades dejando todo a disposición dle usuario para interactuar.
  */
 async function start() {
-    VARIABLES.user = await ajax({url:"http://localhost/api/auth/getLoggedUser"})
+    VARIABLES.user = await ajax({url:"/api/auth/getLoggedUser"})
     loadMap()
     await getTecnicos()
     await getUbicaciones()
     renderTecnicos(VARIABLES.tecnicos)
     renderUbicaciones(VARIABLES.ubicaciones)
     if (rutaId) {
-        VARIABLES.ruta = await ajax({url: `http://localhost/api/rutas/get/${rutaId}`})
+        VARIABLES.ruta = await ajax({url: `/api/rutas/get/${rutaId}`})
         await getServicios(rutaId)
     } else {
         await getServicios()
@@ -444,7 +444,7 @@ export async function calcularTramo(origen, destino) {
 async function crearRuta() {
     try {
         let ruta = await ajax({
-            url: "http://localhost/api/rutas/insert",
+            url: "/api/rutas/insert",
             method: "POST",
             data: {
                 nombre:$nombre.value.trim(),
@@ -555,6 +555,15 @@ async function completarRuta(id) {
     }
 }
 
+function checkHora(hora) {
+    const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+    if (hora) {
+        return regex.test(hora);
+    } else {
+        return true
+    }
+}
+
 /**
  * Función básica para checkear los valores del formulario.
  * @param {*} ruta 
@@ -586,6 +595,23 @@ function checkForm(ruta) {
                 return false
             }
         }
+
+        VARIABLES.tramos.forEach((el) => {
+            if (!checkHora(el.salidaEstimada)) {
+                swal.fire({
+                    title: 'Las horas deben estar entre las 00:00 y las 23:59',
+                    icon: 'warning'
+                })
+                return false
+            }
+            if (!checkHora(el.llegadaEstimada)) {
+                swal.fire({
+                    title: 'Las horas deben estar entre las 00:00 y las 23:59',
+                    icon: 'warning'
+                })
+                return false
+            }
+        });
     
         return true
 

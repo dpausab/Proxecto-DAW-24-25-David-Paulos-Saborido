@@ -30,10 +30,18 @@ $d.addEventListener("DOMContentLoaded", async(ev) => {
 $form.addEventListener("submit", async(ev) => {
     ev.preventDefault()
     if (!validarForm()) return
-    if (usuario) {
-      await updateUser(usuario)
-    } else {
-      await insertUser()
+    try {
+      if (usuario) {
+        await updateUser(usuario)
+      } else {
+        await insertUser()
+      }
+      window.location.href = "usuarios.php"
+    } catch (error) {
+      swal.fire({
+        title: 'Error en la acción!',
+        icon: 'error'
+      })
     }
 })
 
@@ -91,7 +99,6 @@ async function insertUser() {
           icon: 'success',
           text: 'Usuario registrado correctamente.'
         })
-        window.location.href = "usuarios.php"
       } 
     } catch (error) {
       await swal.fire({
@@ -120,7 +127,7 @@ async function updateUser(id) {
         rol: $rol.value
       }
     })
-    swal.fire({
+    await swal.fire({
       title: 'Usuario editado correctamente',
       icon: 'success'
     })

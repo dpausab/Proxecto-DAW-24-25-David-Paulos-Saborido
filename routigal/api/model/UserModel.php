@@ -192,7 +192,7 @@ class UserModel extends Model
 
     public static function getTecnicos($offset=null, $limit=null)
     {
-        if (isset($offset, $limit)) {
+        if (isset($offset, $limit) && is_numeric($offset) && is_numeric($limit)) {
             $sql = "SELECT id, nombre, usuario, id_rol FROM usuarios WHERE id_rol=2 ORDER BY id DESC LIMIT $limit OFFSET $offset";
         } else {
             $sql = "SELECT id, nombre, usuario, id_rol FROM usuarios WHERE id_rol=2 ORDER BY id DESC";
@@ -210,7 +210,6 @@ class UserModel extends Model
             error_log("Error UserModel->getAll()");
             error_log($th->getMessage());
             throw new Exception("Error recuperando los tecnicos");
-
         } finally {
             $stmt = null;
             $db = null;

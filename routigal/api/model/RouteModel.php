@@ -393,8 +393,8 @@ class RouteModel extends Model
             $stmt->bindValue(":tt", $ruta['tiempoTotal'], PDO::PARAM_STR);
             $stmt->bindValue(":dt", $ruta['distanciaTotal'], PDO::PARAM_STR);
             $stmt->bindValue(":origen", $ruta['origen'], PDO::PARAM_INT);
-            $stmt->bindValue(":estado", $ruta['estado'], PDO::PARAM_STR);
-            $stmt->bindValue(":tecnico", $ruta['tecnico'], PDO::PARAM_STR);
+            $stmt->bindValue(":estado", $ruta['estado'], PDO::PARAM_INT);
+            $stmt->bindValue(":tecnico", $ruta['tecnico'], PDO::PARAM_INT);
             $stmt->bindValue(":fecha", $ruta['fecha'], PDO::PARAM_STR);
             $stmt->bindValue(":hora", $ruta['horaSalida'], PDO::PARAM_STR);
 

@@ -22,10 +22,6 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
-DROP DATABASE IF EXISTS routigal;
-CREATE DATABASE routigal;
-
-use routigal;
 --
 -- Estructura de tabla para la tabla `endpoints`
 --

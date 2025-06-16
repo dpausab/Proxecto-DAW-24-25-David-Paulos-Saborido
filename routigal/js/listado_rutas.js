@@ -50,7 +50,7 @@ async function getRutas(id=null, nombre=null, fecha=null, estado=null, page=actu
 async function getTecnicos() {
     try {
         let datos  = await ajax({
-            url: `http://localhost/api/usuarios/getTecnicos`
+            url: `/api/usuarios/getTecnicos`
         })
 
         tecnicos = datos
