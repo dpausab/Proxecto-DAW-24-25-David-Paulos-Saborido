@@ -29,13 +29,15 @@ Empregará as tecnoloxías web recoñecidas, PHP, JavaScript (con Leaflet), HTML
 
 A instalación en local do proxecto é bastante sinxela, simplemente requírese ter docker instalado e realizar os seguintes pasos:
 
-> 1.- Clonar ou descargar o repositorio.
+1.- Clonar ou descargar o repositorio.
 
 2.- Na carpeta routigal, crear un arquivo .env coas variables que saen no .env_ejemplo, aquí porás as credenciais que queiras para a BBDD.
 
-3.- Dende a carpeta routigal, executar o comando docker-compose up --build (en Windows), en Linux será sudo docker-compose up.
+3.- Se cambias os datos de exemplo, deberás editar o arquivo de configuración da app dentro da carpeta /routigal, na ruta /config/config.json. Cambiando os valores polos novos que precises, menos o host.
 
-4.- Acceder en http://localhost:8080
+4.- Dende a carpeta routigal, executar o comando docker-compose up --build (en Windows), en Linux será sudo docker-compose up.
+
+5.- Acceder en http://localhost:8080
 
 ## Uso
 
