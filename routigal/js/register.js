@@ -156,15 +156,10 @@ async function fillUser(id) {
  */
 function validarForm() {
     let errores = []
-    let [nombre, usuario, old_pwd, pwd, rol] = $form.querySelectorAll("input, password, select")
-
-    console.log("NOMBRE", nombre.value)
-    console.log("USUARIO", usuario.value)
-    console.log("PWD", pwd)
-    console.log("ROL", rol.value)
+    let [nombre, usuario, old_pwd, pwd, rol] = $form.querySelectorAll("input, select")
     
 
-    if ($old.style.display != "none") {
+    if ($old_container.style.display != "none") {
       if (!old_pwd.value.trim().length) {
         errores.push("La contraseña es obligatoria")
       }

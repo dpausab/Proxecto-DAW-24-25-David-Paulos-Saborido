@@ -287,15 +287,6 @@ class UserModel extends Model
 
     public static function update($data, $userId)
     {
-        $sql = "SELECT * FROM usuarios WHERE usuario=:user";
-        $db = self::getConnection();
-        $stmt = $db->prepare($sql);
-        $stmt->bindValue(":user", $data['usuario'], PDO::PARAM_STR);
-        $stmt->execute();
-        $usuarioEditar = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($usuarioEditar['id']!=$userId) {
-            throw new Error("Usuario no disponible.");
-        } 
         $user = self::get($userId);
         $db = null;
         if (!$user) {
