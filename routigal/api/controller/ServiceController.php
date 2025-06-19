@@ -53,7 +53,7 @@ class ServiceController extends Controller{
     public function getPorRuta($id=null) {
         $datos = [];
         try {
-            $datos = ServiceModel::getPorRuta($id);
+            $datos = ServiceModel::getPorRuta($id[0]);
             
             echo json_encode($datos);
         } catch (\Throwable $th) {

@@ -306,7 +306,7 @@ class ServiceModel extends Model {
         try {
             if (isset($id)) {
                 $stmt = $db->prepare($sql);
-                $stmt->bindParam(':id', $id[0], PDO::PARAM_INT);
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $stmt->execute();
             } else {
                 $stmt = $db->query($sql);

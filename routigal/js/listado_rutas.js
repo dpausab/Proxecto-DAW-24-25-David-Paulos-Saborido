@@ -166,23 +166,9 @@ function renderPaginacion() {
  */
 async function deleteRuta(id) {
     try {
-        let borrados  = await ajax({
-                            url: `/api/servicios/getPorRuta/${id}`
-                        })
-                let serviciosBorrados = borrados
-                serviciosBorrados = Promise.all(serviciosBorrados.map(async el => {
-                    return await ajax({
-                        url: `/api/servicios/updateRutaId/${el.id}`,
-                        method: 'PUT',
-                        data: {
-                            id_ruta: null,
-                            id_estado: 1,
-                            estimado: el.duracion_estimada,
-                            orden: null,
-                            tecnico: null
-                        }
-                    })
-                }))
+        let borrados = await ajax ({
+            url: `/api/servicios/reset/${id}`
+        })
         let datos  = await ajax({
                     url: `/api/rutas/delete/${id}`,
                     method: 'DELETE'
