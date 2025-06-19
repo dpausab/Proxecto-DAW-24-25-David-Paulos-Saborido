@@ -5,12 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Routigal</title>
   <link rel="stylesheet" href="assets/css/landing.css">
+  <script src="js/menu-hamburguesa.js" defer></script>
 </head>
 <body>
   <header>
     <figure class="logo">
       <a href="index.php">Routigal</a>
     </figure>
+    <button id="boton-hamburguesa" class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <nav>
       <ul>
         <li>
