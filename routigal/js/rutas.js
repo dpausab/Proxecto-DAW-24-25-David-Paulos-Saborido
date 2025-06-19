@@ -632,10 +632,10 @@ async function handleStatus() {
     if (!checkForm()) return;
     try {
         let confirm = await swal.fire({
-            title: '¿Seguro que quieres editar la ruta?',
-            icon: 'info'
+            title: '¿Seguro que quieres realizar la acción?',
+            icon: 'info',
+            showCancelButton: true
         })
-
         if (confirm.isConfirmed) {
             if (!rutaId) {
                 await crearRuta()
@@ -692,12 +692,19 @@ guardar.addEventListener("click", async (ev) => {
 completar.addEventListener("click", async(ev) => {
     ev.preventDefault()
     try {
-        await completarRuta(rutaId)
-        await swal.fire({
-            title: 'Ruta completada.',
-            icon: 'success'
+        let confirm = await swal.fire({
+            title: '¿Seguro que quieres marcar la ruta como completada?',
+            icon: 'info',
+            showCancelButton: true
         })
-        window.location.reload()
+        if (confirm.isConfirmed) {
+            await completarRuta(rutaId)
+            await swal.fire({
+                title: 'Ruta completada con éxito.',
+                icon: 'success'
+            })
+            window.location.href = '/html/listado_rutas.php'
+        } else return
     } catch (error) {
         swal.fire({
             title: error.message,

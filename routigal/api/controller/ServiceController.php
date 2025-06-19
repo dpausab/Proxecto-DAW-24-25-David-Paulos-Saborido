@@ -186,15 +186,15 @@ class ServiceController extends Controller{
             }
         }
 
-        if (empty($datos['nombre'])) {
+        if (empty(trim($datos['nombre']))) {
             $errores[] = "El nombre es obligatorio";
         }
 
-        if (empty($datos['cliente'])) {
+        if (empty(trim($datos['cliente']))) {
             $errores[] = "El nombre del cliente es obligatorio";
         }
 
-        if (empty($datos['direccion'])) {
+        if (empty(trim($datos['direccion']))) {
             $errores[] = "La direccion es obligatoria";
         }
 

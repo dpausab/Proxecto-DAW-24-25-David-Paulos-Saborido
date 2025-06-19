@@ -261,8 +261,8 @@ class UserModel extends Model
             $db->beginTransaction();
         
             $stmt = $db->prepare($sql);
-            $stmt->bindValue(":nombre", $user['nombre'], PDO::PARAM_STR);
-            $stmt->bindValue(":user", $user['usuario'], PDO::PARAM_STR);
+            $stmt->bindValue(":nombre", strip_tags($user['nombre']), PDO::PARAM_STR);
+            $stmt->bindValue(":user", strip_tags($user['usuario']), PDO::PARAM_STR);
             $stmt->bindValue(":pwd", sha1($user['pwd']), PDO::PARAM_STR);
             $stmt->bindValue(":rol", $user['rol'], PDO::PARAM_INT);
 
@@ -303,7 +303,8 @@ class UserModel extends Model
             }
         }
         $sql = "UPDATE usuarios SET
-            nombre=:user,
+            nombre=:nom,
+            usuario=:user,
             pwd=:pwd,
             id_rol=:rol
             WHERE id=:id";
@@ -314,7 +315,8 @@ class UserModel extends Model
         try {
             $stmt = $db->prepare($sql);
             $stmt->bindValue(":id", $userId, PDO::PARAM_INT);
-            $stmt->bindValue(":user", $data['nombre'], PDO::PARAM_STR);
+            $stmt->bindValue(":nom", strip_tags($data['nombre']), PDO::PARAM_STR);
+            $stmt->bindValue(":user", strip_tags($data['usuario']), PDO::PARAM_STR);
             $stmt->bindValue(":pwd", sha1($data['new_pwd']), PDO::PARAM_STR);
             $stmt->bindValue(":rol", $data['rol'], PDO::PARAM_INT);
 

@@ -392,11 +392,11 @@ class ServiceModel extends Model {
         $respuesta = false;
         try {
             $stmt = $db->prepare($sql);
-            $stmt->bindValue(":nombre", $servicio['nombre'], PDO::PARAM_STR);
-            $stmt->bindValue(":nombre_cliente", $servicio['cliente'], PDO::PARAM_STR);
+            $stmt->bindValue(":nombre", strip_tags($servicio['nombre']), PDO::PARAM_STR);
+            $stmt->bindValue(":nombre_cliente", strip_tags($servicio['cliente']), PDO::PARAM_STR);
             $stmt->bindValue(":latitud", $servicio['latitud'], PDO::PARAM_STR);
             $stmt->bindValue(":longitud", $servicio['longitud'], PDO::PARAM_STR);
-            $stmt->bindValue(":direccion", $servicio['direccion'], PDO::PARAM_STR);
+            $stmt->bindValue(":direccion", strip_tags($servicio['direccion']), PDO::PARAM_STR);
             $stmt->bindValue(":fecha", $servicio['fecha'], PDO::PARAM_STR);
             $stmt->bindValue(":hora", $servicio['hora'], PDO::PARAM_STR);
             $stmt->bindValue(":duracion_estimada", $servicio['tiempoEstimado'], PDO::PARAM_STR);
@@ -439,11 +439,11 @@ class ServiceModel extends Model {
         try {
             $stmt = $db->prepare($sql);
             $stmt->bindValue(":id", $servicioId, PDO::PARAM_INT);
-            $stmt->bindValue(":nombre", $servicio['nombre'], PDO::PARAM_STR);
-            $stmt->bindValue(":nombre_cliente", $servicio['cliente'], PDO::PARAM_STR);
+            $stmt->bindValue(":nombre", strip_tags($servicio['nombre']), PDO::PARAM_STR);
+            $stmt->bindValue(":nombre_cliente", strip_tags($servicio['cliente']), PDO::PARAM_STR);
             $stmt->bindValue(":latitud", $servicio['latitud'], PDO::PARAM_STR);
             $stmt->bindValue(":longitud", $servicio['longitud'], PDO::PARAM_STR);
-            $stmt->bindValue(":direccion", $servicio['direccion'], PDO::PARAM_STR);
+            $stmt->bindValue(":direccion", strip_tags($servicio['direccion']), PDO::PARAM_STR);
             $stmt->bindValue(":fecha", $servicio['fecha'], PDO::PARAM_STR);
             $stmt->bindValue(":hora", $servicio['hora'], PDO::PARAM_STR);
             $stmt->bindValue(":duracion_estimada", $servicio['tiempoEstimado'], PDO::PARAM_STR);
@@ -539,7 +539,7 @@ class ServiceModel extends Model {
         } catch (PDOException $th) {
             $db->rollBack();
             $resultado = $th->getMessage();
-            error_log("Error ServicioModel->updateRutaId()");
+            error_log("Error ServicioModel->resetRutaId()");
             error_log($th->getMessage());
             throw new Exception("Error reseteando el servicio");
 

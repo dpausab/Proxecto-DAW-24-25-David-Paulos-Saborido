@@ -31,12 +31,22 @@ $form.addEventListener("submit", async(ev) => {
     ev.preventDefault()
     if (!validarForm()) return
     try {
-      if (usuario) {
-        await updateUser(usuario)
-      } else {
-        await insertUser()
-      }
-      window.location.href = "usuarios.php"
+      await swal.fire({
+          title: '¿Estás seguro de querer realizar la acción?',
+          icon: 'info',
+          showCancelButton: true
+      }).then(async(result) => {
+          if (result.isConfirmed) {
+              if (usuario) {
+                await updateUser(usuario)
+              } else {
+                await insertUser()
+              }
+              window.location.href = "usuarios.php"
+          } else {
+              return
+          }
+      })
     } catch (error) {
       swal.fire({
         title: 'Error en la acción!',

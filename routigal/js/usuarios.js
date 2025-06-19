@@ -157,6 +157,11 @@ async function deleteUsuario(id) {
                 })
 
         if(datos.respuesta) {
+            swal.fire({
+                title: 'Usuario borrado',
+                icon: 'success'
+            })
+
             await getUsuarios()
             renderUsuarios(usuarios)
         }
@@ -173,11 +178,17 @@ $usuarios.addEventListener("click", async(ev) => {
 
     if (ev.target.id === "borrar" && ev.target.dataset.id) {
         try {
-            await deleteUsuario(ev.target.dataset.id)   
-            swal.fire({
-                title: 'Usuario borrado',
-                icon: 'success'
-            })
+            await swal.fire({
+                    title: '¿Seguro que quieres borrar el usuario?',
+                    icon: 'info',
+                    showCancelButton: true
+                }).then(async(result) => {
+                    if (result.isConfirmed) {
+                        await deleteUsuario(ev.target.dataset.id)  
+                    } else {
+                        return
+                    }
+                })
         } catch (error) {
             swal.fire({
                 title: 'Algo ha fallado',

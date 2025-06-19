@@ -144,7 +144,20 @@ function startListeners() {
                 let ubicacion = ubicaciones.find(el => el.id == ev.target.dataset.id)
                 formulario(ubicacion)
             } else {
-                await deleteUbicacion(ev.target.dataset.id)
+                await swal.fire({
+                    title: '¿Seguro que quieres borrar la ubicación?',
+                    icon: 'info',
+                    showCancelButton: true
+                }).then(async(result) => {
+                    if (result.isConfirmed) {
+                        await deleteUbicacion(ev.target.dataset.id)
+                        await getUbicaciones()
+                        renderUbicaciones(ubicaciones)
+                    } else {
+                        return
+                    }
+                })
+                
             }
         }
     })
@@ -251,15 +264,25 @@ async function handleStatus() {
     try{
         let ubicacion = ubicaciones.find(el => el.id == id) ?? null
         if (!validarForm()) return
-        if (ubicacion) {
-            await updateUbicacion(ubicacion.id)
-        } else {
-            await addUbicacion()
-        }
-        await getUbicaciones()
-        renderUbicaciones(ubicaciones)
-        $form.reset()
-        $submit.textContent = 'Guardar servicio'
+        await swal.fire({
+                    title: '¿Seguro que quieres realizar la acción?',
+                    icon: 'info',
+                    showCancelButton: true
+                }).then(async(result) => {
+                    if (result.isConfirmed) {
+                        if (ubicacion) {
+                            await updateUbicacion(ubicacion.id)
+                        } else {
+                            await addUbicacion()
+                        }
+                        await getUbicaciones()
+                        renderUbicaciones(ubicaciones)
+                        $form.reset()
+                        $submit.textContent = 'Guardar servicio'
+                    } else {
+                        return
+                    }
+                })
     } catch (error) {
         swal.fire({
             title: 'Fallo en la acción.',

@@ -194,8 +194,6 @@ async function deleteRuta(id) {
                 icon: "success",
                 text: "La ruta ha sido eliminada correctamente."
             })
-            await getRutas()
-            renderRutas(rutas)
         }
     } catch (error) {
         swal.fire({
@@ -244,7 +242,19 @@ function startListeners() {
 
 $rutas.addEventListener("click", async(ev) => {
     if (ev.target.classList.contains('borrar') && ev.target.dataset.id) {
-        await deleteRuta(ev.target.dataset.id)
+        await swal.fire({
+                    title: '¿Seguro que quieres editar el servicio?',
+                    icon: 'info',
+                    showCancelButton: true
+                }).then(async(result) => {
+                    if (result.isConfirmed) {
+                        await deleteRuta(ev.target.dataset.id)
+                        await getRutas()
+                        renderRutas(rutas)
+                    } else {
+                        return
+                    }
+                })
     }
 })
 

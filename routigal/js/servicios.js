@@ -286,9 +286,29 @@ async function handleStatus() {
     let servicio = servicios.find(el => el.id == id) ?? null
     if (!validarForm(servicio)) return
     if (servicio) {
-        await updateServicio(servicio.id)
+        await swal.fire({
+            title: '¿Seguro que quieres editar el servicio?',
+            icon: 'info',
+            showCancelButton: true
+        }).then(async(result) => {
+            if (result.isConfirmed) {
+                await updateServicio(servicio.id)
+            } else {
+                return
+            }
+        })
     } else {
-        await addServicio()
+        await swal.fire({
+            title: '¿Seguro que quieres insertar el servicio?',
+            icon: 'info',
+            showCancelButton: true
+        }).then(async(result) => {
+            if (result.isConfirmed) {
+                await addServicio()
+            } else {
+                return
+            }
+        })
     }
     await getServicios()
     renderServicios(servicios)
@@ -323,7 +343,19 @@ function adminPanel() {
                     let servicio = servicios.find(el => el.id == ev.target.dataset.id)
                     formulario(servicio)
                 } else {
-                    await deleteServicio(ev.target.dataset.id)
+                    await swal.fire({
+                        title: '¿Seguro que quieres editar el servicio?',
+                        icon: 'info',
+                        showCancelButton: true
+                    }).then(async(result) => {
+                        if (result.isConfirmed) {
+                            await deleteServicio(ev.target.dataset.id)
+                            await getServicios()
+                            renderServicios(servicios)
+                        } else {
+                            return
+                        }
+                    })
                 }
             }
         })
